@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+// ← Reemplazá con tu endpoint de Formspree: https://formspree.io/f/xxxxxxxx
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mzdlejre';
+
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 export default function Contact() {
@@ -23,9 +26,9 @@ export default function Contact() {
     };
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(data),
       });
 
@@ -39,7 +42,7 @@ export default function Contact() {
       setTimeout(() => setStatus('idle'), 5000);
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err instanceof Error ? err.message : 'Error al enviar');
+      setErrorMsg(err instanceof Error ? err.message : 'Error al enviar. Intentá de nuevo.');
     }
   };
 
