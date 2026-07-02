@@ -106,6 +106,22 @@ a {
   filter: grayscale(1) contrast(1.08) brightness(0.76);
 }
 
+/* Stills develop like prints: exposure lifts as the frame reveals.
+   Still figures carry data-fx; until they enter, the print is dark. */
+figure[data-fx] .monochrome-image {
+  transition: filter 2.6s linear;
+}
+
+figure[data-fx]:not(.in) .monochrome-image {
+  filter: grayscale(1) contrast(1.25) brightness(0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  figure[data-fx] .monochrome-image {
+    transition-duration: 0.2s;
+  }
+}
+
 /* ---------- custom SoundCloud player: seek slider ---------- */
 /* The visual track is drawn by the component; the input is the
    invisible interactive layer with a minimal square thumb. */

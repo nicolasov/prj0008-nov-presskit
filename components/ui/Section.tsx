@@ -10,14 +10,15 @@ type SectionProps = {
   bleed?: boolean;
   /** Stagger index consumed by RevealEngine — later sections fade in later. */
   fxIndex?: number;
+  /** Set false when the section choreographs its own motion inside. */
+  fx?: boolean;
 };
 
-export default function Section({ id, children, className, bleed, fxIndex = 0 }: SectionProps) {
+export default function Section({ id, children, className, bleed, fxIndex = 0, fx = true }: SectionProps) {
   return (
     <section
       id={id}
-      data-fx
-      data-fx-index={fxIndex}
+      {...(fx ? { 'data-fx': '', 'data-fx-index': fxIndex } : {})}
       className={cn('py-[var(--space-section)]', className)}
     >
       {bleed ? children : <Container>{children}</Container>}

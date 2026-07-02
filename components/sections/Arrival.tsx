@@ -39,7 +39,7 @@ export default function Arrival() {
               </h1>
 
               <Staged show={staged} delay={400}>
-                <p className="mt-7 font-serif text-[clamp(1rem,2vw,1.35rem)] font-light italic text-ink/70">
+                <p className="mt-10 font-serif text-[clamp(1rem,2vw,1.35rem)] font-light italic text-ink/70">
                   Curated Journeys
                 </p>
               </Staged>

@@ -25,10 +25,12 @@ export default function Live() {
       </Heading>
       <p className="mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">{t.live.body}</p>
 
-      <ul className="mt-10 flex flex-col border-t border-line">
-        {artists.map((name) => (
+      <ul className="mt-12 flex flex-col border-t border-line">
+        {artists.map((name, i) => (
           <li
             key={name}
+            data-fx=""
+            data-fx-index={i * 2}
             className="border-b border-line py-4 font-archivo text-[clamp(1.4rem,3.4vw,2.4rem)] font-medium text-ink/45 transition-colors duration-hover ease-fade hover:text-ink"
           >
             {name}
