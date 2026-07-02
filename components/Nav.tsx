@@ -7,6 +7,16 @@ import { useLenis } from '@/components/SmoothScroll';
 import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
 import Button from '@/components/ui/Button';
+import InstagramLink from '@/components/ui/InstagramLink';
+
+/** The journey's fictional runtime (55:00), driven by scroll progress. */
+function liveTimecode(progress: number): string {
+  const total = 55 * 60;
+  const s = Math.round(progress * total);
+  const mm = String(Math.floor(s / 60)).padStart(2, '0');
+  const ss = String(s % 60).padStart(2, '0');
+  return `${mm}:${ss}`;
+}
 
 export default function Nav() {
   const { progress, activeId } = useTrackProgress();
@@ -46,13 +56,21 @@ export default function Nav() {
       />
 
       <Container className="flex h-16 items-center justify-between nav:h-[72px]">
-        <a
-          href="#arrival"
-          onClick={(e) => seek(e, 'arrival')}
-          className="font-archivo text-[15px] font-medium tracking-[0.3em] text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
-        >
-          NOV
-        </a>
+        <div className="flex items-baseline gap-5">
+          <a
+            href="#arrival"
+            onClick={(e) => seek(e, 'arrival')}
+            className="font-archivo text-[15px] font-medium tracking-[0.3em] text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
+          >
+            NOV
+          </a>
+          <span
+            aria-hidden="true"
+            className="hidden font-mono text-[10px] tracking-[0.18em] text-ink/45 [font-variant-numeric:tabular-nums] sm:inline"
+          >
+            <span className="text-red-bright">●</span> {liveTimecode(progress)} / 55:00
+          </span>
+        </div>
 
         <nav
           aria-label="Tracklist"
@@ -71,13 +89,12 @@ export default function Nav() {
           ))}
         </nav>
 
-        <Button
-          href="#booking"
-          onClick={(e) => seek(e, 'booking')}
-          className="hidden nav:inline-flex"
-        >
-          Booking
-        </Button>
+        <div className="hidden items-center gap-6 nav:flex">
+          <InstagramLink />
+          <Button href="#booking" onClick={(e) => seek(e, 'booking')}>
+            Booking
+          </Button>
+        </div>
 
         <button
           ref={toggleRef}
@@ -129,6 +146,10 @@ export default function Nav() {
               </a>
             );
           })}
+          <div className="flex items-center justify-between pt-8">
+            <InstagramLink />
+            <span className="font-mono text-[10px] tracking-[0.18em] text-ink/45">Buenos Aires</span>
+          </div>
         </Container>
       </div>
     </header>

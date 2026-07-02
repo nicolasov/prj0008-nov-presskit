@@ -1,4 +1,5 @@
 import Container from '@/components/ui/Container';
+import InstagramLink from '@/components/ui/InstagramLink';
 
 const socialLinks = [
   { label: 'SoundCloud', href: 'https://soundcloud.com/novnovnovnovnovnovnov' },
@@ -8,9 +9,9 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer className="border-t border-line py-10">
-      <Container className="flex flex-wrap items-baseline justify-between gap-4 font-mono text-[10px] tracking-[0.18em] text-ink/45">
+      <Container className="flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] tracking-[0.18em] text-ink/45">
         <span>34.6°S 58.4°W</span>
-        <div className="flex gap-6">
+        <div className="flex items-center gap-6">
           {socialLinks.map(({ label, href }) => (
             <a
               key={label}
@@ -22,6 +23,7 @@ export default function Footer() {
               {label}
             </a>
           ))}
+          <InstagramLink />
         </div>
         <span>© {new Date().getFullYear()} NOV</span>
       </Container>
