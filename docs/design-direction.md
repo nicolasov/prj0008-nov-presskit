@@ -1,37 +1,45 @@
 # NOV — Design Direction
-## Creative Direction v1.0 — response to [creative-director-brief.md](./creative-director-brief.md)
+## Final Direction v2.0 — "The Set" — response to [creative-director-brief.md](./creative-director-brief.md)
 
-Status: **pending approval** — no implementation until this document is approved.
+Status: **approved direction** (merge of proposals A "The Listening Room" and
+B "The Set", user-selected 2026-07-02). Implementation may begin.
+
+Selection: structure, color temperature and motion of **B** + editorial serif
+display voice of **A** for hero and pull quotes only.
 
 ---
 
 ## 00 · Concept
 
-**The Listening Room.**
+**The page is a set.**
 
-The site is not a portfolio. It is a dark, quiet room the visitor walks into.
-Every scroll is a step further inside. Nothing is shouted; everything is placed.
+Eight tracks, one runtime. Sections are cue points with timecodes
+(00:00 Arrival → 55:00 Booking). Navigation is a tracklist. Transitions are
+crossfades — the only transition the site knows. The visitor doesn't scroll a
+website; they play through a journey NOV curated for them.
 
-The organizing metaphor is NOV's own philosophy: *not playing tracks — curating
-journeys*. The page is itself a curated journey: one idea per viewport, revealed
-slowly, ending at a single door (Booking).
+A film with a literary narrator: A24 pacing and Swiss precision carry the
+structure, while a light editorial serif appears only when the page speaks in
+first person (hero, pull quotes).
 
-Recognition test (from the brief): the site should be identifiable without the
-logo. Our signature is the combination of **near-black layered surfaces + huge
-light-weight editorial serif + monospaced dossier metadata + hairline rules**.
-No other DJ site looks like a gallery catalogue.
+Recognition signature (brief test: identifiable without the logo):
+**timecodes as navigation + letterboxed monochrome stills + light serif
+narrator voice + fade-only motion.** No other artist site is structured as a
+tracklist.
 
 ---
 
 ## 01 · Design System — principles
 
-1. Typography carries the design. Images support; type leads.
-2. Multiple blacks, one bone-white voice. No color anywhere.
-3. Hairlines instead of boxes. Borders are 1px, low-contrast, structural.
-4. Metadata as texture — mono uppercase micro-labels (city, year, index)
-   give the "dossier" feel without decoration.
-5. One idea per viewport. If a section answers two questions, split it.
-6. Motion is confirmation, not spectacle. Everything eases out, slowly.
+1. The crossfade is the metaphor and the constraint. Nothing slides, nothing
+   scales, nothing moves sideways — elements only fade.
+2. Hierarchy by opacity, not color. Like light falling off in a dark room.
+3. Timecodes are honest structure: they mark position in the journey.
+4. Every image is a film still: letterboxed, monochrome, captioned like a
+   subtitle, timecoded.
+5. The serif is the narrator — it appears only in big moments, never in
+   interface.
+6. One idea per viewport. Each cue answers one question.
 7. Mobile is designed at the same fidelity, not reflowed.
 
 ---
@@ -42,46 +50,43 @@ Three voices:
 
 | Voice | Face | Role |
 |---|---|---|
-| **Editorial** | Newsreader (Google, variable, optical sizing) | Display headlines, pull quotes, artist names. Light weight (300) at large sizes. Occasional italic for emphasis. |
-| **Interface** | Geist Sans | Body prose, navigation, forms, buttons. |
-| **Metadata** | Geist Mono | Kickers, labels, indexes, coordinates, footer. Uppercase, letter-spaced. |
+| **Narrator** | Newsreader 300 (Google, variable) | Hero wordmark, pull quotes, thesis lines. Light, occasional italic. Never in UI. |
+| **Structure** | Archivo (already in project) | Section heads (500, tracking −0.02em), body (400), navigation, forms. Two weights only. |
+| **Timecode** | Geist Mono | Timecodes, cue labels, captions, metadata. Tabular numerals. |
 
-All loaded via `next/font` (self-hosted, zero layout shift).
+All via `next/font`, self-hosted, zero layout shift.
 
-### Scale (fluid, clamp-based)
+### Scale
 
-| Token | Size | Use |
+| Token | Spec | Use |
 |---|---|---|
-| `display` | clamp(4.5rem, 12vw, 11rem) / 0.95 | Hero "NOV", section statements |
-| `h1` | clamp(2.75rem, 6vw, 5.5rem) / 1.02 | Section titles |
-| `h2` | clamp(1.75rem, 3.5vw, 2.75rem) / 1.15 | Sub-statements |
-| `lead` | clamp(1.125rem, 1.6vw, 1.375rem) / 1.6 | Pull paragraphs |
-| `body` | 1.0625rem (17px) / 1.8 | Prose, max 62ch |
-| `label` | 0.6875rem (11px) / 1.0 | Mono kickers, tracking 0.22em, uppercase |
-
-Rules: headlines never bold (300–400 max). Body never wider than 62ch.
-Labels always mono. `text-wrap: balance` on headings.
+| `hero` | Newsreader 300 · clamp(4.5rem, 15vw, 13rem) / 1 · tracking 0.06em | "NOV" |
+| `quote` | Newsreader 300 italic · clamp(1.5rem, 2.8vw, 2.2rem) / 1.25 | Pull quotes, manifesto |
+| `h1` | Archivo 500 · clamp(1.9rem, 4.2vw, 3.1rem) / 1.05 · tracking −0.02em | Section heads |
+| `sub` | Archivo 400 · 13px · tracking 0.42em · uppercase | "DJ · PRODUCER" captions |
+| `body` | Archivo 400 · 16px / 1.8 · max 60ch | Prose |
+| `tc` | Geist Mono 400 · 11px · tracking 0.18em · tabular-nums | Timecodes, labels |
 
 ---
 
 ## 03 · Color System
 
-No color. Nine tones.
+Neutral-cold blacks. No accent color at all.
 
-| Token | Hex | Use |
+| Token | Value | Use |
 |---|---|---|
 | `bg-0` | `#050505` | Page base |
-| `bg-1` | `#0B0B0B` | Alternate sections, depth |
-| `bg-2` | `#111111` | Surfaces (cards, form fields) |
+| `bg-1` | `#0B0B0B` | Frames, alternate depth |
+| `bg-2` | `#111111` | Surfaces |
 | `bg-3` | `#191919` | Hover surfaces |
-| `line` | `#1E1D1B` | Hairline rules, borders (warm-biased) |
-| `line-strong` | `#2E2C29` | Focus/hover borders |
-| `ink` | `#E9E5DD` | Primary text — soft bone, never pure white |
-| `ink-mut` | `#9A958B` | Secondary text |
-| `ink-faint` | `#5C5850` | Tertiary — indexes, disabled |
+| `line` | `#1F1F1F` | Hairlines |
+| `line-strong` | `#303030` | Focus/hover borders |
+| `ink` | `#EAEAE6` | Full voice — headlines, active states |
+| `ink-70` | rgba(234,234,230,.70) | Supporting — body, captions |
+| `ink-45` | rgba(234,234,230,.45) | Metadata — timecodes, labels |
+| `ink-25` | rgba(234,234,230,.25) | Atmosphere — inactive cues, rules |
 
-Accent: **none**. The bone tone `#C9C4BA` (already in the codebase) survives
-only as the hover/active state of interactive elements. Photography is
+Hover states move up one opacity step; nothing changes hue. Photography
 monochrome-graded. Gradients only as near-invisible vignettes (≤ 6% delta).
 
 ---
@@ -89,99 +94,99 @@ monochrome-graded. Gradients only as near-invisible vignettes (≤ 6% delta).
 ## 04 · Spacing System
 
 - Base unit: 4px. Scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 / 192.
-- Container: **1320px max**, gutter `clamp(24px, 5vw, 64px)`.
-- Grid: 12 columns desktop, 4 columns mobile.
-- Section rhythm: `clamp(120px, 16vw, 224px)` vertical — sections breathe like
-  gallery walls.
-- Prose measure: 62ch max.
+- Container: 1320px max, gutter `clamp(24px, 5vw, 72px)`.
+- Grid: 12 columns desktop, 4 mobile.
+- Section rhythm: `clamp(110px, 16vw, 200px)`.
+- Prose measure: 60ch max.
+- Letterbox bars on stills are structural, part of the composition.
 
 ---
 
 ## 05 · Motion System
 
+**The one rule: everything is a crossfade.** Nothing translates, nothing
+scales, nothing bounces.
+
 | Layer | Spec |
 |---|---|
-| Smooth scroll | Lenis, lerp 0.09 |
-| Reveals | opacity 0→1 + translateY 24px→0, 1000–1400ms, `cubic-bezier(0.19, 1, 0.22, 1)`, stagger 90ms (GSAP ScrollTrigger) |
-| Hero entrance | Single staged sequence: texture (0ms) → NOV (400ms) → subtitle (900ms) → nav (1300ms) |
-| Images | scale 1.04→1 on reveal (1600ms); hover scale 1.02 over 1200ms |
-| Micro | Link underline draws in 400ms; buttons shift border color, nothing moves |
-| Forbidden | Bounce, spin, parallax > 8%, marquee, hover lift/shadow |
-| Accessibility | `prefers-reduced-motion`: all transforms removed, opacity-only at 200ms |
+| Reveals | opacity 0→1 · 1400–2000ms · stagger 140ms (GSAP ScrollTrigger) |
+| Smooth scroll | Lenis, lerp 0.08. Scroll position drives the timecode readout in the nav. |
+| Hero entrance | Staged fades: smoke → NOV → sub → tracklist nav |
+| Images | Fade from 0 · hover: caption fades in, exposure lifts ~4% |
+| Micro | Opacity-step hovers (25→45→70→100). Underline none — links brighten. |
+| Timecode nav | Current cue at 70%, others at 25%; click seeks (Lenis scrollTo) |
+| Forbidden | Translate, scale, bounce, spin, marquee, parallax, hover lift/shadow |
+| Reduced motion | Fades shorten to 200ms — degrades almost invisibly |
 
 ### WebGL (hero only)
 
-One R3F canvas: fbm noise displacement — slow smoke/ink drift, monochrome,
-≤ 6% luminance variance. Mouse adds a soft displacement radius (physical, not
-playful). DPR capped at 1.5, paused when offscreen, dynamic-imported.
-Fallback: static grain texture (also the reduced-motion and low-power path).
+One R3F canvas: fbm smoke/ink drift, monochrome, ≤ 6% luminance variance,
+soft mouse displacement. DPR ≤ 1.5, paused offscreen, dynamic-imported.
+Fallback: static grain (also reduced-motion and low-power path).
 
 ---
 
 ## 06 · Component Inventory
 
-**Layout:** `Nav` (wordmark + 3 anchors + booking CTA, hides on scroll down),
-`Section` (rhythm wrapper), `Footer`.
+**Layout:** `Nav` (wordmark + timecode readout + tracklist + booking),
+`Cue` (section wrapper: timecode + anchor + rhythm), `Footer`.
 
-**Editorial primitives:** `Kicker` (mono label), `Headline`, `Prose`,
-`PullQuote`, `HairlineRule`, `IndexLabel` (01–08 section numbering — the site
-is literally a sequence/journey, so numbering carries meaning).
+**Primitives:** `Timecode`, `CueLabel`, `NarratorQuote` (serif), `SectionHead`,
+`Prose`, `Still` (letterboxed image: caption + timecode), `HairlineRule`.
 
-**Content:** `HeroCanvas` (WebGL + fallback), `Manifesto` (scroll-revealed
-lines), `Portrait`, `LiveList` (rooms + shared booths, typographic),
-`MagazineGallery` (irregular editorial layout), `VideoStill` (poster frame,
-YouTube iframe injected only on click), `SetList` (SoundCloud, same pattern),
-`PressKitItem` (download rows), `BookingForm` (name, email, date/venue,
-message → existing Resend route), `SocialLinks`.
+**Content:** `HeroCanvas` (WebGL + static fallback), `Manifesto` (crossfading
+lines), `CreditsList` (Live — rooms/artists as rolling credits),
+`FilmGallery` (21:9 + 4:5 stills, irregular rhythm), `VideoStill` /
+`SetList` (posters; iframes injected on click only), `PressKitItem`
+(download rows: format, size), `BookingForm` (4 fields → existing Resend
+route), `SocialLinks`.
 
-**Cut from current build:** `Stats` (filler), `Marquee` (motion cliché),
-`Genres` (folds into Philosophy), `Testimonials`/`Events` (already deleted).
+**Cut from current build:** `Stats`, `Marquee`, `Genres` (folds into
+Philosophy). `Testimonials`/`Events` already removed.
 
 ---
 
-## 07 · Page Architecture
+## 07 · Page Architecture — the tracklist
 
-One page, nine movements. Each viewport answers one question.
-
-| # | Section | Question it answers | Content |
+| Cue | TC | Section | Question |
 |---|---|---|---|
-| 01 | **Arrival** | Where am I? | NOV / DJ • Producer / Curated Journeys. WebGL texture. Nothing else. |
-| 02 | **Philosophy** | What does he believe? | 3–4 manifesto lines revealed line-by-line. "Not playing tracks. Curating journeys." |
-| 03 | **About** | Who is he? | Large portrait + trimmed bio (existing copy) + influences as mono metadata. |
-| 04 | **Live** | Where has he played? | Selected rooms + shared-booth artists as large typographic list (Jimmy Van M, Popof, Martín García, Nicolás Rada, Fernando Ferreyra, Carlos Alfonsin). |
-| 05 | **Gallery** | What does it look like? | Magazine layout from `assets/` — irregular rhythm, full-bleed moments. |
-| 06 | **Videos / Sets** | What does it sound like? | Poster stills → click to play. SoundCloud sets in same visual system. |
-| 07 | **Press Kit** | What can I use? | Download rows: photos, bio, logo, tech rider. |
-| 08 | **Booking** | How do I book him? | One sentence: *"Every journey begins with a conversation."* + 4-field form. |
-| — | **Footer** | — | Coordinates (34.6°S 58.4°W), socials, © year. |
+| 01 | 00:00 | **Arrival** | Where am I? — Title card: NOV (serif) · DJ • Producer · *Curated Journeys*. Smoke. |
+| 02 | 04:30 | **Philosophy** | What does he believe? — Manifesto lines crossfading like opening captions. |
+| 03 | 09:00 | **About** | Who is he? — Letterboxed portrait, bio as subtitle blocks. |
+| 04 | 18:00 | **Live** | Where has he played? — Rooms + shared booths as rolling credits (Jimmy Van M, Popof, Martín García, Nicolás Rada, Fernando Ferreyra, Carlos Alfonsin). |
+| 05 | 27:00 | **Gallery** | What does it look like? — Film stills, captions, timecodes. |
+| 06 | 38:00 | **Videos / Sets** | What does it sound like? — Posters, click to play. YouTube + SoundCloud. |
+| 07 | 47:00 | **Press Kit** | What can I use? — Download rows: photos, bio, logo, rider. |
+| 08 | 55:00 | **Booking** | How do I book him? — "Every journey begins with a conversation." 4 fields. |
+| — | — | **Footer** | Coordinates 34.6°S 58.4°W · socials · © year. |
+
+Timecodes are editorial fiction — position in the journey, not real durations.
 
 ---
 
-## 08 · User Journey (emotional arc → sections)
+## 08 · User Journey
 
-Curiosity (01 Arrival) → Mystery (02 Philosophy) → Confidence (03 About) →
-Discovery (04 Live + 05 Gallery) → Emotion (06 Videos/Sets) → Trust (07 Press
-Kit) → Booking (08).
-
-The single CTA ("Booking") is present in the nav from second one, but the page
-never pushes — it lets the visitor descend at their own pace.
+Curiosity (01) → Mystery (02) → Confidence (03) → Discovery (04–05) →
+Emotion (06) → Trust (07) → Booking (08). Single CTA in the nav from second
+one; the page never pushes.
 
 ---
 
 ## 09–10 · Wireframes & High-Fidelity
 
-Rendered in the visual presentation (Artifact) that accompanies this document:
-lo-fi frames for Arrival, About, Gallery and Booking (desktop + mobile), and a
-live high-fidelity mock of the hero and about sections in the final visual
-language.
+Rendered in the visual presentation (Artifact "NOV — Design Direction ·
+Final"): letterboxed wireframes for Arrival, About, Live and Booking, plus a
+live hi-fi mock of the hero with the tracklist navigation and smoke texture.
 
 ---
 
-## Implementation notes (post-approval)
+## Implementation notes
 
-- New deps: `framer-motion`, `gsap`, `lenis`, `three`, `@react-three/fiber`
-  (dynamic-imported; hero canvas is the only Three consumer).
-- Fonts via `next/font/google`: Newsreader, Geist, Geist Mono.
-- Performance budget: 95+ Lighthouse. WebGL lazy, videos click-to-load,
-  `next/image` everywhere, no library outside the list above.
-- Existing `/api/contact` (Resend) is kept as-is.
+- New deps: `gsap`, `lenis`, `three`, `@react-three/fiber` (+ `framer-motion`
+  only if micro-fades need it — prefer GSAP-only to keep bundle minimal).
+- Fonts: Newsreader + Archivo + Geist Mono via `next/font/google`.
+- Performance budget: 95+ Lighthouse. WebGL dynamic-imported, embeds
+  click-to-load, `next/image` everywhere.
+- Existing `/api/contact` (Resend) kept as-is.
+- Build order: tokens + fonts → Cue/Nav skeleton with timecodes → sections
+  01→08 → WebGL hero → motion pass → performance pass.
