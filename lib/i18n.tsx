@@ -29,9 +29,11 @@ const dictionaries = {
     pressKit: {
       facts: [
         ['Origin', 'Buenos Aires, Argentina'],
-        ['Sound', 'Progressive House, Deep House, Hypnotic Groove'],
+        ['Sound', 'Progressive House, Deep House, Organic House, Hypnotic Groove'],
         ['Set Philosophy', 'Fresh music selected before every performance'],
         ['Booking', 'Clubs, listening rooms, private and coastal dates'],
+        ['Technical Rider', 'Minimum 3× Pioneer CDJ-2000NXS2 · DJM-900NXS2 · booth monitors + sub-low'],
+        ['Logistics', 'Travel expenses and accommodation covered by the promoter'],
       ] as [string, string][],
       downloadsMeta: {
         portraits: 'High-resolution studio press photos',
@@ -75,9 +77,11 @@ const dictionaries = {
     pressKit: {
       facts: [
         ['Origen', 'Buenos Aires, Argentina'],
-        ['Sonido', 'Progressive House, Deep House, Hypnotic Groove'],
+        ['Sonido', 'Progressive House, Deep House, Organic House, Hypnotic Groove'],
         ['Filosofía de set', 'Música nueva seleccionada antes de cada presentación'],
         ['Booking', 'Clubes, listening rooms, fechas privadas y de costa'],
+        ['Rider técnico', 'Mínimo 3× Pioneer CDJ-2000NXS2 · DJM-900NXS2 · monitores de cabina + sub-low'],
+        ['Logística', 'Viáticos y alojamiento a cargo del organizador'],
       ] as [string, string][],
       downloadsMeta: {
         portraits: 'Fotos de prensa de estudio en alta resolución',

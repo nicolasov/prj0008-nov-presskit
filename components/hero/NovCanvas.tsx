@@ -81,10 +81,13 @@ const FRAGMENT = /* glsl */ `
     );
 
     // ---- distortion: sub-pixel drift + pointer displacement ----
+    // scroll disperses the word: the drift amplitude grows until the
+    // glyphs come apart like ink in water
+    float disperse = 0.0045 + uScroll * uScroll * 0.06;
     vec2 drift = (vec2(
-      noise(sp * 2.4 + uTime * 0.05),
-      noise(sp * 2.4 - uTime * 0.04)
-    ) - 0.5) * 0.0045;
+      noise(sp * (2.4 + uScroll * 6.0) + uTime * 0.05),
+      noise(sp * (2.4 + uScroll * 6.0) - uTime * 0.04)
+    ) - 0.5) * disperse;
 
     vec2 toMouse = uv - uMouse;
     float md = exp(-length(vec2(toMouse.x * uPlaneAspect, toMouse.y)) * 5.0);
@@ -102,7 +105,7 @@ const FRAGMENT = /* glsl */ `
 
     // ---- breathing + scroll response ----
     float breath = 0.93 + 0.07 * sin(uTime * 0.42);
-    float alpha = glyph * reveal * breath * (1.0 - uScroll * 0.7);
+    float alpha = glyph * reveal * breath * max(0.0, 1.0 - uScroll * 1.15);
 
     vec3 bg = vec3(0.0196);            // #050505
     vec3 ink = vec3(0.918, 0.918, 0.902); // #EAEAE6
@@ -296,7 +299,12 @@ export default function NovCanvas({ onReady }: NovCanvasProps) {
   }, []);
 
   return (
-    <div ref={containerRef} aria-hidden="true" className="absolute inset-0 font-serif">
+    <div
+      ref={containerRef}
+      aria-hidden="true"
+      className="absolute inset-0 font-serif"
+      style={{ opacity: 'calc(1 - var(--hero-scroll, 0) * 0.92)' }}
+    >
       {payload && (
         <Canvas
           dpr={[1, 1.5]}
