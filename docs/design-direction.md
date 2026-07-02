@@ -24,8 +24,8 @@ first person (hero, pull quotes).
 
 Recognition signature (brief test: identifiable without the logo):
 **timecodes as navigation + letterboxed monochrome stills + light serif
-narrator voice + fade-only motion.** No other artist site is structured as a
-tracklist.
+narrator voice + a single deep red as the live signal + fade-only motion.**
+No other artist site is structured as a tracklist.
 
 ---
 
@@ -33,7 +33,8 @@ tracklist.
 
 1. The crossfade is the metaphor and the constraint. Nothing slides, nothing
    scales, nothing moves sideways — elements only fade.
-2. Hierarchy by opacity, not color. Like light falling off in a dark room.
+2. Hierarchy by opacity; red is the signal. The dark is the ground — one
+   deep red marks where you are and where you can act, nothing else.
 3. Timecodes are honest structure: they mark position in the journey.
 4. Every image is a film still: letterboxed, monochrome, captioned like a
    subtitle, timecoded.
@@ -71,7 +72,7 @@ All via `next/font`, self-hosted, zero layout shift.
 
 ## 03 · Color System
 
-Neutral-cold blacks. No accent color at all.
+Neutral-cold blacks as the ground, one deep red as **the signal**.
 
 | Token | Value | Use |
 |---|---|---|
@@ -85,9 +86,21 @@ Neutral-cold blacks. No accent color at all.
 | `ink-70` | rgba(234,234,230,.70) | Supporting — body, captions |
 | `ink-45` | rgba(234,234,230,.45) | Metadata — timecodes, labels |
 | `ink-25` | rgba(234,234,230,.25) | Atmosphere — inactive cues, rules |
+| `red` | `#C1372B` | Signal — larger elements, borders, fills |
+| `red-bright` | `#E0523F` | Signal at small sizes — live timecode, active cue, mono labels |
+| `red-dim` | rgba(193,55,43,.40) | Traces — rules, underlines |
 
-Hover states move up one opacity step; nothing changes hue. Photography
-monochrome-graded. Gradients only as near-invisible vignettes (≤ 6% delta).
+### The red rule
+
+The red is the record light / the needle. It marks exactly two things:
+**where you are** (live cue in the tracklist, current timecode) and **where
+you can act** (Booking CTA, interactive hovers). It never decorates.
+Budget: red occupies ≤ ~2% of any viewport. Deep and cinematic, never neon.
+
+Text hierarchy is still carried by opacity. Interactive hovers shift toward
+red (as a 500ms crossfade); non-interactive text brightens one opacity step.
+Photography monochrome-graded. Gradients only as near-invisible vignettes
+(≤ 6% delta).
 
 ---
 
