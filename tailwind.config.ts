@@ -9,39 +9,35 @@ const config: Config = {
     extend: {
       fontFamily: {
         archivo: ['var(--font-archivo)', 'sans-serif'],
-        manrope: ['var(--font-manrope)', 'sans-serif'],
+        serif: ['var(--font-newsreader)', 'serif'],
+        mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
       },
       colors: {
         bg: {
-          DEFAULT: '#020202',
-          2: '#070707',
+          0: '#050505',
+          1: '#0B0B0B',
+          2: '#111111',
+          3: '#191919',
         },
-        card: {
-          DEFAULT: '#101010',
-          2: '#161616',
+        line: '#1F1F1F',
+        'line-strong': '#303030',
+        ink: 'rgb(var(--ink-rgb) / <alpha-value>)',
+        red: {
+          DEFAULT: 'rgb(var(--red-rgb) / <alpha-value>)',
+          bright: '#E0523F',
         },
-        accent: {
-          DEFAULT: '#C9C4BA',
-          hover: '#EEEAE2',
-        },
-        txt: '#F4F1EB',
+      },
+      maxWidth: {
+        container: '1320px',
       },
       screens: {
         nav: '880px',
       },
-      animation: {
-        'spin-slow': 'spin 16s linear infinite',
-        marquee: 'marquee 26s linear infinite',
-        float: 'float 6s ease-in-out infinite',
+      transitionTimingFunction: {
+        fade: 'linear',
       },
-      keyframes: {
-        marquee: {
-          to: { transform: 'translateX(-50%)' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-9px)' },
-        },
+      transitionDuration: {
+        hover: '500ms',
       },
     },
   },
