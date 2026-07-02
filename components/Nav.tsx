@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import { CUES } from '@/lib/cues';
 import { useTrackProgress } from '@/lib/useTrackProgress';
 import { useLenis } from '@/components/SmoothScroll';
+import Container from '@/components/ui/Container';
+import Timecode from '@/components/ui/Timecode';
+import Button from '@/components/ui/Button';
 
 export default function Nav() {
   const { progress, activeId } = useTrackProgress();
@@ -42,7 +45,7 @@ export default function Nav() {
         style={{ width: `${progress * 100}%` }}
       />
 
-      <div className="container flex h-16 items-center justify-between nav:h-[72px]">
+      <Container className="flex h-16 items-center justify-between nav:h-[72px]">
         <a
           href="#arrival"
           onClick={(e) => seek(e, 'arrival')}
@@ -55,31 +58,26 @@ export default function Nav() {
           aria-label="Tracklist"
           className="hidden items-center gap-[clamp(14px,1.6vw,26px)] nav:flex"
         >
-          {CUES.slice(0, -1).map((cue) => {
-            const isActive = cue.id === activeId;
-            return (
-              <a
-                key={cue.id}
-                href={`#${cue.id}`}
-                onClick={(e) => seek(e, cue.id)}
-                aria-current={isActive ? 'true' : undefined}
-                className={`font-mono text-[11px] tracking-[0.14em] no-underline transition-colors duration-hover ease-fade focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4 ${
-                  isActive ? 'text-red-bright' : 'text-ink/25 hover:text-ink/70'
-                }`}
-              >
-                {cue.tc}
-              </a>
-            );
-          })}
+          {CUES.slice(0, -1).map((cue) => (
+            <a
+              key={cue.id}
+              href={`#${cue.id}`}
+              onClick={(e) => seek(e, cue.id)}
+              aria-current={cue.id === activeId ? 'true' : undefined}
+              className="no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
+            >
+              <Timecode tc={cue.tc} active={cue.id === activeId} interactive />
+            </a>
+          ))}
         </nav>
 
-        <a
+        <Button
           href="#booking"
           onClick={(e) => seek(e, 'booking')}
-          className="hidden border border-red px-5 py-[10px] font-archivo text-[11px] font-medium uppercase tracking-[0.22em] text-red-bright no-underline transition-colors duration-hover ease-fade hover:bg-red/10 focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4 nav:inline-flex"
+          className="hidden nav:inline-flex"
         >
           Booking
-        </a>
+        </Button>
 
         <button
           ref={toggleRef}
@@ -103,7 +101,7 @@ export default function Nav() {
             style={menuOpen ? { transform: 'translateY(-5px) rotate(-45deg)' } : undefined}
           />
         </button>
-      </div>
+      </Container>
 
       <div
         id="mobile-tracklist"
@@ -114,7 +112,7 @@ export default function Nav() {
           menuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
-        <div className="container flex flex-col gap-1 py-8">
+        <Container className="flex flex-col gap-1 py-8">
           {CUES.map((cue) => {
             const isActive = cue.id === activeId;
             return (
@@ -127,11 +125,11 @@ export default function Nav() {
                 }`}
               >
                 <span className="font-archivo text-[20px] font-medium">{cue.label}</span>
-                <span className="font-mono text-[11px] tracking-[0.14em]">{cue.tc}</span>
+                <Timecode tc={cue.tc} active={isActive} />
               </a>
             );
           })}
-        </div>
+        </Container>
       </div>
     </header>
   );

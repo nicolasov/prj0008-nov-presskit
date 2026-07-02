@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { archivo, newsreader, geistMono } from '@/lib/fonts';
-import RevealInit from '@/components/RevealInit';
+import RevealEngine from '@/components/RevealEngine';
 import SmoothScroll from '@/components/SmoothScroll';
 
 const siteUrl = 'https://nov.dj';
@@ -77,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-bg-0 text-ink antialiased">
         <div aria-hidden="true" className="grain" />
-        <RevealInit />
+        <RevealEngine />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
