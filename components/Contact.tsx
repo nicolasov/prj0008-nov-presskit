@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-// ← Reemplazá con tu endpoint de Formspree: https://formspree.io/f/xxxxxxxx
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mzdlejre';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
@@ -34,7 +33,7 @@ export default function Contact() {
 
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
-        throw new Error(json.error ?? 'Error al enviar');
+        throw new Error(json.error ?? 'Could not send message');
       }
 
       setStatus('success');
@@ -42,102 +41,93 @@ export default function Contact() {
       setTimeout(() => setStatus('idle'), 5000);
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err instanceof Error ? err.message : 'Error al enviar. Intentá de nuevo.');
+      setErrorMsg(err instanceof Error ? err.message : 'Could not send. Please try again.');
     }
   };
 
   const inputCls =
-    'bg-[var(--bg2)] border border-[var(--line)] rounded-[11px] px-[15px] py-[13px] text-txt text-[14.5px] outline-none transition-all duration-300 focus:border-accent focus:shadow-[0_0_0_3px_rgba(224,70,58,.12)] w-full';
+    'w-full border border-[var(--line)] bg-[var(--bg2)] px-4 py-[14px] text-[14.5px] text-[var(--txt)] outline-none transition duration-300 focus:border-[var(--silver)] focus:bg-[var(--surface)]';
 
   return (
     <section
       id="contacto"
-      className="max-w-[1240px] mx-auto px-[clamp(18px,4vw,40px)] py-[clamp(48px,7vw,90px)] pb-[clamp(60px,9vw,110px)] flex flex-wrap gap-[clamp(36px,5vw,72px)]"
+      className="mx-auto grid max-w-[1240px] gap-[clamp(34px,6vw,82px)] px-[clamp(18px,4vw,40px)] py-[clamp(70px,9vw,126px)] lg:grid-cols-[0.82fr_1.18fr]"
     >
-      {/* Left col */}
-      <div data-reveal="" className="flex-[1_1_320px] min-w-[280px]">
-        <div className="w-[46px] h-[3px] bg-accent mb-[26px]" />
-        <h2
-          className="font-archivo font-black uppercase tracking-[-0.01em] leading-none m-0 mb-[22px]"
-          style={{ fontSize: 'clamp(2rem,4.4vw,3.2rem)' }}
-        >
-          Pongámonos
-          <br />
-          en contacto
-        </h2>
-        <p className="text-[var(--mut)] text-[16px] leading-[1.7] max-w-[42ch] m-0 mb-[34px]">
-          Para reservas, fechas y consultas de booking. Contame de tu evento y armamos juntos el
-          viaje sonoro perfecto.
+      <div data-reveal="">
+        <p className="section-kicker">Booking</p>
+        <h2 className="section-title max-w-[8ch]">Open the room.</h2>
+        <p className="mt-7 max-w-[44ch] text-[16px] leading-[1.85] text-[var(--mut)]">
+          For clubs, agencies, private listening rooms and coastal dates. Send the context
+          of the night and the desired emotional direction.
         </p>
-        <div className="flex flex-col gap-4">
+        <div className="mt-9 grid gap-4 border-t border-[var(--line)] pt-7">
+          <a href="mailto:booking@nov.dj" className="quiet-link text-[15px]">
+            booking@nov.dj
+          </a>
           <a
-            href="mailto:booking@nov.dj"
-            className="flex items-center gap-[14px] text-txt no-underline transition-colors duration-300 hover:text-accent"
+            href="https://soundcloud.com/novnovnovnovnovnovnov"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="quiet-link text-[15px]"
           >
-            <span className="grid place-items-center w-[42px] h-[42px] rounded-full border border-[var(--line)] flex-none text-[18px]">
-              ✉
-            </span>
-            <span className="text-[15.5px]">booking@nov.dj</span>
+            soundcloud.com/novnovnovnovnovnovnov
           </a>
         </div>
       </div>
 
-      {/* Form */}
-      <div data-reveal="" className="flex-[1.1_1_380px] min-w-[300px]">
-        <form
-          onSubmit={onSubmit}
-          className="bg-card border border-[var(--line)] rounded-[8px] p-[clamp(24px,3.4vw,40px)] grid gap-[18px]"
-          style={{ gridTemplateColumns: '1fr 1fr' }}
+      <form
+        data-reveal=""
+        onSubmit={onSubmit}
+        className="grid gap-4 border border-[var(--line)] bg-[var(--surface)] p-[clamp(18px,3vw,34px)] sm:grid-cols-2"
+      >
+        <label className="grid gap-2">
+          <span className="text-[11px] uppercase tracking-[0.2em] text-[var(--mut2)]">Name *</span>
+          <input name="name" type="text" required placeholder="Your name" className={inputCls} />
+        </label>
+
+        <label className="grid gap-2">
+          <span className="text-[11px] uppercase tracking-[0.2em] text-[var(--mut2)]">Email *</span>
+          <input name="email" type="email" required placeholder="you@example.com" className={inputCls} />
+        </label>
+
+        <label className="grid gap-2">
+          <span className="text-[11px] uppercase tracking-[0.2em] text-[var(--mut2)]">Venue</span>
+          <input name="venue" type="text" placeholder="Club, city or agency" className={inputCls} />
+        </label>
+
+        <label className="grid gap-2">
+          <span className="text-[11px] uppercase tracking-[0.2em] text-[var(--mut2)]">Date</span>
+          <input name="date" type="text" placeholder="DD / MM / YYYY" className={inputCls} />
+        </label>
+
+        <label className="grid gap-2 sm:col-span-2">
+          <span className="text-[11px] uppercase tracking-[0.2em] text-[var(--mut2)]">Message *</span>
+          <textarea
+            name="message"
+            rows={5}
+            required
+            placeholder="Tell us about the room, the audience and the moment of the night."
+            className={inputCls}
+            style={{ resize: 'vertical' }}
+          />
+        </label>
+
+        {status === 'error' && (
+          <p className="m-0 text-[13px] text-[var(--silver)] sm:col-span-2">{errorMsg}</p>
+        )}
+
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="silver-button sm:col-span-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <label className="flex flex-col gap-2">
-            <span className="text-[13px] text-[var(--mut)] font-medium">Nombre *</span>
-            <input name="name" type="text" required placeholder="Tu nombre" className={inputCls} />
-          </label>
-
-          <label className="flex flex-col gap-2">
-            <span className="text-[13px] text-[var(--mut)] font-medium">Email *</span>
-            <input name="email" type="email" required placeholder="vos@ejemplo.com" className={inputCls} />
-          </label>
-
-          <label className="flex flex-col gap-2">
-            <span className="text-[13px] text-[var(--mut)] font-medium">Lugar / Club</span>
-            <input name="venue" type="text" placeholder="Club, ciudad" className={inputCls} />
-          </label>
-
-          <label className="flex flex-col gap-2">
-            <span className="text-[13px] text-[var(--mut)] font-medium">Fecha</span>
-            <input name="date" type="text" placeholder="DD / MM / AAAA" className={inputCls} />
-          </label>
-
-          <label className="flex flex-col gap-2 col-span-2">
-            <span className="text-[13px] text-[var(--mut)] font-medium">Mensaje *</span>
-            <textarea
-              name="message"
-              rows={4}
-              required
-              placeholder="Contame sobre tu evento..."
-              className={inputCls}
-              style={{ resize: 'vertical' }}
-            />
-          </label>
-
-          {status === 'error' && (
-            <p className="col-span-2 text-accent text-[13px] m-0">{errorMsg}</p>
-          )}
-
-          <button
-            type="submit"
-            disabled={status === 'loading'}
-            className="col-span-2 py-[15px] border-none rounded-[11px] bg-accent text-white font-bold text-[15px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-[2px] hover:shadow-[0_14px_30px_rgba(224,70,58,.28)] hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
-          >
-            {status === 'loading'
-              ? 'Enviando…'
-              : status === 'success'
-              ? '✓ ¡Mensaje enviado!'
-              : 'Enviar consulta'}
-          </button>
-        </form>
-      </div>
+          {status === 'loading'
+            ? 'Sending'
+            : status === 'success'
+              ? 'Message sent'
+              : 'Send booking request'}
+        </button>
+      </form>
     </section>
   );
 }

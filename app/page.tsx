@@ -4,11 +4,10 @@ import Stats from '@/components/Stats';
 import Bio from '@/components/Bio';
 import Genres from '@/components/Genres';
 import Marquee from '@/components/Marquee';
-import Testimonials from '@/components/Testimonials';
-import Events from '@/components/Events';
 import BoothStrip from '@/components/BoothStrip';
 import Gallery from '@/components/Gallery';
 import MusicPlayer from '@/components/MusicPlayer';
+import PressAssets from '@/components/PressAssets';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 
@@ -24,9 +23,8 @@ export default function Home() {
         <Marquee />
         <MusicPlayer />
         <Gallery />
-        <Testimonials />
-        <Events />
         <BoothStrip />
+        <PressAssets />
         <Contact />
       </main>
       <Footer />

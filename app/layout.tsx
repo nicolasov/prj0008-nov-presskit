@@ -1,48 +1,33 @@
 import type { Metadata } from 'next';
-import { Archivo, Manrope } from 'next/font/google';
 import './globals.css';
 import RevealInit from '@/components/RevealInit';
-
-const archivo = Archivo({
-  subsets: ['latin'],
-  weight: ['500', '600', '700', '800', '900'],
-  variable: '--font-archivo',
-  display: 'swap',
-});
-
-const manrope = Manrope({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-manrope',
-  display: 'swap',
-});
 
 const siteUrl = 'https://nov.dj';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'NOV — DJ & Productor | Buenos Aires',
+    default: 'NOV — Official Presskit',
     template: '%s | NOV',
   },
   description:
-    'NOV es un DJ y productor de Buenos Aires que construye sets hipnóticos y cargados de groove. Progressive house, deep & organic, ambient & downtempo.',
+    'Official presskit for NOV, a Buenos Aires DJ and producer creating deep, hypnotic and emotionally evolving progressive house sets.',
   keywords: [
     'NOV',
     'DJ',
-    'Productor',
+    'Producer',
     'Buenos Aires',
     'Progressive House',
     'Deep House',
-    'DJ Booking',
-    'Sets hipnóticos',
-    'Groove',
+    'Official Presskit',
+    'Hypnotic Groove',
+    'Deep House',
     'Argentina',
   ],
   authors: [{ name: 'NOV' }],
   openGraph: {
-    title: 'NOV — DJ & Productor | Buenos Aires',
-    description: 'Sets hipnóticos cargados de groove. Progressive house, deep & organic, ambient. Buenos Aires, Argentina.',
+    title: 'NOV — Official Presskit',
+    description: 'Deep, hypnotic and emotionally evolving sets. Progressive house from Buenos Aires.',
     url: siteUrl,
     siteName: 'NOV',
     locale: 'es_AR',
@@ -51,8 +36,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NOV — DJ & Productor | Buenos Aires',
-    description: 'Sets hipnóticos cargados de groove.',
+    title: 'NOV — Official Presskit',
+    description: 'Deep, hypnotic and emotionally evolving sets.',
     images: ['/images/nov-stage.jpg'],
   },
   robots: { index: true, follow: true },
@@ -62,7 +47,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'MusicGroup',
   name: 'NOV',
-  genre: ['Progressive House', 'Deep House', 'Ambient', 'Downtempo'],
+  genre: ['Progressive House', 'Deep House', 'Hypnotic Groove'],
   url: siteUrl,
   sameAs: [
     'https://soundcloud.com/novnovnovnovnovnovnov',
@@ -81,7 +66,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${archivo.variable} ${manrope.variable}`}>
+    <html lang="es">
       <head>
         <script
           type="application/ld+json"

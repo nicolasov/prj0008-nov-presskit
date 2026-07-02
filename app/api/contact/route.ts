@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
       replyTo: email,
       subject: `[NOV Booking] Consulta de ${name}`,
       html: `
-        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#0a0908;color:#F5F1EB;padding:32px;border-radius:8px">
-          <h2 style="color:#E0463A;font-size:24px;margin:0 0 24px">Nueva consulta de booking</h2>
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#020202;color:#F4F1EB;padding:32px;border-radius:4px">
+          <h2 style="color:#C9C4BA;font-size:24px;margin:0 0 24px">Nueva consulta de booking</h2>
           <table style="width:100%;border-collapse:collapse">
             <tr>
               <td style="padding:10px 0;color:rgba(245,241,235,.56);font-size:13px;width:120px">Nombre</td>
@@ -47,12 +47,12 @@ export async function POST(req: NextRequest) {
             </tr>
             <tr>
               <td style="padding:10px 0;color:rgba(245,241,235,.56);font-size:13px">Email</td>
-              <td style="padding:10px 0"><a href="mailto:${escapeHtml(email)}" style="color:#E0463A">${escapeHtml(email)}</a></td>
+              <td style="padding:10px 0"><a href="mailto:${escapeHtml(email)}" style="color:#C9C4BA">${escapeHtml(email)}</a></td>
             </tr>
             ${venue ? `<tr><td style="padding:10px 0;color:rgba(245,241,235,.56);font-size:13px">Lugar</td><td style="padding:10px 0">${escapeHtml(venue)}</td></tr>` : ''}
             ${date ? `<tr><td style="padding:10px 0;color:rgba(245,241,235,.56);font-size:13px">Fecha</td><td style="padding:10px 0">${escapeHtml(date)}</td></tr>` : ''}
           </table>
-          <div style="margin-top:24px;padding:20px;background:#161310;border-radius:6px;border-left:3px solid #E0463A">
+          <div style="margin-top:24px;padding:20px;background:#101010;border-radius:4px;border-left:3px solid #C9C4BA">
             <p style="margin:0;line-height:1.7;white-space:pre-line">${escapeHtml(message)}</p>
           </div>
           <p style="margin-top:24px;color:rgba(245,241,235,.38);font-size:12px">

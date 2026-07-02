@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#0a0908;-webkit-font-smoothing:antialiased}
+::selection{background:#E0463A;color:#fff}
+input,textarea{font-family:'Manrope',sans-serif}
+input::placeholder,textarea::placeholder{color:rgba(245,241,235,.32)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes mq{to{transform:translateX(-50%)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes pulsering{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.7);opacity:0}}
+@keyframes revealIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div ref="{{ setRoot }}" style="--bg:#0a0908;--bg2:#100e0b;--card:#161310;--card2:#1c1813;--accent:#E0463A;--accent2:#F15B4C;--txt:#F5F1EB;--mut:rgba(245,241,235,.56);--mut2:rgba(245,241,235,.38);--line:rgba(255,255,255,.09); position:relative; overflow:hidden; min-height:100vh; background:var(--bg); color:var(--txt); font-family:'Manrope',sans-serif; line-height:1.5">
+
+  <sc-if value="{{ showGlow }}" hint-placeholder-val="{{ true }}">
+    <div ref="{{ setGlow }}" aria-hidden="true" style="position:absolute; inset:-12% 0 auto 0; height:96vh; pointer-events:none; z-index:0; background:radial-gradient(58% 50% at 72% 10%, rgba(224,70,58,.18), transparent 68%), radial-gradient(48% 42% at 8% 26%, rgba(224,70,58,.07), transparent 70%)"></div>
+  </sc-if>
+
+  <sc-if value="{{ showGrain }}" hint-placeholder-val="{{ true }}">
+    <div aria-hidden="true" style="position:fixed; inset:0; pointer-events:none; z-index:70; opacity:.045; mix-blend-mode:overlay; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;)"></div>
+  </sc-if>
+
+  <!-- Navbar -->
+  <header ref="{{ setHeader }}" style="position:fixed; top:0; left:0; right:0; z-index:50; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(10,9,8,.55); border-bottom:1px solid var(--line); transition:transform .45s cubic-bezier(.22,1,.36,1), background .4s; will-change:transform">
+    <div ref="{{ setProgress }}" aria-hidden="true" style="position:absolute; left:0; bottom:-1px; height:2px; width:0%; background:var(--accent); box-shadow:0 0 12px rgba(224,70,58,.6)"></div>
+    <nav style="max-width:1240px; margin:0 auto; padding:16px clamp(18px,4vw,40px); display:flex; align-items:center; justify-content:space-between; gap:20px">
+      <a href="#top" style="display:flex; align-items:center; gap:11px; text-decoration:none; color:var(--txt)">
+        <span style="font-family:'Archivo'; font-weight:800; letter-spacing:.32em; font-size:18px">NOV</span>
+      </a>
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleNav }}" aria-label="Men&uacute;" style="display:grid; gap:5px; background:none; border:none; cursor:pointer; padding:8px">
+          <span style="width:24px; height:2px; background:var(--txt); display:block"></span>
+          <span style="width:24px; height:2px; background:var(--txt); display:block"></span>
+          <span style="width:16px; height:2px; background:var(--txt); display:block"></span>
+        </button>
+      </sc-if>
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; align-items:center; gap:34px">
+          <a href="#bio" style="color:var(--mut); text-decoration:none; font-size:14.5px; font-weight:500; transition:color .25s" style-hover="color:var(--txt)">Bio</a>
+          <a href="#sonido" style="color:var(--mut); text-decoration:none; font-size:14.5px; font-weight:500; transition:color .25s" style-hover="color:var(--txt)">Sonido</a>
+          <a href="#testimonios" style="color:var(--mut); text-decoration:none; font-size:14.5px; font-weight:500; transition:color .25s" style-hover="color:var(--txt)">Testimonios</a>
+          <a href="#fechas" style="color:var(--mut); text-decoration:none; font-size:14.5px; font-weight:500; transition:color .25s" style-hover="color:var(--txt)">Fechas</a>
+          <a href="#contacto" style="display:inline-flex; align-items:center; gap:8px; padding:11px 22px; border-radius:100px; border:1px solid var(--line); color:var(--txt); text-decoration:none; font-size:14px; font-weight:600; transition:border-color .3s, background .3s, transform .3s" style-hover="border-color:var(--accent); background:rgba(255,255,255,.04); transform:translateY(-1px)">Contactar</a>
+        </div>
+      </sc-if>
+    </nav>
+    <sc-if value="{{ navOpenMobile }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:8px clamp(18px,4vw,40px) 26px; display:flex; flex-direction:column; gap:4px; border-top:1px solid var(--line); background:rgba(10,9,8,.92)">
+        <a href="#bio" onClick="{{ closeNav }}" style="color:var(--txt); text-decoration:none; font-family:'Archivo'; font-weight:700; font-size:22px; padding:12px 0">Bio</a>
+        <a href="#sonido" onClick="{{ closeNav }}" style="color:var(--txt); text-decoration:none; font-family:'Archivo'; font-weight:700; font-size:22px; padding:12px 0">Sonido</a>
+        <a href="#testimonios" onClick="{{ closeNav }}" style="color:var(--txt); text-decoration:none; font-family:'Archivo'; font-weight:700; font-size:22px; padding:12px 0">Testimonios</a>
+        <a href="#fechas" onClick="{{ closeNav }}" style="color:var(--txt); text-decoration:none; font-family:'Archivo'; font-weight:700; font-size:22px; padding:12px 0">Fechas</a>
+        <a href="#contacto" onClick="{{ closeNav }}" style="margin-top:8px; text-align:center; padding:14px; border-radius:100px; background:var(--accent); color:#fff; text-decoration:none; font-weight:700">Contactar</a>
+      </div>
+    </sc-if>
+  </header>
+
+  <main id="top" style="position:relative; z-index:1">
+
+    <!-- Hero (full-bleed) -->
+    <section style="position:relative; min-height:100vh; min-height:100svh; display:flex; align-items:flex-end; overflow:hidden">
+      <div style="position:absolute; inset:0; z-index:0">
+        <img ref="{{ setHeroImg }}" onError="{{ imgFallback }}" src="assets/nov-stage.jpg" alt="NOV en cabina durante un set" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; transform:scale(1.06); will-change:transform">
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(10,9,8,.62) 0%, rgba(10,9,8,.22) 34%, rgba(10,9,8,.72) 76%, rgba(10,9,8,.98) 100%)"></div>
+        <div style="position:absolute; inset:0; background:radial-gradient(125% 75% at 50% -5%, transparent 42%, rgba(10,9,8,.55))"></div>
+      </div>
+      <div style="position:relative; z-index:2; width:100%; max-width:1240px; margin:0 auto; padding:0 clamp(18px,4vw,40px) clamp(54px,8vw,104px)">
+        <div data-reveal="" style="">
+          <div style="display:inline-flex; align-items:center; gap:10px; padding:8px 16px; border:1px solid rgba(255,255,255,.16); border-radius:100px; margin-bottom:30px; backdrop-filter:blur(6px); background:rgba(10,9,8,.2)">
+            <span style="width:7px; height:7px; border-radius:50%; background:var(--accent)"></span>
+            <span style="font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--txt)">DJ &amp; Productor &middot; Buenos Aires</span>
+          </div>
+          <h1 style="font-family:'Archivo'; font-weight:900; text-transform:uppercase; letter-spacing:-.02em; line-height:.9; font-size:clamp(3rem,9.2vw,7.2rem); margin:0 0 30px; text-wrap:balance; text-shadow:0 2px 40px rgba(0,0,0,.4)">Sets hipn&oacute;ticos<br>cargados de <span style="color:var(--accent)">groove</span></h1>
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:30px">
+            <div style="max-width:48ch">
+              <p style="color:rgba(245,241,235,.82); font-size:clamp(15px,1.6vw,18px); margin:0 0 30px; line-height:1.65">Construyo viajes sonoros profundos que leen la pista y guían cada momento con precisión. Una invitación a cerrar los ojos, conectar y simplemente sentir.</p>
+              <div style="display:flex; flex-wrap:wrap; gap:14px">
+                <a href="#contacto" style="display:inline-flex; align-items:center; gap:10px; padding:16px 30px; border-radius:6px; background:var(--accent); color:#fff; text-decoration:none; font-weight:700; font-size:15px; transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s, background .3s" style-hover="transform:translateY(-3px); box-shadow:0 16px 40px rgba(224,70,58,.3); background:var(--accent2)">Contactar</a>
+                <a href="#sonido" style="display:inline-flex; align-items:center; gap:11px; padding:16px 28px; border-radius:6px; border:1px solid rgba(255,255,255,.22); color:var(--txt); text-decoration:none; font-weight:600; font-size:15px; transition:border-color .3s, background .3s, transform .3s" style-hover="border-color:var(--accent); background:rgba(255,255,255,.06); transform:translateY(-3px)">
+                  <span style="display:grid; place-items:center; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff">&#9654;</span>
+                  Escuchar sets
+                </a>
+              </div>
+            </div>
+            <div style="width:104px; height:104px; position:relative; flex:0 0 auto; animation:floaty 6s ease-in-out infinite">
+              <div style="position:absolute; inset:0; animation:spin 16s linear infinite">
+                <svg viewBox="0 0 100 100" style="width:100%; height:100%">
+                  <defs><path id="novcp" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" fill="none"></path></defs>
+                  <text style="font:600 8.2px Archivo; fill:#F5F1EB; letter-spacing:1.6px"><textPath href="#novcp">ESCUCHAR &middot; SETS &middot; EN VIVO &middot; </textPath></text>
+                </svg>
+              </div>
+              <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); display:grid; place-items:center; width:46px; height:46px; border-radius:50%; background:var(--accent); color:#fff; font-size:16px; padding-left:3px">&#9654;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section data-reveal="" style="max-width:1240px; margin:0 auto; padding:clamp(20px,4vw,46px) clamp(18px,4vw,40px)">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:clamp(20px,4vw,40px); padding:clamp(26px,3vw,38px) 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line)">
+        <div style="text-align:center">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:clamp(2.4rem,4.4vw,3.4rem); line-height:1; letter-spacing:-.02em">+15</div>
+          <div style="color:var(--mut); font-size:14px; margin-top:8px">A&ntilde;os como DJ</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:clamp(2.4rem,4.4vw,3.4rem); line-height:1; letter-spacing:-.02em; color:var(--accent)">100%</div>
+          <div style="color:var(--mut); font-size:14px; margin-top:8px">Selecci&oacute;n renovada</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bio / About -->
+    <section id="bio" style="max-width:1240px; margin:0 auto; padding:clamp(64px,9vw,120px) clamp(18px,4vw,40px); display:flex; flex-wrap:wrap; gap:clamp(36px,5vw,72px); align-items:center">
+      <div data-reveal="" style="flex:1 1 360px; min-width:280px">
+        <div style="position:relative; border-radius:6px; overflow:hidden; aspect-ratio:4/5; background:#0d0b09; box-shadow:0 36px 80px rgba(0,0,0,.5)">
+          <img onError="{{ imgFallback }}" src="assets/nov-bio.jpg" alt="NOV en cabina durante un set" style="width:100%; height:100%; object-fit:cover; object-position:center; transition:transform 1.1s cubic-bezier(.22,1,.36,1)" style-hover="transform:scale(1.05)">
+          <div aria-hidden="true" style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 52%, rgba(10,9,8,.5))"></div>
+        </div>
+      </div>
+      <div data-reveal="" style="flex:1 1 380px; min-width:300px">
+        <div style="width:46px; height:3px; background:var(--accent); margin-bottom:26px"></div>
+        <h2 style="font-family:'Archivo'; font-weight:800; text-transform:uppercase; letter-spacing:-.01em; line-height:1; font-size:clamp(2rem,4.2vw,3.1rem); margin:0 0 26px">Groove, emoci&oacute;n<br>y profundidad</h2>
+        <p style="color:var(--mut); font-size:16.5px; line-height:1.7; margin:0 0 18px">NOV es un DJ y productor de Buenos Aires que construye sets hipnóticos y cargados de groove, donde la emoción y la profundidad son protagonistas.</p>
+        <p style="color:var(--mut); font-size:16.5px; line-height:1.7; margin:0 0 18px">Con una fuerte sensibilidad para leer la pista, crea atmósferas envolventes y una narrativa sólida que guía cada momento con precisión. En cada presentación renueva su selección, explorando nuevos sonidos para una experiencia siempre fresca.</p>
+        <p style="color:var(--txt); font-size:16.5px; line-height:1.7; margin:0 0 32px; font-weight:600">Su sonido invita a cerrar los ojos, conectar y simplemente sentir.</p>
+        <a href="#contacto" style="display:inline-flex; align-items:center; gap:10px; padding:14px 26px; border-radius:100px; border:1px solid var(--line); color:var(--txt); text-decoration:none; font-weight:600; font-size:15px; transition:border-color .3s, background .3s, transform .3s" style-hover="border-color:var(--accent); background:rgba(255,255,255,.04); transform:translateY(-2px)">Trabajemos juntos &#8594;</a>
+      </div>
+    </section>
+
+    <!-- Sonido / What I play -->
+    <section id="sonido" style="max-width:1240px; margin:0 auto; padding:clamp(48px,7vw,90px) clamp(18px,4vw,40px)">
+      <div data-reveal="" style="text-align:center; margin-bottom:clamp(40px,5vw,64px)">
+        <div style="width:46px; height:3px; background:var(--accent); margin:0 auto 22px"></div>
+        <h2 style="font-family:'Archivo'; font-weight:800; text-transform:uppercase; letter-spacing:-.01em; font-size:clamp(1.9rem,4.2vw,3rem); margin:0">G&eacute;neros</h2>
+      </div>
+      <div style="border-top:1px solid var(--line)">
+        <div data-reveal="" data-genre="" style="display:flex; flex-wrap:wrap; align-items:center; gap:18px; padding:clamp(22px,3vw,34px) clamp(6px,2vw,20px); border-bottom:1px solid var(--line); cursor:default; transition:background .35s, padding-left .35s" style-hover="background:var(--card); padding-left:clamp(14px,2.6vw,30px)">
+          <span style="font-family:'Archivo'; color:var(--mut2); font-size:14px; width:34px">01</span>
+          <h3 style="font-family:'Archivo'; font-weight:800; text-transform:uppercase; font-size:clamp(1.3rem,2.4vw,1.9rem); margin:0; flex:0 0 auto; width:min(100%,250px)">Progressive House</h3>
+          <p style="color:var(--mut); font-size:15px; margin:0; flex:1 1 280px; max-width:54ch; line-height:1.6">Viajes largos y envolventes que construyen tensión y la liberan en el momento justo.</p>
+          <span style="display:grid; place-items:center; width:44px; height:44px; border-radius:50%; border:1px solid var(--line); color:var(--txt); flex:0 0 auto; transition:background .3s, color .3s, transform .3s" style-hover="background:var(--accent); color:#fff; transform:rotate(45deg)">&#8599;</span>
+        </div>
+        <div data-reveal="" data-genre="" style="display:flex; flex-wrap:wrap; align-items:center; gap:18px; padding:clamp(22px,3vw,34px) clamp(6px,2vw,20px); border-bottom:1px solid var(--line); cursor:default; transition:background .35s, padding-left .35s" style-hover="background:var(--card); padding-left:clamp(14px,2.6vw,30px)">
+          <span style="font-family:'Archivo'; color:var(--mut2); font-size:14px; width:34px">02</span>
+          <h3 style="font-family:'Archivo'; font-weight:800; text-transform:uppercase; font-size:clamp(1.3rem,2.4vw,1.9rem); margin:0; flex:0 0 auto; width:min(100%,250px)">Deep &amp; Organic</h3>
+          <p style="color:var(--mut); font-size:15px; margin:0; flex:1 1 280px; max-width:54ch; line-height:1.6">Grooves cálidos y orgánicos que invitan a moverse sin apuro, con alma y textura.</p>
+          <span style="display:grid; place-items:center; width:44px; height:44px; border-radius:50%; border:1px solid var(--line); color:var(--txt); flex:0 0 auto; transition:background .3s, color .3s, transform .3s" style-hover="background:var(--accent); color:#fff; transform:rotate(45deg)">&#8599;</span>
+        </div>
+        <div data-reveal="" data-genre="" style="display:flex; flex-wrap:wrap; align-items:center; gap:18px; padding:clamp(22px,3vw,34px) clamp(6px,2vw,20px); border-bottom:1px solid var(--line); cursor:default; transition:background .35s, padding-left .35s" style-hover="background:var(--card); padding-left:clamp(14px,2.6vw,30px)">
+          <span style="font-family:'Archivo'; color:var(--mut2); font-size:14px; width:34px">03</span>
+          <h3 style="font-family:'Archivo'; font-weight:800; text-transform:uppercase; font-size:clamp(1.3rem,2.4vw,1.9rem); margin:0; flex:0 0 auto; width:min(100%,250px)">Ambient &amp; Downtempo</h3>
+          <p style="color:var(--mut); font-size:15px; margin:0; flex:1 1 280px; max-width:54ch; line-height:1.6">Atmósferas para abrir o cerrar una noche, donde la emoción toma todo el control.</p>
+          <span style="display:grid; place-items:center; width:44px; height:44px; border-radius:50%; border:1px solid var(--line); color:var(--txt); flex:0 0 auto; transition:background .3s, color .3s, transform .3s" style-hover="background:var(--accent); color:#fff; transform:rotate(45deg)">&#8599;</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <section aria-hidden="true" style="padding:clamp(34px,5vw,60px) 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); overflow:hidden">
+      <div style="display:flex; width:max-content; animation:mq 26s linear infinite; will-change:transform">
+        <div style="display:flex; align-items:center; gap:34px; padding-right:34px; font-family:'Archivo'; font-weight:800; text-transform:uppercase; font-size:clamp(1.8rem,4vw,3rem); letter-spacing:.01em; color:var(--mut2)">
+          <span>Groove</span><span>&#10038;</span><span>Depth</span><span>&#10038;</span><span>Emotion</span><span>&#10038;</span><span>Hypnotic</span><span>&#10038;</span><span>Soul</span><span>&#10038;</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:34px; padding-right:34px; font-family:'Archivo'; font-weight:800; text-transform:uppercase; font-size:clamp(1.8rem,4vw,3rem); letter-spacing:.01em; color:var(--mut2)">
+          <span>Groove</span><span>&#10038;</span><span>Depth</span><span>&#10038;</span><span>Emotion</span><span>&#10038;</span><span>Hypnotic</span><span>&#10038;</span><span>Soul</span><span>&#10038;</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonios" style="max-width:1240px; margin:0 auto; padding:clamp(64px,9vw,118px) clamp(18px,4vw,40px)">
+      <div data-reveal="" style="margin-bottom:clamp(34px,4vw,52px)">
+        <div style="width:46px; height:3px; background:var(--accent); margin-bottom:22px"></div>
+        <h2 style="font-family:'Archivo'; font-weight:800; text-transform:uppercase; letter-spacing:-.01em; font-size:clamp(1.9rem,4.2vw,3rem); margin:0">Lo que dicen</h2>
+      </div>
+      <div data-reveal="" style="display:flex; flex-wrap:wrap; gap:clamp(20px,3vw,36px); align-items:stretch">
+        <div style="flex:1 1 280px; min-width:240px; border-radius:6px; overflow:hidden; min-height:320px; position:relative">
+          <img ref="{{ setTestiImg }}" onError="{{ imgFallback }}" src="assets/nov-live.jpg" alt="NOV en cabina durante un set" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:opacity .5s"><div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(10,9,8,.15), rgba(10,9,8,.55))"></div>
+        </div>
+        <div style="flex:1.4 1 420px; min-width:300px; background:var(--card); border:1px solid var(--line); border-radius:6px; padding:clamp(28px,4vw,52px); display:flex; flex-direction:column; justify-content:center">
+          <span style="font-family:'Archivo'; font-size:64px; line-height:.6; color:var(--accent); height:34px">&ldquo;</span>
+          <h3 style="font-family:'Archivo'; font-weight:700; font-size:clamp(1.25rem,2.4vw,1.8rem); line-height:1.2; margin:0 0 18px; text-transform:uppercase">{{ t.title }}</h3>
+          <p style="color:var(--mut); font-size:16px; line-height:1.7; margin:0 0 26px">{{ t.quote }}</p>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:auto">
+            <div style="display:flex; align-items:center; gap:12px">
+              <span style="width:28px; height:1px; background:var(--accent)"></span>
+              <span style="color:var(--txt); font-weight:600; font-size:14.5px">{{ t.author }}</span>
+            </div>
+            <div style="display:flex; gap:10px">
+              <button onClick="{{ tPrev }}" aria-label="Anterior" style="display:grid; place-items:center; width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:none; color:var(--txt); cursor:pointer; font-size:16px; transition:background .3s, border-color .3s, transform .3s" style-hover="border-color:var(--accent); background:rgba(255,255,255,.04); transform:translateX(-2px)">&#8592;</button>
+              <button onClick="{{ tNext }}" aria-label="Siguiente" style="display:grid; place-items:center; width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:none; color:var(--txt); cursor:pointer; font-size:16px; transition:background .3s, border-color .3s, transform .3s" style-hover="border-color:var(--accent); background:rgba(255,255,255,.04); transform:translateX(2px)">&#8594;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upcoming events / Fechas -->
+    <section id="fechas" style="max-width:1240px; margin:0 auto; padding:clamp(48px,7vw,90px) clamp(18px,4vw,40px)">
+      <div data-reveal="" style="text-align:center; margin-bottom:clamp(40px,5vw,60px)">
+        <div style="width:46px; height:3px; background:var(--accent); margin:0 auto 22px"></div>
+        <h2 style="font-family:'Archivo'; font-weight:800; text-transform:uppercase; letter-spacing:-.01em; font-size:clamp(1.9rem,4.2vw,3rem); margin:0">&Uacute;ltimas fechas</h2>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:clamp(18px,2.4vw,28px)">
+        <article data-reveal="" style="background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s, border-color .4s" style-hover="transform:translateY(-7px); box-shadow:0 26px 56px rgba(0,0,0,.45); border-color:rgba(224,70,58,.35)">
+          <div style="position:relative; aspect-ratio:16/10; overflow:hidden">
+            <img onError="{{ imgFallback }}" src="assets/nov-live.jpg" alt="NOV en cabina con luces de larga exposici&oacute;n" style="width:100%; height:100%; object-fit:cover; transition:transform 1s cubic-bezier(.22,1,.36,1)" style-hover="transform:scale(1.06)">
+          </div>
+          <div style="padding:24px 24px 28px">
+            <div style="color:var(--accent); font-size:13px; font-weight:600; letter-spacing:.04em; margin-bottom:10px">12 JUL 2026</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; text-transform:uppercase; font-size:1.3rem; margin:0 0 10px">Ciclo Progresivo</h3>
+            <p style="color:var(--mut); font-size:14.5px; line-height:1.6; margin:0 0 20px">Set extendido de progressive house. Palermo, Buenos Aires.</p>
+            <a href="#contacto" style="display:inline-flex; align-items:center; gap:8px; color:var(--txt); text-decoration:none; font-weight:600; font-size:14px; transition:gap .3s, color .3s" style-hover="gap:14px; color:var(--accent)">Ver detalle &#8594;</a>
+          </div>
+        </article>
+        <article data-reveal="" style="background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s, border-color .4s" style-hover="transform:translateY(-7px); box-shadow:0 26px 56px rgba(0,0,0,.45); border-color:rgba(224,70,58,.35)">
+          <div style="position:relative; aspect-ratio:16/10; overflow:hidden">
+            <img onError="{{ imgFallback }}" src="assets/nov-stage.jpg" alt="NOV de negro tocando con luces rojas de fondo" style="width:100%; height:100%; object-fit:cover; object-position:center 35%; transition:transform 1s cubic-bezier(.22,1,.36,1)" style-hover="transform:scale(1.06)">
+          </div>
+          <div style="padding:24px 24px 28px">
+            <div style="color:var(--accent); font-size:13px; font-weight:600; letter-spacing:.04em; margin-bottom:10px">09 AGO 2026</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; text-transform:uppercase; font-size:1.3rem; margin:0 0 10px">Sunset Costa</h3>
+            <p style="color:var(--mut); font-size:14.5px; line-height:1.6; margin:0 0 20px">Atardecer melódico frente al mar. Mar del Plata.</p>
+            <a href="#contacto" style="display:inline-flex; align-items:center; gap:8px; color:var(--txt); text-decoration:none; font-weight:600; font-size:14px; transition:gap .3s, color .3s" style-hover="gap:14px; color:var(--accent)">Ver detalle &#8594;</a>
+          </div>
+        </article>
+        <article data-reveal="" style="background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s, border-color .4s" style-hover="transform:translateY(-7px); box-shadow:0 26px 56px rgba(0,0,0,.45); border-color:rgba(224,70,58,.35)">
+          <div style="position:relative; aspect-ratio:16/10; overflow:hidden">
+            <img onError="{{ imgFallback }}" src="assets/nov-hero.jpg" alt="Silueta de NOV frente a la pantalla con su nombre" style="width:100%; height:100%; object-fit:cover; object-position:center 22%; transition:transform 1s cubic-bezier(.22,1,.36,1)" style-hover="transform:scale(1.06)">
+          </div>
+          <div style="padding:24px 24px 28px">
+            <div style="color:var(--accent); font-size:13px; font-weight:600; letter-spacing:.04em; margin-bottom:10px">05 SEP 2026</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; text-transform:uppercase; font-size:1.3rem; margin:0 0 10px">Noche Hipn&oacute;tica</h3>
+            <p style="color:var(--mut); font-size:14.5px; line-height:1.6; margin:0 0 20px">Melodic techno hasta el amanecer. CABA, Buenos Aires.</p>
+            <a href="#contacto" style="display:inline-flex; align-items:center; gap:8px; color:var(--txt); text-decoration:none; font-weight:600; font-size:14px; transition:gap .3s, color .3s" style-hover="gap:14px; color:var(--accent)">Ver detalle &#8594;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Shared booth strip -->
+    <section data-reveal="" style="max-width:1240px; margin:0 auto; padding:clamp(20px,3vw,40px) clamp(18px,4vw,40px) clamp(40px,6vw,80px)">
+      <div style="text-align:center; color:var(--mut2); font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; margin-bottom:22px">Ha compartido cabina con</div>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:18px clamp(26px,4vw,56px); font-family:'Archivo'; font-weight:700; text-transform:uppercase; font-size:clamp(1.35rem,2.9vw,2.1rem); color:var(--mut); letter-spacing:.01em">
+        <span style="transition:color .3s" style-hover="color:var(--txt)">Jimmy Van M</span>
+        <span style="transition:color .3s" style-hover="color:var(--txt)">Popof</span>
+        <span style="transition:color .3s" style-hover="color:var(--txt)">Mart&iacute;n Garc&iacute;a</span>
+        <span style="transition:color .3s" style-hover="color:var(--txt)">Nicol&aacute;s Rada</span>
+        <span style="transition:color .3s" style-hover="color:var(--txt)">Fernando Ferreyra</span>
+        <span style="transition:color .3s" style-hover="color:var(--txt)">Carlos Alfonsin</span>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contacto" style="max-width:1240px; margin:0 auto; padding:clamp(48px,7vw,90px) clamp(18px,4vw,40px) clamp(60px,9vw,110px); display:flex; flex-wrap:wrap; gap:clamp(36px,5vw,72px)">
+      <div data-reveal="" style="flex:1 1 320px; min-width:280px">
+        <div style="width:46px; height:3px; background:var(--accent); margin-bottom:26px"></div>
+        <h2 style="font-family:'Archivo'; font-weight:800; text-transform:uppercase; letter-spacing:-.01em; line-height:1; font-size:clamp(2rem,4.4vw,3.2rem); margin:0 0 22px">Pong&aacute;monos<br>en contacto</h2>
+        <p style="color:var(--mut); font-size:16px; line-height:1.7; max-width:42ch; margin:0 0 34px">Para reservas, fechas y consultas de booking. Contame de tu evento y armamos juntos el viaje sonoro perfecto.</p>
+        <div style="display:flex; flex-direction:column; gap:16px">
+          <a href="mailto:booking@nov.dj" style="display:flex; align-items:center; gap:14px; color:var(--txt); text-decoration:none; transition:color .3s" style-hover="color:var(--accent)">
+            <span style="display:grid; place-items:center; width:42px; height:42px; border-radius:50%; border:1px solid var(--line)">&#9993;</span>
+            <span style="font-size:15.5px">booking@nov.dj</span>
+          </a>
+          <a href="tel:+5491100000000" style="display:flex; align-items:center; gap:14px; color:var(--txt); text-decoration:none; transition:color .3s" style-hover="color:var(--accent)">
+            <span style="display:grid; place-items:center; width:42px; height:42px; border-radius:50%; border:1px solid var(--line)">&#9742;</span>
+            <span style="font-size:15.5px">+54 9 11 0000 0000</span>
+          </a>
+        </div>
+      </div>
+      <div data-reveal="" style="flex:1.1 1 380px; min-width:300px">
+        <form onSubmit="{{ onSubmit }}" style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:clamp(24px,3.4vw,40px); display:grid; grid-template-columns:1fr 1fr; gap:18px">
+          <label style="display:flex; flex-direction:column; gap:8px">
+            <span style="font-size:13px; color:var(--mut); font-weight:500">Nombre</span>
+            <input type="text" required="" placeholder="Tu nombre" style="background:var(--bg2); border:1px solid var(--line); border-radius:11px; padding:13px 15px; color:var(--txt); font-size:14.5px; outline:none; transition:border-color .3s, box-shadow .3s" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(224,70,58,.12)">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:8px">
+            <span style="font-size:13px; color:var(--mut); font-weight:500">Email</span>
+            <input type="email" required="" placeholder="vos@ejemplo.com" style="background:var(--bg2); border:1px solid var(--line); border-radius:11px; padding:13px 15px; color:var(--txt); font-size:14.5px; outline:none; transition:border-color .3s, box-shadow .3s" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(224,70,58,.12)">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:8px">
+            <span style="font-size:13px; color:var(--mut); font-weight:500">Lugar / Club</span>
+            <input type="text" placeholder="Club, ciudad" style="background:var(--bg2); border:1px solid var(--line); border-radius:11px; padding:13px 15px; color:var(--txt); font-size:14.5px; outline:none; transition:border-color .3s, box-shadow .3s" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(224,70,58,.12)">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:8px">
+            <span style="font-size:13px; color:var(--mut); font-weight:500">Fecha</span>
+            <input type="text" placeholder="DD / MM / AAAA" style="background:var(--bg2); border:1px solid var(--line); border-radius:11px; padding:13px 15px; color:var(--txt); font-size:14.5px; outline:none; transition:border-color .3s, box-shadow .3s" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(224,70,58,.12)">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:8px; grid-column:1 / -1">
+            <span style="font-size:13px; color:var(--mut); font-weight:500">Mensaje</span>
+            <textarea rows="4" placeholder="Contame sobre tu evento..." style="background:var(--bg2); border:1px solid var(--line); border-radius:11px; padding:13px 15px; color:var(--txt); font-size:14.5px; outline:none; resize:vertical; transition:border-color .3s, box-shadow .3s" style-focus="border-color:var(--accent); box-shadow:0 0 0 3px rgba(224,70,58,.12)"></textarea>
+          </label>
+          <button type="submit" style="grid-column:1 / -1; padding:15px; border:none; border-radius:11px; background:var(--accent); color:#fff; font-weight:700; font-size:15px; cursor:pointer; transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .3s" style-hover="transform:translateY(-2px); box-shadow:0 14px 30px rgba(224,70,58,.28); background:var(--accent2)">{{ submitLabel }}</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer style="position:relative; z-index:1; border-top:1px solid var(--line); padding:clamp(40px,5vw,64px) clamp(18px,4vw,40px) 32px">
+    <div style="max-width:1240px; margin:0 auto; display:flex; flex-wrap:wrap; gap:34px; justify-content:space-between">
+      <div style="flex:1 1 240px; min-width:220px">
+        <div style="display:flex; align-items:center; gap:11px; margin-bottom:16px">
+          <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:50%; border:1px solid var(--accent); color:var(--accent); font-size:13px">&#9835;</span>
+          <span style="font-family:'Archivo'; font-weight:800; letter-spacing:.32em; font-size:17px">NOV</span>
+        </div>
+        <p style="color:var(--mut); font-size:14.5px; line-height:1.65; max-width:34ch; margin:0">DJ y productor de Buenos Aires. Atmósferas envolventes para cerrar los ojos y sentir.</p>
+      </div>
+      <div style="display:flex; gap:clamp(40px,6vw,80px); flex-wrap:wrap">
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <span style="font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--mut2); margin-bottom:4px">Navegar</span>
+          <a href="#bio" style="color:var(--mut); text-decoration:none; font-size:14.5px; transition:color .25s" style-hover="color:var(--txt)">Bio</a>
+          <a href="#sonido" style="color:var(--mut); text-decoration:none; font-size:14.5px; transition:color .25s" style-hover="color:var(--txt)">Sonido</a>
+          <a href="#fechas" style="color:var(--mut); text-decoration:none; font-size:14.5px; transition:color .25s" style-hover="color:var(--txt)">Fechas</a>
+          <a href="#contacto" style="color:var(--mut); text-decoration:none; font-size:14.5px; transition:color .25s" style-hover="color:var(--txt)">Contacto</a>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <span style="font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--mut2); margin-bottom:4px">Escuchar</span>
+          <a href="#" style="color:var(--mut); text-decoration:none; font-size:14.5px; transition:color .25s" style-hover="color:var(--accent)">Spotify</a>
+          <a href="#" style="color:var(--mut); text-decoration:none; font-size:14.5px; transition:color .25s" style-hover="color:var(--accent)">SoundCloud</a>
+          <a href="#" style="color:var(--mut); text-decoration:none; font-size:14.5px; transition:color .25s" style-hover="color:var(--accent)">Instagram</a>
+          <a href="#" style="color:var(--mut); text-decoration:none; font-size:14.5px; transition:color .25s" style-hover="color:var(--accent)">Beatport</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1240px; margin:36px auto 0; padding-top:24px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; color:var(--mut2); font-size:13px">
+      <span>&copy; 2026 NOV. Todos los derechos reservados.</span>
+      <span>Buenos Aires, Argentina</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#E0463A&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;glow&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;grain&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.rootRef = React.createRef();
+    this.state = {
+      vw: (typeof window !== 'undefined' ? window.innerWidth : 1280),
+      navOpen: false,
+      ti: 0,
+      sent: false
+    };
+    this.testimonials = [
+      { title: 'Una narrativa impecable de punta a punta', quote: 'NOV leyó la pista como pocos y nos llevó de viaje toda la noche. Profundidad y groove en dosis perfectas; la gente no se quería ir.', author: 'Ciclo Subm&aacute;rino', img: 'assets/nov-live.jpg' },
+      { title: 'La cabina quedó en las mejores manos', quote: 'Atmósferas envolventes y una energía que crece sin apuro. Cada momento se sintió pensado. Volvemos a llamarlo sin dudarlo.', author: 'Terraza Costa', img: 'assets/nov-stage.jpg' },
+      { title: 'Emoción pura en la pista', quote: 'Hipnótico de principio a fin. La selección renovada hizo que se sintiera fresco y único. Una de las mejores noches del ciclo.', author: 'Club An&aacute;logo', img: 'assets/nov-hero.jpg' }
+    ];
+  }
+
+  componentDidMount(){
+    try {
+      if (this._rootEl && this.props.accent) this._rootEl.style.setProperty('--accent', this.props.accent);
+    } catch (e) {}
+
+    this._onResize = () => {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => { this._raf = 0; this.setState({ vw: window.innerWidth }); });
+    };
+    window.addEventListener('resize', this._onResize);
+
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- Scroll-reveal with stagger. Content is visible by default (no inline
+    // opacity in the template); we hide via JS then animate in additively using
+    // `animation` — a property the template never sets, so React re-renders
+    // can't revert it. Any failure path leaves everything fully visible. ---
+    try {
+      const els = Array.prototype.slice.call((this._rootEl || document).querySelectorAll('[data-reveal]'));
+      if (els.length && !reduce && ('IntersectionObserver' in window)) {
+        const playIn = (el, i) => {
+          el.style.opacity = '';
+          el.style.animation = 'revealIn .9s cubic-bezier(.22,1,.36,1) ' + (i ? (i * 0.07).toFixed(2) + 's' : '0s') + ' both';
+        };
+        els.forEach(el => { el.style.opacity = '0'; });
+        this._io = new IntersectionObserver((ents) => {
+          let i = 0;
+          ents.forEach(en => { if (en.isIntersecting) { playIn(en.target, i++); this._io.unobserve(en.target); } });
+        }, { threshold: 0.06, rootMargin: '0px 0px -6% 0px' });
+        els.forEach(el => this._io.observe(el));
+        const vh = window.innerHeight || 800;
+        let k = 0;
+        els.forEach(el => { if (el.getBoundingClientRect().top < vh * 0.95) { playIn(el, k++); this._io.unobserve(el); } });
+        this._failsafe = setTimeout(() => {
+          els.forEach(el => { if (getComputedStyle(el).opacity === '0') { el.style.opacity = ''; el.style.animation = ''; } });
+        }, 1800);
+      }
+    } catch (e) {
+      try {
+        var all = (this._rootEl || document).querySelectorAll('[data-reveal]');
+        for (var j = 0; j < all.length; j++) { all[j].style.opacity = ''; all[j].style.animation = ''; }
+      } catch (e2) {}
+    }
+
+    // --- Single rAF-throttled scroll handler: progress bar, hero parallax,
+    // header hide-on-scroll-down / reveal-on-scroll-up. ---
+    this._lastY = window.scrollY || 0;
+    this._onScroll = () => {
+      if (this._sraf) return;
+      this._sraf = requestAnimationFrame(() => {
+        this._sraf = 0;
+        const y = window.scrollY || 0;
+        const doc = document.documentElement;
+        const max = (doc.scrollHeight - window.innerHeight) || 1;
+        const pct = Math.max(0, Math.min(1, y / max));
+        if (this._progress) this._progress.style.width = (pct * 100).toFixed(2) + '%';
+        if (!reduce && this._heroImg) this._heroImg.style.transform = 'translateY(' + (y * 0.06) + 'px) scale(1.06)';
+        if (!reduce && this._glow) this._glow.style.transform = 'translateY(' + (y * 0.1) + 'px)';
+        if (this._header) {
+          const goingDown = y > this._lastY + 2;
+          const goingUp = y < this._lastY - 2;
+          if (y > 140 && goingDown) {
+            this._header.style.transform = 'translateY(-100%)';
+          } else if (goingUp || y <= 140) {
+            this._header.style.transform = 'translateY(0)';
+          }
+          this._header.style.background = y > 40 ? 'rgba(10,9,8,.82)' : 'rgba(10,9,8,.55)';
+        }
+        this._lastY = y;
+      });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if (prevState.ti !== this.state.ti && this._testiImg) {
+      this._testiImg.src = this.testimonials[this.state.ti].img;
+    }
+  }
+
+  componentWillUnmount(){
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._io) this._io.disconnect();
+    if (this._sentTimer) clearTimeout(this._sentTimer);
+    if (this._failsafe) clearTimeout(this._failsafe);
+  }
+
+  renderVals(){
+    const vw = this.state.vw;
+    const isMobile = vw < 880;
+    const t = this.testimonials[this.state.ti];
+    return {
+      setRoot: (el) => { this._rootEl = el; },
+      setHeader: (el) => { this._header = el; },
+      setProgress: (el) => { this._progress = el; },
+      setHeroImg: (el) => { this._heroImg = el; },
+      setGlow: (el) => { this._glow = el; },
+      setTestiImg: (el) => { this._testiImg = el; },
+      imgFallback: (e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/900x900/100e0b/2a241c?text=NOV'; },
+      isMobile: isMobile,
+      isDesktop: !isMobile,
+      navOpenMobile: isMobile && this.state.navOpen,
+      toggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
+      closeNav: () => this.setState({ navOpen: false }),
+      t: t,
+      tNext: () => this.setState(s => ({ ti: (s.ti + 1) % this.testimonials.length })),
+      tPrev: () => this.setState(s => ({ ti: (s.ti - 1 + this.testimonials.length) % this.testimonials.length })),
+      showGlow: this.props.glow ?? true,
+      showGrain: this.props.grain ?? true,
+      submitLabel: this.state.sent ? '\u2713  \u00a1Mensaje enviado!' : 'Enviar consulta',
+      onSubmit: (e) => {
+        e.preventDefault();
+        this.setState({ sent: true });
+        if (this._sentTimer) clearTimeout(this._sentTimer);
+        this._sentTimer = setTimeout(() => this.setState({ sent: false }), 3200);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

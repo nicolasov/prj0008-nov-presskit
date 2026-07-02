@@ -13,18 +13,18 @@ const config: Config = {
       },
       colors: {
         bg: {
-          DEFAULT: '#0a0908',
-          2: '#100e0b',
+          DEFAULT: '#020202',
+          2: '#070707',
         },
         card: {
-          DEFAULT: '#161310',
-          2: '#1c1813',
+          DEFAULT: '#101010',
+          2: '#161616',
         },
         accent: {
-          DEFAULT: '#E0463A',
-          hover: '#F15B4C',
+          DEFAULT: '#C9C4BA',
+          hover: '#EEEAE2',
         },
-        txt: '#F5F1EB',
+        txt: '#F4F1EB',
       },
       screens: {
         nav: '880px',

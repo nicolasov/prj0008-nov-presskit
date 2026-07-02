@@ -4,149 +4,112 @@ import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
 export default function Hero() {
-  const imgRef = useRef<HTMLDivElement>(null);
+  const plateRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    const el = imgRef.current;
+    const el = plateRef.current;
     if (!el) return;
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (reduce) return;
 
-    const onScroll = () => {
+    const onMove = (event: PointerEvent) => {
       if (rafRef.current) return;
       rafRef.current = requestAnimationFrame(() => {
         rafRef.current = 0;
-        const y = window.scrollY;
-        if (el) el.style.transform = `translateY(${(y * 0.06).toFixed(1)}px) scale(1.06)`;
+        const x = (event.clientX / window.innerWidth - 0.5) * 18;
+        const y = (event.clientY / window.innerHeight - 0.5) * 14;
+        el.style.setProperty('--mx', `${x.toFixed(2)}px`);
+        el.style.setProperty('--my', `${y.toFixed(2)}px`);
       });
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onMove);
   }, []);
 
   return (
     <section
       id="top"
-      className="relative min-h-screen flex items-end overflow-hidden"
-      style={{ minHeight: '100svh' }}
+      className="secret-hero relative flex h-[calc(100svh-52px)] min-h-[580px] items-end overflow-hidden"
     >
-      {/* Background image + overlays */}
-      <div className="absolute inset-0 z-0">
-        <div ref={imgRef} className="absolute inset-0" style={{ transform: 'scale(1.06)', willChange: 'transform' }}>
+      <div className="room-scene" aria-hidden="true">
+        <div className="room-wall room-wall-left" />
+        <div className="room-wall room-wall-right" />
+        <div className="room-horizon" />
+        <div className="room-grid" />
+        <div ref={plateRef} className="room-plate">
           <Image
             src="/images/nov-stage.jpg"
-            alt="NOV en cabina durante un set"
+            alt=""
             fill
             priority
             quality={90}
-            className="object-cover object-[center_30%]"
-            sizes="100vw"
+            className="monochrome-image object-cover object-[center_42%]"
+            sizes="(max-width: 760px) 54vw, 430px"
           />
         </div>
-        {/* Gradient overlays */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(180deg, rgba(10,9,8,.62) 0%, rgba(10,9,8,.22) 34%, rgba(10,9,8,.72) 76%, rgba(10,9,8,.98) 100%)',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: 'radial-gradient(125% 75% at 50% -5%, transparent 42%, rgba(10,9,8,.55))' }}
-        />
       </div>
 
-      {/* Ambient glow */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none z-0"
-        style={{
-          background: 'radial-gradient(58% 50% at 72% 10%, rgba(224,70,58,.18), transparent 68%), radial-gradient(48% 42% at 8% 26%, rgba(224,70,58,.07), transparent 70%)',
-        }}
-      />
-
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-[1240px] mx-auto px-[clamp(18px,4vw,40px)] pb-[clamp(54px,8vw,104px)]">
-        <div data-reveal="">
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-[10px] px-4 py-2 border border-white/[.16] rounded-full mb-[30px]"
-            style={{ backdropFilter: 'blur(6px)', background: 'rgba(10,9,8,.2)' }}
-          >
-            <span className="w-[7px] h-[7px] rounded-full bg-accent" />
-            <span className="text-[12.5px] tracking-[.18em] uppercase text-txt">
-              DJ &amp; Productor &middot; Buenos Aires
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1
-            className="font-archivo font-black uppercase tracking-[-0.02em] leading-[.9] m-0 mb-[30px]"
-            style={{
-              fontSize: 'clamp(3rem,9.2vw,7.2rem)',
-              textShadow: '0 2px 40px rgba(0,0,0,.4)',
-              textWrap: 'balance',
-            }}
-          >
-            Sets hipnóticos
-            <br />
-            cargados de <span className="text-accent">groove</span>
+      <div className="relative z-10 mx-auto grid w-full max-w-[1240px] gap-[clamp(24px,4vw,48px)] px-[clamp(18px,4vw,40px)] pb-[clamp(30px,5vw,64px)] pt-24 md:grid-cols-[1fr_320px] md:items-end">
+        <div data-reveal="" className="max-w-[860px]">
+          <p className="section-kicker">Buenos Aires / Progressive House / Deep House</p>
+          <h1 className="font-editorial m-0 text-[clamp(6.2rem,22vw,16rem)] font-normal leading-[0.72] tracking-[0] text-[var(--txt)]">
+            NOV
           </h1>
-
-          {/* CTA row */}
-          <div className="flex flex-wrap items-end justify-between gap-[30px]">
-            <div className="max-w-[48ch]">
-              <p
-                className="text-[rgba(245,241,235,.82)] m-0 mb-[30px] leading-[1.65]"
-                style={{ fontSize: 'clamp(15px,1.6vw,18px)' }}
-              >
-                Construyo viajes sonoros profundos que leen la pista y guían cada momento con
-                precisión. Una invitación a cerrar los ojos, conectar y simplemente sentir.
-              </p>
-              <div className="flex flex-wrap gap-[14px]">
-                <a
-                  href="#contacto"
-                  className="inline-flex items-center gap-[10px] px-[30px] py-[16px] rounded-[6px] bg-accent text-white no-underline font-bold text-[15px] transition-all duration-[350ms] ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_40px_rgba(224,70,58,.3)] hover:bg-accent-hover"
-                >
-                  Contactar
-                </a>
-                <a
-                  href="#sonido"
-                  className="inline-flex items-center gap-[11px] px-[28px] py-[16px] rounded-[6px] border border-white/[.22] text-txt no-underline font-semibold text-[15px] transition-all duration-300 hover:border-accent hover:bg-white/[.06] hover:-translate-y-[3px]"
-                >
-                  <span className="grid place-items-center w-6 h-6 rounded-full bg-accent text-white text-[13px] pl-[2px]">
-                    ▶
-                  </span>
-                  Escuchar sets
-                </a>
-              </div>
-            </div>
-
-            {/* Spinning badge */}
-            <div className="w-[104px] h-[104px] relative flex-none animate-float">
-              <div className="absolute inset-0 animate-spin-slow">
-                <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <defs>
-                    <path
-                      id="novcp"
-                      d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"
-                      fill="none"
-                    />
-                  </defs>
-                  <text style={{ font: '600 8.2px var(--font-archivo)', fill: '#F5F1EB', letterSpacing: '1.6px' }}>
-                    <textPath href="#novcp">ESCUCHAR · SETS · EN VIVO · </textPath>
-                  </text>
-                </svg>
-              </div>
-              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 grid place-items-center w-[46px] h-[46px] rounded-full bg-accent text-white text-[16px] pl-[3px]">
-                ▶
-              </span>
+          <div className="mt-[clamp(26px,4vw,42px)] grid gap-8 md:grid-cols-[minmax(0,46ch)_auto] md:items-end">
+            <p className="m-0 max-w-[49ch] text-[clamp(15px,1.6vw,18px)] leading-[1.85] text-[var(--mut)]">
+              A private listening room for deep, hypnotic and emotionally evolving sets.
+              Built with silence, tension and a fresh selection before every performance.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a href="#contacto" className="silver-button">
+                Booking
+              </a>
+              <a href="#escuchar" className="ghost-button">
+                Listen
+              </a>
             </div>
           </div>
         </div>
+
+        <aside
+          data-reveal=""
+          className="hidden border-l border-[var(--line)] pl-6 text-[12px] uppercase tracking-[0.18em] text-[var(--mut2)] md:block"
+        >
+          <p className="m-0 leading-[1.8]">
+            Not a portfolio.
+            <br />
+            Not a resume.
+            <br />
+            A slow entrance.
+          </p>
+        </aside>
+
+        <div className="col-span-full grid gap-px border-y border-[var(--line)] bg-[var(--line)] sm:grid-cols-3">
+          {[
+            ['Origin', 'Buenos Aires, Argentina'],
+            ['Language', 'Hypnotic groove / emotional storytelling'],
+            ['Method', 'Every set selected fresh'],
+          ].map(([label, value]) => (
+            <div key={label} className="bg-[rgba(2,2,2,.74)] px-4 py-4 sm:px-5">
+              <span className="block text-[10px] uppercase tracking-[0.22em] text-[var(--mut2)]">
+                {label}
+              </span>
+              <span className="mt-2 block text-[13px] leading-[1.55] text-[var(--txt)]">
+                {value}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
+
+      <a
+        href="#room"
+        className="absolute bottom-4 right-[clamp(18px,4vw,40px)] z-20 hidden text-[11px] uppercase tracking-[0.22em] text-[var(--mut2)] no-underline transition hover:text-[var(--txt)] sm:block"
+      >
+        Enter
+      </a>
     </section>
   );
 }

@@ -1,72 +1,57 @@
 const navLinks = [
-  { label: 'Bio', href: '#bio' },
-  { label: 'Sonido', href: '#sonido' },
-  { label: 'Fechas', href: '#fechas' },
-  { label: 'Contacto', href: '#contacto' },
+  { label: 'Room', href: '#room' },
+  { label: 'Dossier', href: '#bio' },
+  { label: 'Sound', href: '#sonido' },
+  { label: 'Press', href: '#press' },
+  { label: 'Booking', href: '#contacto' },
 ];
 
 const socialLinks = [
-  { label: 'Spotify', href: '#' },
   { label: 'SoundCloud', href: 'https://soundcloud.com/novnovnovnovnovnovnov' },
   { label: 'YouTube', href: 'https://youtube.com/@novnovnovnovnovnovnov' },
-  { label: 'Instagram', href: '#' },
-  { label: 'Beatport', href: '#' },
 ];
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 border-t border-[var(--line)] px-[clamp(18px,4vw,40px)] pt-[clamp(40px,5vw,64px)] pb-8">
-      <div className="max-w-[1240px] mx-auto flex flex-wrap gap-[34px] justify-between">
-        {/* Brand */}
-        <div className="flex-[1_1_240px] min-w-[220px]">
-          <div className="flex items-center gap-[11px] mb-4">
-            <span className="grid place-items-center w-8 h-8 rounded-full border border-accent text-accent text-[13px]">
-              ♫
-            </span>
-            <span className="font-archivo font-black tracking-[.32em] text-[17px]">NOV</span>
-          </div>
-          <p className="text-[var(--mut)] text-[14.5px] leading-[1.65] max-w-[34ch] m-0">
-            DJ y productor de Buenos Aires. Atmósferas envolventes para cerrar los ojos y sentir.
+    <footer className="relative z-10 border-t border-[var(--line)] px-[clamp(18px,4vw,40px)] py-[clamp(34px,5vw,60px)]">
+      <div className="mx-auto grid max-w-[1240px] gap-10 md:grid-cols-[1fr_auto_auto]">
+        <div>
+          <a href="#top" className="font-archivo text-[18px] font-semibold tracking-[.34em] text-[var(--txt)] no-underline">
+            NOV
+          </a>
+          <p className="mt-5 max-w-[34ch] text-[14.5px] leading-[1.7] text-[var(--mut)]">
+            Official presskit for a Buenos Aires DJ and producer creating deep,
+            hypnotic and emotionally evolving sets.
           </p>
         </div>
 
-        {/* Links */}
-        <div className="flex flex-wrap gap-[clamp(40px,6vw,80px)]">
-          <div className="flex flex-col gap-3">
-            <span className="text-[12px] tracking-[0.16em] uppercase text-[var(--mut2)] mb-1">
-              Navegar
-            </span>
-            {navLinks.map(({ label, href }) => (
-              <a
-                key={href}
-                href={href}
-                className="text-[var(--mut)] no-underline text-[14.5px] transition-colors duration-[250ms] hover:text-txt"
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-[12px] tracking-[0.16em] uppercase text-[var(--mut2)] mb-1">
-              Escuchar
-            </span>
-            {socialLinks.map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target={href.startsWith('http') ? '_blank' : undefined}
-                rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="text-[var(--mut)] no-underline text-[14.5px] transition-colors duration-[250ms] hover:text-accent"
-              >
-                {label}
-              </a>
-            ))}
-          </div>
+        <div className="grid gap-3">
+          <span className="text-[11px] uppercase tracking-[0.22em] text-[var(--mut2)]">Index</span>
+          {navLinks.map(({ label, href }) => (
+            <a key={href} href={href} className="quiet-link text-[14px]">
+              {label}
+            </a>
+          ))}
+        </div>
+
+        <div className="grid gap-3">
+          <span className="text-[11px] uppercase tracking-[0.22em] text-[var(--mut2)]">Listen</span>
+          {socialLinks.map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="quiet-link text-[14px]"
+            >
+              {label}
+            </a>
+          ))}
         </div>
       </div>
 
-      <div className="max-w-[1240px] mx-auto mt-9 pt-6 border-t border-[var(--line)] flex flex-wrap gap-3 justify-between text-[var(--mut2)] text-[13px]">
-        <span>© 2026 NOV. Todos los derechos reservados.</span>
+      <div className="mx-auto mt-10 flex max-w-[1240px] flex-wrap justify-between gap-3 border-t border-[var(--line)] pt-6 text-[12px] uppercase tracking-[0.18em] text-[var(--mut2)]">
+        <span>© 2026 NOV</span>
         <span>Buenos Aires, Argentina</span>
       </div>
     </footer>
