@@ -31,7 +31,7 @@ export default function Live() {
             key={name}
             data-fx=""
             data-fx-index={i * 2}
-            className="border-b border-line py-4 font-archivo text-[clamp(1.4rem,3.4vw,2.4rem)] font-medium text-ink/45 transition-colors duration-hover ease-fade hover:text-ink"
+            className="border-b border-line py-4 font-archivo text-[clamp(1.4rem,3.4vw,2.4rem)] font-medium text-ink/55 transition-colors duration-hover ease-fade hover:text-ink"
           >
             {name}
           </li>

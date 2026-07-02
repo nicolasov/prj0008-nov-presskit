@@ -17,14 +17,26 @@ export default function HeroStage({
 }: {
   children: (state: { canvasReady: boolean; staged: boolean }) => React.ReactNode;
 }) {
-  const [reduced, setReduced] = useState(false);
+  const [mountCanvas, setMountCanvas] = useState(false);
   const [canvasReady, setCanvasReady] = useState(false);
   const [staged, setStaged] = useState(false);
 
+  // The canvas is atmosphere, not content: it boots on the visitor's
+  // first gesture (pointer, scroll, touch, key) — a response to
+  // presence, and it keeps three.js out of the loading window
+  // entirely. The DOM word is always the base experience.
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReduced(mq.matches);
-    if (mq.matches) setStaged(true);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setStaged(true);
+      return;
+    }
+    const events: (keyof WindowEventMap)[] = ['pointermove', 'scroll', 'touchstart', 'keydown'];
+    const boot = () => {
+      events.forEach((e) => window.removeEventListener(e, boot));
+      setMountCanvas(true);
+    };
+    events.forEach((e) => window.addEventListener(e, boot, { passive: true, once: false }));
+    return () => events.forEach((e) => window.removeEventListener(e, boot));
   }, []);
 
   useEffect(() => {
@@ -42,7 +54,7 @@ export default function HeroStage({
 
   return (
     <>
-      {!reduced && <NovCanvas onReady={() => setCanvasReady(true)} />}
+      {mountCanvas && <NovCanvas onReady={() => setCanvasReady(true)} />}
       {children({ canvasReady, staged })}
     </>
   );

@@ -77,27 +77,27 @@ export default function Booking() {
 
         <form onSubmit={onSubmit} className="grid gap-4 border border-line bg-bg-1 p-[clamp(18px,3vw,34px)] sm:grid-cols-2">
           <label className="grid gap-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.name} *</span>
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/55">{t.booking.name} *</span>
             <input name="name" type="text" required placeholder={t.booking.namePlaceholder} className={inputCls} />
           </label>
 
           <label className="grid gap-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.email} *</span>
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/55">{t.booking.email} *</span>
             <input name="email" type="email" required placeholder={t.booking.emailPlaceholder} className={inputCls} />
           </label>
 
           <label className="grid gap-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.venue}</span>
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/55">{t.booking.venue}</span>
             <input name="venue" type="text" placeholder={t.booking.venuePlaceholder} className={inputCls} />
           </label>
 
           <label className="grid gap-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.date}</span>
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/55">{t.booking.date}</span>
             <input name="date" type="text" placeholder={t.booking.datePlaceholder} className={inputCls} />
           </label>
 
           <label className="grid gap-2 sm:col-span-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.message} *</span>
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/55">{t.booking.message} *</span>
             <textarea
               name="message"
               rows={5}

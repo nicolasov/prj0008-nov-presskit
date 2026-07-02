@@ -24,7 +24,7 @@ export default function Arrival() {
             <div className="flex flex-col items-center text-center">
               <Staged show={staged} delay={200}>
                 <p className="mb-6 font-mono text-[12px] tracking-[0.44em] text-ink/70">
-                  DJ<span className="mx-3 text-ink/25">•</span>Producer
+                  DJ<span className="mx-3 text-ink/45">•</span>Producer
                 </p>
               </Staged>
 
@@ -46,8 +46,8 @@ export default function Arrival() {
             </div>
 
             <Staged show={staged} delay={600} className="flex items-end justify-between">
-              <span className="font-mono text-[10px] tracking-[0.18em] text-ink/45">Buenos Aires</span>
-              <span className="font-mono text-[10px] tracking-[0.18em] text-ink/45">Scroll</span>
+              <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Buenos Aires</span>
+              <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Scroll</span>
             </Staged>
           </Container>
         )}

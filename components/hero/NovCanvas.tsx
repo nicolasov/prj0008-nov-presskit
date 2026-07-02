@@ -116,10 +116,19 @@ const FRAGMENT = /* glsl */ `
   }
 `;
 
-function supportsWebGL(): boolean {
+/**
+ * True only for hardware-accelerated WebGL. Software rasterizers
+ * (SwiftShader, llvmpipe) would burn the main thread compiling and
+ * drawing the shader — those machines get the DOM word instead.
+ */
+function supportsHardwareWebGL(): boolean {
   try {
     const canvas = document.createElement('canvas');
-    return Boolean(canvas.getContext('webgl2') ?? canvas.getContext('webgl'));
+    const gl = (canvas.getContext('webgl2') ?? canvas.getContext('webgl')) as WebGLRenderingContext | null;
+    if (!gl) return false;
+    const info = gl.getExtension('WEBGL_debug_renderer_info');
+    const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
+    return !/swiftshader|llvmpipe|software/i.test(renderer);
   } catch {
     return false;
   }
@@ -259,7 +268,7 @@ export default function NovCanvas({ onReady }: NovCanvasProps) {
   const startTimeRef = useRef(0);
 
   useEffect(() => {
-    if (!supportsWebGL()) return;
+    if (!supportsHardwareWebGL()) return;
 
     let cancelled = false;
     const container = containerRef.current;

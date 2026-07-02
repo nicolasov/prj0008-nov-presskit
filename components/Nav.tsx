@@ -67,7 +67,7 @@ export default function Nav() {
           </a>
           <span
             aria-hidden="true"
-            className="hidden font-mono text-[10px] tracking-[0.18em] text-ink/45 [font-variant-numeric:tabular-nums] sm:inline"
+            className="hidden font-mono text-[10px] tracking-[0.18em] text-ink/55 [font-variant-numeric:tabular-nums] sm:inline"
           >
             <span className="text-red-bright">●</span> {liveTimecode(progress)} / 55:00
           </span>
@@ -153,7 +153,7 @@ export default function Nav() {
               <InstagramLink />
               <LangToggle />
             </div>
-            <span className="font-mono text-[10px] tracking-[0.18em] text-ink/45">Buenos Aires</span>
+            <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Buenos Aires</span>
           </div>
         </Container>
       </div>

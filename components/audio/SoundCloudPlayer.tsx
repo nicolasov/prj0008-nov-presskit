@@ -176,13 +176,13 @@ export default function SoundCloudPlayer() {
               </svg>
             )}
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/45">
+          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55">
             {phase === 'loading' ? 'Tuning in' : 'Selected sets — SoundCloud'}
           </span>
         </button>
       ) : phase === 'error' ? (
         <div className="flex min-h-[280px] flex-col items-center justify-center gap-4 p-8">
-          <p className="m-0 font-mono text-[10px] uppercase tracking-[0.22em] text-ink/45">
+          <p className="m-0 font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55">
             Player unavailable
           </p>
           <a
@@ -202,7 +202,7 @@ export default function SoundCloudPlayer() {
               <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-red-bright">
                 ● Now playing
               </span>
-              <span className="font-mono text-[10px] tracking-[0.18em] text-ink/45 [font-variant-numeric:tabular-nums]">
+              <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55 [font-variant-numeric:tabular-nums]">
                 {fmt(position)} / {fmt(duration)}
               </span>
             </div>
@@ -237,7 +237,7 @@ export default function SoundCloudPlayer() {
                 onClick={() => skipTo(Math.max(0, index - 1))}
                 disabled={index === 0}
                 aria-label="Previous set"
-                className="border-0 bg-transparent p-1 font-mono text-[11px] tracking-[0.18em] text-ink/45 transition-colors duration-hover ease-fade enabled:cursor-pointer enabled:hover:text-ink disabled:opacity-40"
+                className="border-0 bg-transparent p-1 font-mono text-[11px] tracking-[0.18em] text-ink/55 transition-colors duration-hover ease-fade enabled:cursor-pointer enabled:hover:text-ink disabled:opacity-40"
               >
                 ‹‹
               </button>
@@ -263,7 +263,7 @@ export default function SoundCloudPlayer() {
                 onClick={() => skipTo(Math.min(sounds.length - 1, index + 1))}
                 disabled={index >= sounds.length - 1}
                 aria-label="Next set"
-                className="border-0 bg-transparent p-1 font-mono text-[11px] tracking-[0.18em] text-ink/45 transition-colors duration-hover ease-fade enabled:cursor-pointer enabled:hover:text-ink disabled:opacity-40"
+                className="border-0 bg-transparent p-1 font-mono text-[11px] tracking-[0.18em] text-ink/55 transition-colors duration-hover ease-fade enabled:cursor-pointer enabled:hover:text-ink disabled:opacity-40"
               >
                 ››
               </button>
@@ -278,7 +278,7 @@ export default function SoundCloudPlayer() {
                   type="button"
                   onClick={() => skipTo(i)}
                   className={`flex w-full cursor-pointer items-baseline gap-4 border-0 border-b border-line bg-transparent px-[clamp(18px,3vw,28px)] py-3 text-left transition-colors duration-hover ease-fade ${
-                    i === index ? 'text-red-bright' : 'text-ink/45 hover:text-ink/70'
+                    i === index ? 'text-red-bright' : 'text-ink/55 hover:text-ink/70'
                   }`}
                 >
                   <span className="font-mono text-[10px] tracking-[0.18em] [font-variant-numeric:tabular-nums]">

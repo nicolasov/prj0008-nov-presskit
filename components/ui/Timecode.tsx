@@ -14,7 +14,7 @@ export default function Timecode({ tc, label, active, interactive, className }: 
     <span
       className={cn(
         'font-mono text-[11px] tracking-[0.18em] transition-colors duration-hover ease-fade [font-variant-numeric:tabular-nums]',
-        active ? 'text-red-bright' : 'text-ink/45',
+        active ? 'text-red-bright' : 'text-ink/55',
         !active && interactive && 'hover:text-ink/70',
         className,
       )}

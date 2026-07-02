@@ -39,10 +39,10 @@ export default function Still({
     >
       <Image src={src} alt={alt} fill priority={priority} sizes={sizes} className="monochrome-image object-cover" />
       {tc && (
-        <span className="absolute right-4 top-4 font-mono text-[10px] tracking-[0.16em] text-ink/25">{tc}</span>
+        <span className="absolute right-4 top-4 font-mono text-[10px] tracking-[0.16em] text-ink/45">{tc}</span>
       )}
       {caption && (
-        <figcaption className="absolute bottom-4 left-4 font-mono text-[10px] tracking-[0.16em] text-ink/45">
+        <figcaption className="absolute bottom-4 left-4 font-mono text-[10px] tracking-[0.16em] text-ink/55">
           {caption}
         </figcaption>
       )}

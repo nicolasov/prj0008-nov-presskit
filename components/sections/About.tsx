@@ -29,7 +29,7 @@ export default function About() {
             <p className="max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">{t.about.p1}</p>
             <p className="max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">{t.about.p2}</p>
           </div>
-          <div className="mt-8 border-t border-line pt-6 font-mono text-[10.5px] tracking-[0.16em] text-ink/45">
+          <div className="mt-8 border-t border-line pt-6 font-mono text-[10.5px] tracking-[0.16em] text-ink/55">
             <span className="text-ink/70">{t.about.influences}</span> — Guy J · Hernan Cattaneo ·
             John Digweed · Simon Vuarambon · Sahar Z
           </div>

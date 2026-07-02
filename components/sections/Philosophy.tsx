@@ -30,7 +30,7 @@ export default function Philosophy() {
     lines.forEach((line, i) => {
       const tween = gsap.fromTo(
         line,
-        { opacity: 0.04 },
+        { opacity: 0 },
         {
           opacity: 1,
           ease: 'none',
