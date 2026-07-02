@@ -1,4 +1,4 @@
-import Navbar from '@/components/Navbar';
+import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
 import Stats from '@/components/Stats';
 import Bio from '@/components/Bio';
@@ -14,7 +14,7 @@ import Footer from '@/components/Footer';
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Nav />
       <main className="relative z-10">
         <Hero />
         <Stats />
