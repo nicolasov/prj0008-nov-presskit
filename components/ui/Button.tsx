@@ -6,13 +6,14 @@ type ButtonProps = {
   href?: string;
   type?: 'button' | 'submit';
   variant?: 'primary' | 'ghost';
+  disabled?: boolean;
   children: ReactNode;
   className?: string;
   onClick?: MouseEventHandler;
 };
 
 const base =
-  'inline-flex items-center gap-2 font-archivo text-[11px] font-medium uppercase tracking-[0.22em] no-underline transition-colors duration-hover ease-fade focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4';
+  'inline-flex items-center gap-2 font-archivo text-[11px] font-medium uppercase tracking-[0.22em] no-underline transition-colors duration-hover ease-fade focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4 disabled:cursor-not-allowed disabled:opacity-50';
 
 const variants = {
   primary: 'border border-red px-5 py-[10px] text-red-bright hover:bg-red/10',
@@ -24,6 +25,7 @@ export default function Button({
   href,
   type = 'button',
   variant = 'primary',
+  disabled,
   children,
   className,
   onClick,
@@ -39,7 +41,7 @@ export default function Button({
   }
 
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
       {children}
     </button>
   );
