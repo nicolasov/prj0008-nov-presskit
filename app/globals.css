@@ -106,8 +106,39 @@ a {
   filter: grayscale(1) contrast(1.08) brightness(0.76);
 }
 
-/* ---------- SoundCloud iframe override ---------- */
-.sc-player iframe {
+/* ---------- custom SoundCloud player: seek slider ---------- */
+/* The visual track is drawn by the component; the input is the
+   invisible interactive layer with a minimal square thumb. */
+.sc-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  margin: 0;
+}
+
+.sc-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 9px;
+  height: 9px;
+  background: #e0523f;
   border: none;
   border-radius: 0;
+}
+
+.sc-range::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  background: #e0523f;
+  border: none;
+  border-radius: 0;
+}
+
+.sc-range::-moz-range-track {
+  background: transparent;
+}
+
+.sc-range:focus-visible {
+  outline: 1px solid #e0523f;
+  outline-offset: 4px;
 }
