@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { archivo, newsreader, geistMono } from '@/lib/fonts';
 import RevealInit from '@/components/RevealInit';
+import SmoothScroll from '@/components/SmoothScroll';
 
 const siteUrl = 'https://nov.dj';
 
@@ -66,17 +68,17 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${archivo.variable} ${newsreader.variable} ${geistMono.variable}`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>
+      <body className="bg-bg-0 text-ink antialiased">
         <div aria-hidden="true" className="grain" />
         <RevealInit />
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
