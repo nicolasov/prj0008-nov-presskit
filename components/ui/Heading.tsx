@@ -8,7 +8,8 @@ type HeadingProps = {
 };
 
 /** The structure voice — Archivo, section titles and headers. Never serif. */
-export default function Heading({ as: Tag = 'h2', children, className }: HeadingProps) {
+export default function Heading({ as = 'h2', children, className }: HeadingProps) {
+  const Tag = as as 'h2';
   return (
     <Tag
       className={cn(

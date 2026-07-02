@@ -7,6 +7,7 @@ type ContainerProps = {
   className?: string;
 };
 
-export default function Container({ as: Tag = 'div', children, className }: ContainerProps) {
+export default function Container({ as = 'div', children, className }: ContainerProps) {
+  const Tag = as as 'div';
   return <Tag className={cn('container', className)}>{children}</Tag>;
 }
