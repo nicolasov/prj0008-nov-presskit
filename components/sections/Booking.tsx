@@ -5,6 +5,7 @@ import Section from '@/components/ui/Section';
 import Timecode from '@/components/ui/Timecode';
 import Quote from '@/components/ui/Quote';
 import Button from '@/components/ui/Button';
+import { useLang } from '@/lib/i18n';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -12,6 +13,7 @@ const inputCls =
   'w-full border border-line bg-bg-1 px-4 py-[14px] text-[14.5px] text-ink outline-none transition-colors duration-hover ease-fade focus:border-red';
 
 export default function Booking() {
+  const { t } = useLang();
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -46,7 +48,7 @@ export default function Booking() {
       setTimeout(() => setStatus('idle'), 5000);
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err instanceof Error ? err.message : 'Could not send. Please try again.');
+      setErrorMsg(err instanceof Error ? err.message : t.booking.errorFallback);
     }
   };
 
@@ -75,32 +77,32 @@ export default function Booking() {
 
         <form onSubmit={onSubmit} className="grid gap-4 border border-line bg-bg-1 p-[clamp(18px,3vw,34px)] sm:grid-cols-2">
           <label className="grid gap-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">Name *</span>
-            <input name="name" type="text" required placeholder="Your name" className={inputCls} />
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.name} *</span>
+            <input name="name" type="text" required placeholder={t.booking.namePlaceholder} className={inputCls} />
           </label>
 
           <label className="grid gap-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">Email *</span>
-            <input name="email" type="email" required placeholder="you@example.com" className={inputCls} />
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.email} *</span>
+            <input name="email" type="email" required placeholder={t.booking.emailPlaceholder} className={inputCls} />
           </label>
 
           <label className="grid gap-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">Venue</span>
-            <input name="venue" type="text" placeholder="Club, city or agency" className={inputCls} />
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.venue}</span>
+            <input name="venue" type="text" placeholder={t.booking.venuePlaceholder} className={inputCls} />
           </label>
 
           <label className="grid gap-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">Date</span>
-            <input name="date" type="text" placeholder="DD / MM / YYYY" className={inputCls} />
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.date}</span>
+            <input name="date" type="text" placeholder={t.booking.datePlaceholder} className={inputCls} />
           </label>
 
           <label className="grid gap-2 sm:col-span-2">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">Message *</span>
+            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/45">{t.booking.message} *</span>
             <textarea
               name="message"
               rows={5}
               required
-              placeholder="Tell us about the room, the audience and the moment of the night."
+              placeholder={t.booking.messagePlaceholder}
               className={inputCls}
               style={{ resize: 'vertical' }}
             />
@@ -117,7 +119,7 @@ export default function Booking() {
             disabled={status === 'loading'}
             className="justify-center py-[14px] sm:col-span-2"
           >
-            {status === 'loading' ? 'Sending' : status === 'success' ? 'Message sent' : 'Send booking request'}
+            {status === 'loading' ? t.booking.sending : status === 'success' ? t.booking.sent : t.booking.submit}
           </Button>
         </form>
       </div>

@@ -1,6 +1,9 @@
+'use client';
+
 import Section from '@/components/ui/Section';
 import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
+import { useLang } from '@/lib/i18n';
 
 const artists = [
   'Jimmy Van M',
@@ -12,17 +15,15 @@ const artists = [
 ];
 
 export default function Live() {
+  const { t } = useLang();
+
   return (
     <Section id="live" fxIndex={0}>
       <Timecode tc="18:00" label="Live" />
       <Heading as="h2" className="mt-6 max-w-[9ch]">
         Trusted in serious rooms.
       </Heading>
-      <p className="mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">
-        NOV has performed across Buenos Aires and the Argentine coast, sharing the
-        booth with artists who shaped the progressive and deep electronic language of
-        the region.
-      </p>
+      <p className="mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">{t.live.body}</p>
 
       <ul className="mt-10 flex flex-col border-t border-line">
         {artists.map((name) => (

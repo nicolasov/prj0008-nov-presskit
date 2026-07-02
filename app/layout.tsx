@@ -3,6 +3,7 @@ import './globals.css';
 import { archivo, newsreader, geistMono } from '@/lib/fonts';
 import RevealEngine from '@/components/RevealEngine';
 import SmoothScroll from '@/components/SmoothScroll';
+import { LanguageProvider } from '@/lib/i18n';
 
 const siteUrl = 'https://nov.dj';
 
@@ -78,7 +79,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-bg-0 text-ink antialiased">
         <div aria-hidden="true" className="grain" />
         <RevealEngine />
-        <SmoothScroll>{children}</SmoothScroll>
+        <LanguageProvider>
+          <SmoothScroll>{children}</SmoothScroll>
+        </LanguageProvider>
       </body>
     </html>
   );

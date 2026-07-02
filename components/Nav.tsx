@@ -8,6 +8,7 @@ import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
 import Button from '@/components/ui/Button';
 import InstagramLink from '@/components/ui/InstagramLink';
+import LangToggle from '@/components/ui/LangToggle';
 
 /** The journey's fictional runtime (55:00), driven by scroll progress. */
 function liveTimecode(progress: number): string {
@@ -90,6 +91,7 @@ export default function Nav() {
         </nav>
 
         <div className="hidden items-center gap-6 nav:flex">
+          <LangToggle />
           <InstagramLink />
           <Button href="#booking" onClick={(e) => seek(e, 'booking')}>
             Booking
@@ -147,7 +149,10 @@ export default function Nav() {
             );
           })}
           <div className="flex items-center justify-between pt-8">
-            <InstagramLink />
+            <div className="flex items-center gap-6">
+              <InstagramLink />
+              <LangToggle />
+            </div>
             <span className="font-mono text-[10px] tracking-[0.18em] text-ink/45">Buenos Aires</span>
           </div>
         </Container>

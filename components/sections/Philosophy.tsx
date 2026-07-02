@@ -1,8 +1,13 @@
+'use client';
+
 import Section from '@/components/ui/Section';
 import Timecode from '@/components/ui/Timecode';
 import Quote from '@/components/ui/Quote';
+import { useLang } from '@/lib/i18n';
 
 export default function Philosophy() {
+  const { t } = useLang();
+
   return (
     <Section id="philosophy" fxIndex={0}>
       <Timecode tc="04:30" label="Philosophy" />
@@ -10,11 +15,7 @@ export default function Philosophy() {
         <Quote className="text-ink">Not playing tracks.</Quote>
         <Quote className="text-red-bright">Curating journeys.</Quote>
       </div>
-      <p className="mt-10 max-w-[60ch] text-[16px] leading-[1.8] text-ink/70">
-        Every set is researched and selected fresh, built to move slowly from tension
-        into release. Nothing is aggressive. Nothing is loud. The room is trusted to
-        follow, one careful transition at a time.
-      </p>
+      <p className="mt-10 max-w-[60ch] text-[16px] leading-[1.8] text-ink/70">{t.philosophy.body}</p>
     </Section>
   );
 }
