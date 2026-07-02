@@ -8,9 +8,9 @@ import { useLang, type Dictionary } from '@/lib/i18n';
 type DownloadKey = keyof Dictionary['pressKit']['downloadsMeta'];
 
 const downloads: { title: string; metaKey: DownloadKey; format: string; href: string }[] = [
-  { title: 'Portraits', metaKey: 'portraits', format: 'ZIP · 24 MB', href: '/images/book-1.png' },
-  { title: 'Live Still', metaKey: 'liveStill', format: 'JPG · 4.2 MB', href: '/images/nov-stage.jpg' },
-  { title: 'Artist Mark', metaKey: 'artistMark', format: 'JPG · 3.1 MB', href: '/images/nov-hero.jpg' },
+  { title: 'Portraits', metaKey: 'portraits', format: 'JPG · 0.3 MB', href: '/images/nov-portrait-wall.jpg' },
+  { title: 'Live Still', metaKey: 'liveStill', format: 'JPG · 0.3 MB', href: '/images/nov-booth-motion.jpg' },
+  { title: 'Artist Mark', metaKey: 'artistMark', format: 'JPG · 0.2 MB', href: '/images/nov-booth-shadow.jpg' },
 ];
 
 export default function PressKit() {

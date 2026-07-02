@@ -35,13 +35,13 @@ export const metadata: Metadata = {
     siteName: 'NOV',
     locale: 'es_AR',
     type: 'website',
-    images: [{ url: '/images/nov-stage.jpg', width: 1200, height: 630, alt: 'NOV DJ & Productor' }],
+    images: [{ url: '/images/nov-booth-motion.jpg', width: 1537, height: 1023, alt: 'NOV in the booth' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'NOV — Official Presskit',
     description: 'Deep, hypnotic and emotionally evolving sets.',
-    images: ['/images/nov-stage.jpg'],
+    images: ['/images/nov-booth-motion.jpg'],
   },
   robots: { index: true, follow: true },
 };

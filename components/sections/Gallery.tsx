@@ -11,40 +11,34 @@ export default function Gallery() {
 
       <Container className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-12">
         <Still
-          src="/images/nov-stage.jpg"
-          alt="NOV in the booth"
+          src="/images/nov-booth-motion.jpg"
+          alt="NOV in the booth, hands on the mixer, light trails"
           aspect="letterbox"
-          caption="Closing track — hands on the filter"
+          caption="Hands on the filter — closing hour"
           tc="27:14"
           className="md:col-span-8"
+          sizes="(max-width: 880px) 100vw, 66vw"
           fxIndex={0}
         />
         <Still
-          src="/images/nov-hero.jpg"
-          alt="NOV portrait, natural light"
+          src="/images/nov-booth-shadow.jpg"
+          alt="NOV in the booth, half light"
           aspect="portrait"
-          caption="Natural light"
+          caption="The booth, half light"
           tc="27:41"
           className="md:col-span-4"
+          sizes="(max-width: 880px) 100vw, 33vw"
           fxIndex={1}
         />
         <Still
-          src="/images/nov-bali-1.png"
-          alt="NOV, coastal date"
-          aspect="portrait"
-          caption="Coastal date"
-          tc="28:05"
-          className="md:col-span-4"
-          fxIndex={2}
-        />
-        <Still
-          src="/images/nov-live.jpg"
-          alt="NOV live, wide shot"
+          src="/images/nov-headphones.jpg"
+          alt="NOV cueing with headphones"
           aspect="letterbox"
-          caption="Wide shot — the room"
+          caption="Cueing the next room"
           tc="28:22"
-          className="md:col-span-8"
-          fxIndex={3}
+          className="md:col-span-12"
+          sizes="100vw"
+          fxIndex={2}
         />
       </Container>
     </section>

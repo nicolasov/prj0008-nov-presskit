@@ -12,7 +12,13 @@ export default function About() {
   return (
     <Section id="about" fxIndex={1}>
       <div className="grid gap-[clamp(32px,5vw,72px)] lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-        <Still src="/images/nov-portrait.png" alt="NOV portrait" aspect="portrait" priority />
+        <Still
+          src="/images/nov-portrait-wall.jpg"
+          alt="NOV — portrait against a concrete wall, natural light"
+          aspect="portrait"
+          caption="Buenos Aires"
+          priority
+        />
 
         <div>
           <Timecode tc="09:00" label="About" />
