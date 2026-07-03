@@ -1,6 +1,7 @@
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import CueButton from '@/components/ui/CueButton';
+import BpmTicker from '@/components/hidden/BpmTicker';
 import Arrival from '@/components/sections/Arrival';
 import Philosophy from '@/components/sections/Philosophy';
 import About from '@/components/sections/About';
@@ -26,6 +27,7 @@ export default function Home() {
       </main>
       <Footer />
       <CueButton />
+      <BpmTicker />
     </>
   );
 }

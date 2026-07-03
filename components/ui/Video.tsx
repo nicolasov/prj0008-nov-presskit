@@ -1,60 +1,92 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 type VideoProps = {
-  poster: string;
-  title: string;
-  embedSrc: string;
-  aspect?: 'video' | 'square';
+  src: string;
+  caption?: string;
+  tc?: string;
+  aspect?: 'letterbox' | 'wide' | 'portrait';
   className?: string;
+  fxIndex?: number;
 };
 
-/** Poster-first, click-to-load embed — no iframe hits the network until intent. */
-export default function Video({ poster, title, embedSrc, aspect = 'video', className }: VideoProps) {
-  const [playing, setPlaying] = useState(false);
+const aspects = {
+  letterbox: 'aspect-[21/9]',
+  wide: 'aspect-video',
+  portrait: 'aspect-[4/5]',
+};
+
+/**
+ * A video treated exactly like an editorial still — muted, looping,
+ * grain-graded, captioned as a subtitle. Never autoplays with sound. Plays
+ * only while on screen (paused offscreen for battery/perf) and yields to the
+ * SoundCloud player: if the visitor starts a set, the loop pauses so there is
+ * never a second moving-image demanding attention over the music.
+ */
+export default function Video({ src, caption, tc, aspect = 'letterbox', className, fxIndex = 0 }: VideoProps) {
+  const wrapRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const onScreen = useRef(false);
+  const audioBusy = useRef(false);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const video = videoRef.current;
+    if (!wrap || !video) return;
+
+    const sync = () => {
+      if (onScreen.current && !audioBusy.current) video.play().catch(() => {});
+      else video.pause();
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        onScreen.current = entry.isIntersecting;
+        sync();
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(wrap);
+
+    const onAudioEngaged = () => {
+      audioBusy.current = true;
+      sync();
+    };
+    window.addEventListener('nov:audio-engaged', onAudioEngaged);
+
+    return () => {
+      io.disconnect();
+      window.removeEventListener('nov:audio-engaged', onAudioEngaged);
+    };
+  }, []);
 
   return (
-    <div
-      className={cn(
-        'relative overflow-hidden border border-line-strong bg-bg-1',
-        aspect === 'video' ? 'aspect-video' : 'aspect-square',
-        className,
-      )}
+    <figure
+      ref={wrapRef}
+      data-fx
+      data-fx-index={fxIndex}
+      className={cn('relative overflow-hidden border border-line-strong bg-bg-1', aspects[aspect], className)}
     >
-      {playing ? (
-        <iframe
-          src={embedSrc}
-          title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 h-full w-full border-0"
-        />
-      ) : (
-        <button
-          type="button"
-          onClick={() => setPlaying(true)}
-          aria-label={`Play ${title}`}
-          className="group absolute inset-0 h-full w-full cursor-pointer border-0 bg-transparent p-0 focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
-        >
-          <Image
-            src={poster}
-            alt={title}
-            fill
-            sizes="100vw"
-            className="monochrome-image object-cover transition-[filter] duration-hover ease-fade group-hover:brightness-110"
-          />
-          <span className="absolute inset-0 flex items-center justify-center">
-            <span className="flex h-14 w-14 items-center justify-center rounded-full border border-red-bright text-red-bright transition-colors duration-hover ease-fade group-hover:bg-red/10">
-              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor" aria-hidden="true">
-                <path d="M0 0L14 8L0 16V0Z" />
-              </svg>
-            </span>
-          </span>
-        </button>
+      <video
+        ref={videoRef}
+        src={src}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+        className="monochrome-image h-full w-full object-cover"
+      />
+      {tc && (
+        <span className="absolute right-4 top-4 font-mono text-[10px] tracking-[0.16em] text-ink/45">{tc}</span>
       )}
-    </div>
+      {caption && (
+        <figcaption className="absolute bottom-4 left-4 font-mono text-[10px] tracking-[0.16em] text-ink/55">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
   );
 }

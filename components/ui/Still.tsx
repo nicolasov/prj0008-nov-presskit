@@ -11,6 +11,8 @@ type StillProps = {
   priority?: boolean;
   fxIndex?: number;
   className?: string;
+  /** Applied to the <Image> — e.g. object-position for a deliberate crop. */
+  imgClassName?: string;
 };
 
 const aspects = {
@@ -30,6 +32,7 @@ export default function Still({
   priority,
   fxIndex = 0,
   className,
+  imgClassName,
 }: StillProps) {
   return (
     <figure
@@ -37,7 +40,14 @@ export default function Still({
       data-fx-index={fxIndex}
       className={cn('relative overflow-hidden border border-line-strong bg-bg-1', aspects[aspect], className)}
     >
-      <Image src={src} alt={alt} fill priority={priority} sizes={sizes} className="monochrome-image object-cover" />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority={priority}
+        sizes={sizes}
+        className={cn('monochrome-image object-cover', imgClassName)}
+      />
       {tc && (
         <span className="absolute right-4 top-4 font-mono text-[10px] tracking-[0.16em] text-ink/45">{tc}</span>
       )}

@@ -13,11 +13,21 @@ export type Lang = 'en' | 'es';
 const dictionaries = {
   en: {
     philosophy: {
-      body: 'Every set is researched and selected fresh, built to move slowly from tension into release. Nothing is aggressive. Nothing is loud. The room is trusted to follow, one careful transition at a time.',
+      lines: [
+        'Every set, researched and selected fresh.',
+        'Built to move from tension into release.',
+        'Nothing aggressive. Nothing loud.',
+        'The room is trusted to follow.',
+      ],
     },
     about: {
-      p1: 'NOV is a DJ and producer from Buenos Aires, shaped by progressive house, deep house, hypnotic groove and emotional storytelling. His sets avoid aggression; they build tension slowly, with an organic sense of evolution.',
-      p2: 'Before every performance he carefully selects new music, keeping each night fresh and specific to the room. The result is less a playlist and more a guided atmospheric journey.',
+      lines: [
+        'A DJ and producer from Buenos Aires.',
+        'Progressive, deep, hypnotic — never aggressive.',
+        'Tension built slowly, with room to breathe.',
+        'New music chosen before every night.',
+        'Not a playlist. A guided journey.',
+      ],
       influences: 'Influences',
     },
     live: {
@@ -70,11 +80,21 @@ const dictionaries = {
   },
   es: {
     philosophy: {
-      body: 'Cada set se investiga y selecciona desde cero, construido para moverse lentamente de la tensión a la liberación. Nada es agresivo. Nada es estridente. Se confía en que la sala siga el viaje, una transición cuidadosa a la vez.',
+      lines: [
+        'Cada set, investigado y elegido desde cero.',
+        'Construido para ir de la tensión a la liberación.',
+        'Nada agresivo. Nada estridente.',
+        'Se confía en que la sala siga.',
+      ],
     },
     about: {
-      p1: 'NOV es un DJ y productor de Buenos Aires, formado por el progressive house, el deep house, el groove hipnótico y la narrativa emocional. Sus sets evitan la agresión; construyen tensión lentamente, con un sentido orgánico de evolución.',
-      p2: 'Antes de cada presentación selecciona cuidadosamente música nueva, manteniendo cada noche fresca y específica para la sala. El resultado es menos una playlist y más un viaje atmosférico guiado.',
+      lines: [
+        'DJ y productor de Buenos Aires.',
+        'Progresivo, profundo, hipnótico — nunca agresivo.',
+        'Tensión que crece lento, con aire para respirar.',
+        'Música nueva elegida antes de cada noche.',
+        'No una playlist. Un viaje guiado.',
+      ],
       influences: 'Influencias',
     },
     live: {

@@ -175,6 +175,38 @@ figure[data-fx]:not(.in) .monochrome-image {
   animation: bar-breathe 4.5s ease-in-out infinite;
 }
 
+/* Editorial line-setting: each line rises from behind its mask, staggered */
+.line-reveal {
+  opacity: 0;
+  transform: translateY(0.9em);
+  transition:
+    opacity 1s ease,
+    transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.line-reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line-reveal {
+    transition-duration: 0.2s;
+    transform: none;
+  }
+}
+
+/* CUE one-time arrow nudge — a gentle point toward the button, never a bounce */
+@keyframes cue-nudge {
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(0);
+  }
+  50% {
+    transform: translateY(-50%) translateX(-4px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bar-complete {
     animation: none;

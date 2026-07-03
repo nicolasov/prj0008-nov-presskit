@@ -5,6 +5,7 @@ import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
 import Still from '@/components/ui/Still';
 import Accent from '@/components/ui/Accent';
+import LineReveal from '@/components/ui/LineReveal';
 import { useLang } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
 
@@ -30,10 +31,11 @@ export default function About() {
           <Heading as="h2" className="mt-6">
             A slow build into <Accent>depth</Accent>.
           </Heading>
-          <div className="mt-8 flex flex-col gap-4">
-            <p className="max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">{t.about.p1}</p>
-            <p className="max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">{t.about.p2}</p>
-          </div>
+          <LineReveal
+            lines={t.about.lines}
+            className="mt-8 flex flex-col gap-2"
+            lineClassName="max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.35rem)] font-light leading-[1.5] text-ink/80"
+          />
           <div className="mt-8 border-t border-line pt-6 font-mono text-[10.5px] tracking-[0.16em] text-ink/55">
             <span className="text-ink/70">{t.about.influences}</span> — Guy J · Hernan Cattaneo ·
             John Digweed · Simon Vuarambon · Sahar Z
