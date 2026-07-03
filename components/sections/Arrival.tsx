@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
@@ -39,6 +39,17 @@ const smooth = (a: number, b: number, x: number) => {
  */
 export default function Arrival() {
   const introReady = useIntroReveal();
+  const [ripple, setRipple] = useState(false);
+
+  // The water ripple — a tiny liquid vibration on the letterforms (SVG
+  // displacement). Desktop pointers only (like the cursor light it coexists
+  // with) and never under reduced motion, so mobile stays perfectly smooth.
+  // It never touches the typography's position.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    setRipple(true);
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -50,17 +61,17 @@ export default function Arrival() {
       const vp = window.scrollY / Math.max(1, window.innerHeight);
 
       const develop = smooth(0.05, 0.7, vp); // photo resolves, NOV colours
-      const recede = 1 - smooth(1.3, 2.2, vp); // photo lingers, then goes
+      const recede = 1 - smooth(1.4, 2.3, vp); // photo lingers (the glue), then goes
       const photo = develop * recede;
-      const novOp = 1 - smooth(0.95, 1.65, vp); // NOV stays, then fades late
+      // NOV steps back sooner so Philosophy can own the viewport without
+      // competing — but the photograph stays as the connective tissue.
+      const novOp = 1 - smooth(0.85, 1.4, vp);
       const mix = develop; // bone → signal
-      const phil = smooth(0.72, 1.55, vp); // Philosophy emerges within the frame
       const depth = smooth(0, 2, vp);
 
       root.style.setProperty('--h-photo', (photo * 0.92).toFixed(4));
       root.style.setProperty('--h-nov', novOp.toFixed(4));
       root.style.setProperty('--h-mix', `${(mix * 100).toFixed(2)}%`);
-      root.style.setProperty('--h-phil', phil.toFixed(4));
       root.style.setProperty('--h-photo-scale', reduced ? '1' : (1 + depth * 0.06).toFixed(4));
       root.style.setProperty('--h-photo-y', reduced ? '0px' : `${(depth * 24).toFixed(1)}px`);
     };
@@ -136,7 +147,10 @@ export default function Arrival() {
             <HeroWordInteractions>
               <h1
                 className="nov-logo pointer-events-auto m-0 ml-[0.06em] font-serif text-[clamp(4.5rem,15vw,13rem)] font-light leading-none tracking-[0.06em]"
-                style={{ color: 'color-mix(in srgb, #EAEAE6, #E0523F var(--h-mix, 0%))' }}
+                style={{
+                  color: 'color-mix(in srgb, #EAEAE6, #E0523F var(--h-mix, 0%))',
+                  filter: ripple ? 'url(#nov-ripple)' : undefined,
+                }}
               >
                 NOV
               </h1>
@@ -156,6 +170,28 @@ export default function Arrival() {
       {/* the hero's first screen of scroll — the fixed layers show through
           this empty space; after it, the document rises over them. */}
       <div id={cue.id} aria-hidden="true" className="h-[100svh]" />
+
+      {/* the water ripple filter — a static fine turbulence displacing the
+          letterforms, its amount breathing slowly like the surface of still
+          water. Applied to the NOV h1 above. Rendered only when enabled. */}
+      {ripple && (
+        <svg aria-hidden="true" width="0" height="0" className="absolute">
+          <filter id="nov-ripple" x="-8%" y="-8%" width="116%" height="116%" colorInterpolationFilters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.018 0.022" numOctaves={2} seed={7} result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="3">
+              <animate
+                attributeName="scale"
+                values="2.2;4.2;2.2"
+                dur="9s"
+                repeatCount="indefinite"
+                calcMode="spline"
+                keyTimes="0;0.5;1"
+                keySplines="0.4 0 0.6 1;0.4 0 0.6 1"
+              />
+            </feDisplacementMap>
+          </filter>
+        </svg>
+      )}
     </>
   );
 }

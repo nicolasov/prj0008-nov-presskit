@@ -50,6 +50,24 @@ intentional decisions rather than drift:
    where the hero "ends". This is the one place several layers move at once;
    it is deliberate and load-bearing to the whole experience.
 
+   Sprint 7.0 refinements:
+   - **NOV steps back sooner** (fades over ~vp 0.85→1.4) so Philosophy owns
+     the frame; the photograph keeps lingering (recede ~vp 1.4→2.3) as the
+     connective tissue.
+   - **Philosophy sets itself as an editorial page**, not a block. When it
+     enters view a *time-based* sequence plays (Philosophy.tsx) regardless of
+     scroll speed — timestamp (quick) → pause → "Not playing tracks." →
+     "Curating journeys." (slow, the key line) → the body, line by line — so
+     the eye reads one thing at a time. Body text is at higher contrast
+     (ink/90) so it's confident once it owns the viewport. Reduced motion
+     shows it all at once, no timeline.
+   - **The water ripple** returns on NOV: a static fine `feTurbulence`
+     displacing the letterforms, its amount breathing 2.2↔4.2 over 9s like
+     the surface of still water (`#nov-ripple`, Arrival.tsx). Desktop
+     pointers only (coexists with the cursor light), off under reduced
+     motion, never moves the type. Cheap (static turbulence, scale-only
+     animation) — Lighthouse stays 100.
+
 ## Scroll pacing
 
 - The tracklist is driven by scroll progress.
