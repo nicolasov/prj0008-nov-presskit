@@ -38,10 +38,11 @@ export default function Live() {
 
     // the track holds two identical sequences; travelling exactly -50%
     // lands the second on the first — a seamless wrap.
+    // very slow, editorial drift — closer to reading a line than a marquee
     tweenRef.current = gsap.to(track, {
       xPercent: -50,
       ease: 'none',
-      duration: 48,
+      duration: 88,
       repeat: -1,
     });
     return () => {

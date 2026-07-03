@@ -8,6 +8,7 @@ import DirectorsMode from '@/components/hidden/DirectorsMode';
 import IdleGrainBreath from '@/components/hidden/IdleGrainBreath';
 import { LanguageProvider } from '@/lib/i18n';
 import { IntroRevealProvider } from '@/lib/introReveal';
+import { PlaybackProvider } from '@/lib/playback';
 
 const siteUrl = 'https://nov.dj';
 
@@ -117,7 +118,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <IdleGrainBreath />
         <LanguageProvider>
           <IntroRevealProvider>
-            <SmoothScroll>{children}</SmoothScroll>
+            <PlaybackProvider>
+              <SmoothScroll>{children}</SmoothScroll>
+            </PlaybackProvider>
           </IntroRevealProvider>
         </LanguageProvider>
       </body>

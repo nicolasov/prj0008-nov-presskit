@@ -6,9 +6,9 @@ import { useTrackProgress } from '@/lib/useTrackProgress';
 import { useLenis } from '@/components/SmoothScroll';
 import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
-import Button from '@/components/ui/Button';
 import InstagramLink from '@/components/ui/InstagramLink';
 import LangToggle from '@/components/ui/LangToggle';
+import Drawer from '@/components/ui/Drawer';
 import { useIntroReveal } from '@/lib/introReveal';
 
 /** The journey's fictional runtime, driven by scroll progress. */
@@ -29,18 +29,23 @@ function realTimecode(): string {
   }).format(new Date());
 }
 
+/**
+ * One navigation language on every screen: wordmark + live timecode + a
+ * single minimal hamburger. The tracklist and everything else live inside a
+ * Drawer — no desktop menu bar, nothing that reads as "website chrome". The
+ * red recording timeline is always mounted so it paints from the first
+ * movement through the whole set.
+ */
 export default function Nav() {
   const { progress, activeId } = useTrackProgress();
   const lenis = useLenis();
   const revealed = useIntroReveal();
   const [menuOpen, setMenuOpen] = useState(false);
-  const toggleRef = useRef<HTMLButtonElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const hoverTimer = useRef<number>(undefined);
   const [showRealTime, setShowRealTime] = useState(false);
 
-  // Rare analog flicker on the progress hairline — a signal catching static,
-  // once every minute or two, gone before it registers as anything.
+  // Rare analog flicker on the progress hairline — a signal catching static.
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let id: number;
@@ -62,35 +67,13 @@ export default function Nav() {
     return () => window.clearTimeout(id);
   }, []);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setMenuOpen(false);
-        toggleRef.current?.focus();
-      }
-    };
-    document.addEventListener('keydown', onKeyDown);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [menuOpen]);
-
-  const seek = (e: React.MouseEvent, id: string) => {
+  const seek = (id: string) => {
     setMenuOpen(false);
-    if (!lenis) return;
-    e.preventDefault();
-    lenis.scrollTo(`#${id}`, { offset: -88 });
+    lenis?.scrollTo(`#${id}`, { offset: id === 'arrival' ? 0 : -88 });
   };
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      {/* The recording timeline — always mounted, outside the chrome's
-          intro fade, so a single continuous red hairline paints with
-          scroll from the very first movement through the whole set. It is
-          invisible at rest (0 width) so it never breaks the hero silence. */}
       <div
         ref={barRef}
         aria-hidden="true"
@@ -98,124 +81,79 @@ export default function Nav() {
         style={{ width: `${progress * 100}%` }}
       />
 
-      {/* The chrome — carries the background + border, and settles in on
-          reveal (first scroll or ~3s). Hidden during the hero silence. */}
       <div
         className={`border-b border-line bg-bg-0 transition-[opacity,transform] duration-[1100ms] ease-fade ${
           revealed ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
         }`}
       >
         <Container className="flex h-16 items-center justify-between nav:h-[72px]">
-        <div className="flex items-baseline gap-5">
-          <a
-            href="#arrival"
-            onClick={(e) => seek(e, 'arrival')}
-            aria-label="NOV — return to Arrival"
-            className="nov-logo font-serif text-[22px] font-light leading-none tracking-[0.14em] text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
-          >
-            NOV
-          </a>
-          <span
-            aria-hidden="true"
-            onMouseEnter={() => {
-              hoverTimer.current = window.setTimeout(() => setShowRealTime(true), 1500);
-            }}
-            onMouseLeave={() => {
-              window.clearTimeout(hoverTimer.current);
-              setShowRealTime(false);
-            }}
-            className="hidden cursor-default font-mono text-[10px] tracking-[0.18em] text-ink/55 [font-variant-numeric:tabular-nums] sm:inline"
-          >
-            <span className="text-red-bright">●</span>{' '}
-            {showRealTime ? `${realTimecode()} BA` : `${liveTimecode(progress)} / ${RUNTIME_TC}`}
-          </span>
-        </div>
-
-        <nav
-          aria-label="Tracklist"
-          className="hidden items-center gap-[clamp(14px,1.6vw,26px)] nav:flex"
-        >
-          {CUES.slice(0, -1).map((cue) => (
-            <a
-              key={cue.id}
-              href={`#${cue.id}`}
-              onClick={(e) => seek(e, cue.id)}
-              aria-current={cue.id === activeId ? 'true' : undefined}
-              className="no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
+          <div className="flex items-baseline gap-5">
+            <button
+              type="button"
+              onClick={() => seek('arrival')}
+              aria-label="NOV — return to 00:00"
+              className="nov-logo border-none bg-transparent p-0 font-serif text-[22px] font-light leading-none tracking-[0.14em] text-ink hover:cursor-pointer focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
             >
-              <Timecode tc={cue.tc} active={cue.id === activeId} interactive />
-            </a>
-          ))}
-        </nav>
+              NOV
+            </button>
+            <span
+              aria-hidden="true"
+              onMouseEnter={() => {
+                hoverTimer.current = window.setTimeout(() => setShowRealTime(true), 1500);
+              }}
+              onMouseLeave={() => {
+                window.clearTimeout(hoverTimer.current);
+                setShowRealTime(false);
+              }}
+              className="hidden cursor-default font-mono text-[10px] tracking-[0.18em] text-ink/55 [font-variant-numeric:tabular-nums] sm:inline"
+            >
+              <span className="text-red-bright">●</span>{' '}
+              {showRealTime ? `${realTimecode()} BA` : `${liveTimecode(progress)} / ${RUNTIME_TC}`}
+            </span>
+          </div>
 
-        <div className="hidden items-center gap-6 nav:flex">
-          <LangToggle />
-          <InstagramLink />
-          <Button href="#booking" onClick={(e) => seek(e, 'booking')}>
-            Booking
-          </Button>
-        </div>
-
-        <button
-          ref={toggleRef}
-          type="button"
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-tracklist"
-          className="flex flex-col gap-[5px] border-none bg-transparent p-2 nav:hidden focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
-        >
-          <span
-            className="block h-px w-6 bg-ink transition-transform duration-hover ease-fade"
-            style={menuOpen ? { transform: 'translateY(5px) rotate(45deg)' } : undefined}
-          />
-          <span
-            className="block h-px w-6 bg-ink transition-opacity duration-hover ease-fade"
-            style={menuOpen ? { opacity: 0 } : undefined}
-          />
-          <span
-            className="block h-px w-6 bg-ink transition-transform duration-hover ease-fade"
-            style={menuOpen ? { transform: 'translateY(-5px) rotate(-45deg)' } : undefined}
-          />
-        </button>
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+            className="flex flex-col items-end gap-[5px] border-none bg-transparent p-2 hover:cursor-pointer focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
+          >
+            <span className="block h-px w-6 bg-ink" />
+            <span className="block h-px w-4 bg-ink" />
+          </button>
         </Container>
       </div>
 
-      <div
-        id="mobile-tracklist"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Tracklist"
-        className={`fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-bg-0 transition-opacity duration-[600ms] ease-fade nav:hidden ${
-          menuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
-        }`}
-      >
-        <Container className="flex flex-col gap-1 py-8">
+      <Drawer open={menuOpen} onClose={() => setMenuOpen(false)} title="Tracklist">
+        <nav aria-label="Tracklist" className="flex flex-col">
           {CUES.map((cue) => {
             const isActive = cue.id === activeId;
             return (
-              <a
+              <button
                 key={cue.id}
-                href={`#${cue.id}`}
-                onClick={(e) => seek(e, cue.id)}
-                className={`flex items-baseline justify-between gap-4 border-b border-line py-4 no-underline transition-colors duration-hover ease-fade ${
+                type="button"
+                onClick={() => seek(cue.id)}
+                aria-current={isActive ? 'true' : undefined}
+                className={`flex items-baseline justify-between gap-4 border-b border-line bg-transparent py-4 text-left hover:cursor-pointer ${
                   isActive ? 'text-red-bright' : 'text-ink/70'
-                }`}
+                } transition-colors duration-hover ease-fade hover:text-ink`}
               >
-                <span className="font-archivo text-[20px] font-medium">{cue.label}</span>
+                <span className="font-serif text-[24px] font-light">{cue.label}</span>
                 <Timecode tc={cue.tc} active={isActive} />
-              </a>
+              </button>
             );
           })}
-          <div className="flex items-center justify-between pt-8">
-            <div className="flex items-center gap-6">
-              <InstagramLink />
-              <LangToggle />
-            </div>
-            <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Buenos Aires</span>
+        </nav>
+
+        <div className="mt-10 flex items-center justify-between border-t border-line pt-6">
+          <div className="flex items-center gap-6">
+            <InstagramLink />
+            <LangToggle />
           </div>
-        </Container>
-      </div>
+          <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Buenos Aires</span>
+        </div>
+      </Drawer>
     </header>
   );
 }

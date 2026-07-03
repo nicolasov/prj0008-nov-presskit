@@ -1,29 +1,62 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIntroReveal } from '@/lib/introReveal';
+import { usePlaying } from '@/lib/playback';
 
 /**
- * A tiny BPM readout — the set's pulse, drifting slowly between 120–124 like
- * a track breathing, never fixed, never distracting. Bottom-left, whisper
- * opacity, desktop only. Part of the editorial playback language (BPM /
- * pitch / cue) translated into type rather than a DJ UI. Reduced motion
- * holds it at a single value.
+ * The set's pulse — a tiny BPM readout drifting 120–124 like a track
+ * breathing, plus a whisper-quiet pitch that nudges with scroll and always
+ * eases back to zero (the way a jog wheel settles). Bottom-left, desktop
+ * only. When the music is playing it drifts a little more alive; silent, it
+ * is nearly still. Part of the editorial playback language, in type — never
+ * a DJ UI. Reduced motion holds it.
  */
 export default function BpmTicker() {
   const revealed = useIntroReveal();
+  const playing = usePlaying();
   const [bpm, setBpm] = useState(122);
+  const [pitch, setPitch] = useState(0);
+  const pitchRef = useRef(0);
+  const lastY = useRef(0);
 
+  // BPM drift — faster cadence and a touch wider while playing
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let target = 122;
-    const id = window.setInterval(() => {
-      // a slow random walk within 120.0–124.0
-      target = Math.min(124, Math.max(120, target + (Math.random() - 0.5) * 1.2));
+    const tick = () => {
+      const spread = playing ? 1.6 : 0.8;
+      target = Math.min(124, Math.max(120, target + (Math.random() - 0.5) * spread));
       setBpm(Number(target.toFixed(1)));
-    }, 5200);
+    };
+    const id = window.setInterval(tick, playing ? 3600 : 5600);
     return () => window.clearInterval(id);
+  }, [playing]);
+
+  // Pitch nudges with scroll velocity, then eases back to 0.0
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    lastY.current = window.scrollY;
+    let raf = 0;
+    const onScroll = () => {
+      const dy = window.scrollY - lastY.current;
+      lastY.current = window.scrollY;
+      pitchRef.current = Math.max(-6, Math.min(6, pitchRef.current + dy * 0.006));
+    };
+    const loop = () => {
+      pitchRef.current *= 0.94; // ease back toward zero
+      setPitch(Math.round(pitchRef.current * 10) / 10);
+      raf = requestAnimationFrame(loop);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    raf = requestAnimationFrame(loop);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
+
+  const pitchStr = `${pitch >= 0 ? '+' : ''}${pitch.toFixed(1)}%`;
 
   return (
     <span
@@ -33,6 +66,7 @@ export default function BpmTicker() {
       }`}
     >
       {bpm.toFixed(1)} BPM
+      <span className={`ml-3 ${Math.abs(pitch) > 0.1 ? 'text-ink/40' : 'text-ink/20'}`}>{pitchStr}</span>
     </span>
   );
 }

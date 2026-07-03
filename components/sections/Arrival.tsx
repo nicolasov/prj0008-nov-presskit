@@ -7,6 +7,7 @@ import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
 import { Staged } from '@/components/hero/HeroStage';
 import HeroWordInteractions from '@/components/hero/HeroWordInteractions';
+import HeroLight from '@/components/hero/HeroLight';
 import { useIntroReveal } from '@/lib/introReveal';
 import { getCue, RUNTIME_TC } from '@/lib/cues';
 
@@ -76,10 +77,13 @@ export default function Arrival() {
             fill
             sizes="100vw"
             priority
-            className="monochrome-image object-cover object-[75%_18%] sm:object-[70%_15%] lg:object-[center_12%]"
+            className="nov-breath monochrome-image object-cover object-[75%_18%] sm:object-[70%_15%] lg:object-[center_12%]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.28),rgba(5,5,5,0.82))]" />
         </div>
+
+        {/* the quiet second act — a soft light that trails the cursor */}
+        <HeroLight active={staged} />
 
         {/* chrome layer — full height, never touches NOV's position.
             Top row clears the fixed nav; NOV stays dead-centre. */}

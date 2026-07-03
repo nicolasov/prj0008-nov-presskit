@@ -1,24 +1,33 @@
 'use client';
 
+import { useState } from 'react';
 import Section from '@/components/ui/Section';
 import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
 import Accent from '@/components/ui/Accent';
-import { useLang, type Dictionary } from '@/lib/i18n';
+import Drawer from '@/components/ui/Drawer';
+import { useLang } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
 
 const cue = getCue('press-kit');
 
-type DownloadKey = keyof Dictionary['pressKit']['downloadsMeta'];
-
-const downloads: { title: string; metaKey: DownloadKey; format: string; href: string }[] = [
-  { title: 'Portraits', metaKey: 'portraits', format: 'JPG · 0.3 MB', href: '/images/nov-portrait-wall.jpg' },
-  { title: 'Live Still', metaKey: 'liveStill', format: 'JPG · 0.3 MB', href: '/images/nov-booth-motion.jpg' },
-  { title: 'Artist Mark', metaKey: 'artistMark', format: 'JPG · 0.2 MB', href: '/images/nov-booth-shadow.jpg' },
+const photoDownloads = [
+  { title: 'Portrait', href: '/images/nov-portrait-wall.jpg', format: 'JPG · 0.3 MB' },
+  { title: 'Booth', href: '/images/nov-booth-motion.jpg', format: 'JPG · 0.3 MB' },
+  { title: 'Editorial', href: '/images/nov-about-editorial-buenos-aires.jpg', format: 'JPG · 0.3 MB' },
 ];
+
+type OpenDrawer = 'biography' | 'rider' | 'photos' | null;
 
 export default function PressKit() {
   const { t } = useLang();
+  const [open, setOpen] = useState<OpenDrawer>(null);
+
+  const rows: { key: Exclude<OpenDrawer, null>; label: string; meta: string }[] = [
+    { key: 'biography', label: t.pressKit.rows.biography, meta: t.pressKit.rowMeta.biography },
+    { key: 'rider', label: t.pressKit.rows.rider, meta: t.pressKit.rowMeta.rider },
+    { key: 'photos', label: t.pressKit.rows.photos, meta: t.pressKit.rowMeta.photos },
+  ];
 
   return (
     <Section id={cue.id} fxIndex={0}>
@@ -27,63 +36,83 @@ export default function PressKit() {
         Everything needed, nothing <Accent>loud</Accent>.
       </Heading>
 
-      <div className="mt-10 flex flex-col border-t border-line">
-        {t.pressKit.facts.map(([label, value]) => (
-          <div key={label} className="grid gap-2 border-b border-line py-5 sm:grid-cols-[160px_1fr]">
-            <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/55">{label}</span>
-            <span className="text-[15px] leading-[1.65] text-ink">{value}</span>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-10 grid gap-8 sm:grid-cols-2">
-        <div>
-          <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink/55">
-            {t.pressKit.rider.technicalLabel}
-          </span>
-          <ul className="m-0 mt-4 flex list-none flex-col gap-2 p-0">
-            {t.pressKit.rider.technical.map((item) => (
-              <li key={item} className="flex gap-3 text-[14.5px] leading-[1.6] text-ink/70">
-                <span aria-hidden="true" className="text-red-bright">—</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink/55">
-            {t.pressKit.rider.hospitalityLabel}
-          </span>
-          <ul className="m-0 mt-4 flex list-none flex-col gap-2 p-0">
-            {t.pressKit.rider.hospitality.map((item) => (
-              <li key={item} className="flex gap-3 text-[14.5px] leading-[1.6] text-ink/70">
-                <span aria-hidden="true" className="text-red-bright">—</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="mt-10 grid gap-3 sm:grid-cols-3">
-        {downloads.map((item) => (
-          <a
-            key={item.title}
-            href={item.href}
-            download
-            className="group flex min-h-[168px] flex-col justify-between border border-line-strong bg-bg-1 p-5 no-underline transition-colors duration-hover ease-fade hover:border-red"
+      <div className="mt-12 flex flex-col border-t border-line">
+        {rows.map((row) => (
+          <button
+            key={row.key}
+            type="button"
+            onClick={() => setOpen(row.key)}
+            className="group flex items-baseline justify-between gap-6 border-b border-line bg-transparent py-6 text-left hover:cursor-pointer"
           >
-            <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">{item.format}</span>
-            <div>
-              <h3 className="m-0 font-archivo text-[17px] font-medium text-ink">{item.title}</h3>
-              <p className="mt-2 text-[13px] leading-[1.55] text-ink/70">{t.pressKit.downloadsMeta[item.metaKey]}</p>
-            </div>
-            <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55 transition-colors duration-hover ease-fade group-hover:text-red-bright">
-              {t.pressKit.download}
+            <span className="flex items-baseline gap-5">
+              <span className="font-serif text-[clamp(1.5rem,3vw,2.2rem)] font-light text-ink transition-colors duration-hover ease-fade group-hover:text-red-bright">
+                {row.label}
+              </span>
+              <span className="hidden text-[13px] text-ink/45 sm:inline">{row.meta}</span>
             </span>
-          </a>
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/45 transition-colors duration-hover ease-fade group-hover:text-red-bright">
+              {t.pressKit.open}
+            </span>
+          </button>
         ))}
       </div>
+
+      <Drawer open={open === 'biography'} onClose={() => setOpen(null)} title={t.pressKit.rows.biography}>
+        <div className="flex flex-col gap-4">
+          {t.pressKit.bioLines.map((line, i) => (
+            <p key={i} className="m-0 text-[15.5px] font-light leading-[1.7] text-ink/80">
+              {line}
+            </p>
+          ))}
+        </div>
+      </Drawer>
+
+      <Drawer open={open === 'rider'} onClose={() => setOpen(null)} title={t.pressKit.rows.rider}>
+        <div className="flex flex-col gap-8">
+          <div>
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink/55">
+              {t.pressKit.rider.technicalLabel}
+            </span>
+            <ul className="m-0 mt-4 flex list-none flex-col gap-2 p-0">
+              {t.pressKit.rider.technical.map((item) => (
+                <li key={item} className="flex gap-3 text-[14.5px] leading-[1.6] text-ink/80">
+                  <span aria-hidden="true" className="text-red-bright">—</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink/55">
+              {t.pressKit.rider.hospitalityLabel}
+            </span>
+            <ul className="m-0 mt-4 flex list-none flex-col gap-2 p-0">
+              {t.pressKit.rider.hospitality.map((item) => (
+                <li key={item} className="flex gap-3 text-[14.5px] leading-[1.6] text-ink/80">
+                  <span aria-hidden="true" className="text-red-bright">—</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Drawer>
+
+      <Drawer open={open === 'photos'} onClose={() => setOpen(null)} title={t.pressKit.rows.photos}>
+        <div className="flex flex-col">
+          {photoDownloads.map((p) => (
+            <a
+              key={p.title}
+              href={p.href}
+              download
+              className="flex items-baseline justify-between gap-4 border-b border-line py-4 no-underline transition-colors duration-hover ease-fade hover:text-red-bright"
+            >
+              <span className="font-serif text-[18px] font-light text-ink">{p.title}</span>
+              <span className="font-mono text-[10px] tracking-[0.18em] text-ink/45">{p.format}</span>
+            </a>
+          ))}
+        </div>
+      </Drawer>
     </Section>
   );
 }

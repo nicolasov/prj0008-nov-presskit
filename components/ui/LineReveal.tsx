@@ -37,7 +37,7 @@ export default function LineReveal({
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           items.forEach((it, idx) => {
-            it.style.transitionDelay = `${idx * 90}ms`;
+            it.style.transitionDelay = `${idx * 140}ms`;
             it.classList.add('in');
           });
           io.disconnect();
@@ -52,10 +52,8 @@ export default function LineReveal({
   return (
     <div ref={ref} className={className}>
       {lines.map((line, i) => (
-        <span key={i} className="block overflow-hidden">
-          <span data-ln className={cn('line-reveal block', lineClassName)}>
-            {line}
-          </span>
+        <span key={i} data-ln className={cn('line-reveal block', lineClassName)}>
+          {line}
         </span>
       ))}
     </div>

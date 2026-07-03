@@ -115,9 +115,13 @@ export default function SoundCloudPlayer() {
 
       widget.bind(PLAY, () => {
         setPlaying(true);
+        window.dispatchEvent(new Event('nov:play')); // wake the experience
         widget.getCurrentSoundIndex((i) => setIndex(i));
       });
-      widget.bind(PAUSE, () => setPlaying(false));
+      widget.bind(PAUSE, () => {
+        setPlaying(false);
+        window.dispatchEvent(new Event('nov:pause'));
+      });
       widget.bind(PLAY_PROGRESS, (data) => setPosition(data?.currentPosition ?? 0));
       widget.bind(FINISH, () => {
         widget.getCurrentSoundIndex((i) => {

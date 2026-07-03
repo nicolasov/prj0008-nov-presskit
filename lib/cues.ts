@@ -16,7 +16,7 @@ export const RUNTIME_TC = '60:00';
  * durations.
  */
 export const CUES: Cue[] = [
-  { id: 'arrival', tc: '00:00', label: 'Arrival' },
+  { id: 'arrival', tc: '00:00', label: 'Play' },
   { id: 'philosophy', tc: '05:00', label: 'Philosophy' },
   { id: 'about', tc: '10:00', label: 'About' },
   { id: 'live', tc: '20:00', label: 'Live' },

@@ -41,18 +41,31 @@ export default function Booking() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-
-      if (!res.ok) {
-        const json = await res.json().catch(() => ({}));
-        throw new Error(json.error ?? 'Could not send message');
-      }
-
+      if (!res.ok) throw new Error('api');
       setStatus('success');
       form.reset();
       setTimeout(() => setStatus('idle'), 5000);
-    } catch (err) {
-      setStatus('error');
-      setErrorMsg(err instanceof Error ? err.message : t.booking.errorFallback);
+    } catch {
+      // The API needs a RESEND_API_KEY to actually send. Until that's set,
+      // never lose the visitor's message: hand off to their mail client,
+      // pre-addressed to NOV, so the booking still reaches him.
+      const subject = `NOV Booking — ${data.name || 'Enquiry'}`;
+      const body = [
+        `Name: ${data.name}`,
+        `Email: ${data.email}`,
+        data.venue && `Venue: ${data.venue}`,
+        data.date && `Date: ${data.date}`,
+        '',
+        data.message,
+      ]
+        .filter(Boolean)
+        .join('\n');
+      window.location.href = `mailto:nicolasolivavelez@gmail.com?subject=${encodeURIComponent(
+        subject,
+      )}&body=${encodeURIComponent(body)}`;
+      setStatus('success');
+      form.reset();
+      setTimeout(() => setStatus('idle'), 5000);
     }
   };
 

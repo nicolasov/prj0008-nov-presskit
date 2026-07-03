@@ -49,6 +49,20 @@ const dictionaries = {
         artistMark: 'NOV stage image and identity reference',
       },
       download: 'Download',
+      rows: { biography: 'Biography', rider: 'Technical Rider', photos: 'Press Photos' },
+      open: 'Open',
+      rowMeta: {
+        biography: 'The short version',
+        rider: 'Minimum setup and hospitality',
+        photos: 'High-resolution stills for editorial use',
+      },
+      bioLines: [
+        'NOV is a DJ and producer from Buenos Aires.',
+        'He works in progressive, deep and organic house — hypnotic, emotional, unhurried.',
+        'Every set is researched and selected fresh, built to move slowly from tension into release.',
+        'He has shared the booth across Buenos Aires and the Argentine coast with Jimmy Van M, Popof, Martín García and others.',
+        'His philosophy is simple: not playing tracks — curating journeys.',
+      ],
       rider: {
         technicalLabel: 'Technical Requirements — Minimum Setup',
         technical: [
@@ -116,6 +130,20 @@ const dictionaries = {
         artistMark: 'Imagen de escenario NOV y referencia de identidad',
       },
       download: 'Descargar',
+      rows: { biography: 'Biografía', rider: 'Rider Técnico', photos: 'Fotos de Prensa' },
+      open: 'Abrir',
+      rowMeta: {
+        biography: 'La versión corta',
+        rider: 'Set mínimo y hospitalidad',
+        photos: 'Stills en alta resolución para uso editorial',
+      },
+      bioLines: [
+        'NOV es un DJ y productor de Buenos Aires.',
+        'Trabaja en progressive, deep y organic house — hipnótico, emocional, sin apuro.',
+        'Cada set se investiga y elige desde cero, para ir lento de la tensión a la liberación.',
+        'Compartió cabina en Buenos Aires y la costa argentina con Jimmy Van M, Popof, Martín García y más.',
+        'Su filosofía es simple: no poner tracks — curar viajes.',
+      ],
       rider: {
         technicalLabel: 'Requerimientos Técnicos — Set Mínimo',
         technical: [
