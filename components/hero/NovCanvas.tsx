@@ -8,12 +8,26 @@ import * as THREE from 'three';
  * "NOV" behaves like light: a museum title projected onto a wall.
  *
  * One fullscreen shader plane. The word is a canvas texture (real
- * Newsreader glyphs) revealed through a noise threshold — developed
- * like a photograph, not faded — with fbm smoke kept under ~6%
- * luminance variance, a tiny opacity breathing, sub-pixel drift, and
- * a soft displacement radius around the pointer. No bounce, no scale,
- * no rotation.
+ * Newsreader glyphs) revealed through a noise threshold — developed like a
+ * photograph, not faded — with fbm smoke kept under ~6% luminance
+ * variance, a tiny opacity breathing, sub-pixel drift, and a soft
+ * displacement radius around the pointer. No bounce, no scale, no rotation.
+ *
+ * The 2026-07-03 sprint added a scrollytelling sequence, all derived from
+ * one `uScroll` value (0→1, driven by Arrival's own pinned scroll range —
+ * see components/sections/Arrival.tsx and docs/04-motion-system.md):
+ *
+ *   hold (0–0.35)      → nothing changes, the word simply stays.
+ *   sweep (0.35–0.55)  → the red signal travels once across the glyphs.
+ *   photograph (0.50–0.82) → the hero photo becomes visible THROUGH the
+ *                            letterforms (the glyph mask is the window).
+ *   disperse (0.80–1.0)   → only now does the word break apart and fade.
+ *
+ * If the pacing is retimed, keep these four thresholds in sync with the
+ * ones documented in docs/04-motion-system.md.
  */
+
+const HERO_PHOTO = '/images/nov-dj-organic-house-buenos-aires-hero.jpg';
 
 const VERTEX = /* glsl */ `
   varying vec2 vUv;
@@ -33,6 +47,7 @@ const FRAGMENT = /* glsl */ `
   uniform float uScroll;
   uniform vec2 uMouse;
   uniform sampler2D uText;
+  uniform sampler2D uPhoto;
   uniform float uPlaneAspect;
   uniform float uTexAspect;
   uniform float uWordScale;
@@ -67,11 +82,16 @@ const FRAGMENT = /* glsl */ `
   void main() {
     vec2 uv = vUv;
 
+    // ---- scroll phases: one source of truth (uScroll) ----
+    float sweep = smoothstep(0.35, 0.55, uScroll);
+    float photoReveal = smoothstep(0.50, 0.82, uScroll);
+    float disperseAmt = smoothstep(0.80, 1.0, uScroll);
+
     // ---- atmosphere: slow ink drift, <=6% luminance variance ----
     vec2 sp = vec2(uv.x * uPlaneAspect, uv.y);
     float smoke = fbm(sp * 1.6 + vec2(uTime * 0.014, -uTime * 0.009));
     smoke += 0.5 * fbm(sp * 3.4 - vec2(uTime * 0.006, uTime * 0.011));
-    smoke = smoothstep(0.55, 1.35, smoke) * 0.055;
+    smoke = smoothstep(0.55, 1.35, smoke) * 0.055 * (1.0 - photoReveal * 0.6);
 
     // ---- text uv: match the DOM word's measured box exactly ----
     float scaleY = uWordScale * uPlaneAspect / uTexAspect;
@@ -81,13 +101,13 @@ const FRAGMENT = /* glsl */ `
     );
 
     // ---- distortion: sub-pixel drift + pointer displacement ----
-    // scroll disperses the word: the drift amplitude grows until the
-    // glyphs come apart like ink in water
-    float disperse = 0.0045 + uScroll * uScroll * 0.06;
+    // the word stays crisp through hold/sweep/photograph and only comes
+    // apart once disperseAmt rises — dissolve happens after the reveal.
+    float driftAmt = 0.0045 + disperseAmt * disperseAmt * 0.06;
     vec2 drift = (vec2(
-      noise(sp * (2.4 + uScroll * 6.0) + uTime * 0.05),
-      noise(sp * (2.4 + uScroll * 6.0) - uTime * 0.04)
-    ) - 0.5) * disperse;
+      noise(sp * (2.4 + disperseAmt * 6.0) + uTime * 0.05),
+      noise(sp * (2.4 + disperseAmt * 6.0) - uTime * 0.04)
+    ) - 0.5) * driftAmt;
 
     vec2 toMouse = uv - uMouse;
     float md = exp(-length(vec2(toMouse.x * uPlaneAspect, toMouse.y)) * 5.0);
@@ -95,7 +115,8 @@ const FRAGMENT = /* glsl */ `
 
     float glyph = 0.0;
     vec2 suv = tuv + drift + mouseOff;
-    if (suv.x > 0.0 && suv.x < 1.0 && suv.y > 0.0 && suv.y < 1.0) {
+    bool inBounds = suv.x > 0.0 && suv.x < 1.0 && suv.y > 0.0 && suv.y < 1.0;
+    if (inBounds) {
       glyph = texture2D(uText, suv).a;
     }
 
@@ -103,17 +124,38 @@ const FRAGMENT = /* glsl */ `
     float grain = fbm(sp * 5.0 + 7.31);
     float reveal = smoothstep(grain - 0.22, grain + 0.22, uReveal * 1.35);
 
-    // ---- breathing + scroll response ----
-    float breath = 0.93 + 0.07 * sin(uTime * 0.42);
-    float alpha = glyph * reveal * breath * max(0.0, 1.0 - uScroll * 1.15);
+    // ---- breathing settles once the sweep begins — a deliberate moment,
+    // not an ambient one ----
+    float breath = mix(0.93 + 0.07 * sin(uTime * 0.42), 1.0, sweep);
 
-    vec3 bg = vec3(0.0196);            // #050505
+    vec3 bg = vec3(0.0196);               // #050505
     vec3 ink = vec3(0.918, 0.918, 0.902); // #EAEAE6
+    vec3 red = vec3(0.757, 0.216, 0.169); // #C1372B
 
-    // smoke enters first (quick fade on mount), the word develops after
+    // ---- the photograph emerges THROUGH the letterforms: the glyph
+    // mask is reused as the photo's own uv, so the letters read as a
+    // window onto a close, textured detail of the frame ----
+    vec3 letterColor = ink;
+    if (inBounds && photoReveal > 0.0) {
+      vec3 photoSample = texture2D(uPhoto, suv).rgb;
+      float lum = dot(photoSample, vec3(0.299, 0.587, 0.114));
+      vec3 graded = vec3(lum) * 0.82 + 0.02;
+      letterColor = mix(ink, graded, photoReveal);
+    }
+
+    // ---- the red signal travels once across the glyphs, before the
+    // photograph, never after ----
+    if (inBounds) {
+      float sweepPos = sweep * 1.5 - 0.25;
+      float sweepBand = exp(-pow((tuv.x - sweepPos) * 3.0, 2.0));
+      letterColor = mix(letterColor, red, sweepBand * 0.85 * (1.0 - photoReveal));
+    }
+
     float smokeIn = min(1.0, uTime * 0.6);
     vec3 col = bg + ink * smoke * smokeIn;
-    col = mix(col, ink, alpha * 0.92);
+
+    float alpha = glyph * reveal * breath * max(0.0, 1.0 - disperseAmt * 1.15);
+    col = mix(col, letterColor, alpha * 0.92);
 
     gl_FragColor = vec4(col, 1.0);
   }
@@ -181,14 +223,16 @@ function makeTextTexture(fontFamily: string): TextPayload {
 
 type SceneProps = {
   payload: TextPayload;
+  photoTexture: THREE.Texture;
   startTime: number;
 };
 
-function Scene({ payload, startTime }: SceneProps) {
+function Scene({ payload, photoTexture, startTime }: SceneProps) {
   const { viewport } = useThree();
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const mouseTarget = useRef(new THREE.Vector2(0.5, 0.45));
   const wordBox = useRef({ scale: 0.4, centerY: 0.5 });
+  const heroElRef = useRef<HTMLElement | null>(null);
 
   const uniforms = useMemo(
     () => ({
@@ -197,25 +241,31 @@ function Scene({ payload, startTime }: SceneProps) {
       uScroll: { value: 0 },
       uMouse: { value: new THREE.Vector2(0.5, 0.45) },
       uText: { value: payload.texture },
+      uPhoto: { value: photoTexture },
       uPlaneAspect: { value: 1 },
       uTexAspect: { value: payload.aspect },
       uWordScale: { value: 0.4 },
       uWordCenterY: { value: 0.5 },
     }),
-    [payload],
+    [payload, photoTexture],
   );
 
+  useEffect(() => {
+    heroElRef.current = document.getElementById('arrival');
+  }, []);
+
   // match the DOM word's measured box so the canvas word sits exactly
-  // where the fallback <h1> renders (seamless handover, honest layout)
+  // where the fallback <h1> renders (seamless handover, honest layout).
+  // The stage is position:sticky while pinned, so the box is stable
+  // across the whole scroll sequence — no need to re-measure on scroll.
   useEffect(() => {
     const measure = () => {
       const h1 = document.querySelector<HTMLElement>('#arrival h1');
       if (!h1) return;
       const rect = h1.getBoundingClientRect();
-      const scrollTop = window.scrollY;
       wordBox.current = {
         scale: rect.width / window.innerWidth / payload.wordFrac,
-        centerY: 1 - (rect.top + scrollTop + rect.height / 2) / window.innerHeight,
+        centerY: 1 - (rect.top + rect.height / 2) / window.innerHeight,
       };
     };
     measure();
@@ -244,8 +294,11 @@ function Scene({ payload, startTime }: SceneProps) {
     const t = Math.min(1, Math.max(0, (performance.now() - startTime) / 3200));
     mat.uniforms.uReveal.value = 1 - Math.pow(1 - t, 3);
 
-    // scroll: how far the hero has left the viewport
-    mat.uniforms.uScroll.value = Math.min(1, Math.max(0, window.scrollY / window.innerHeight));
+    // single source of truth: Arrival's own pinned-scroll progress
+    const raw = heroElRef.current
+      ? parseFloat(getComputedStyle(heroElRef.current).getPropertyValue('--hero-scroll'))
+      : 0;
+    mat.uniforms.uScroll.value = Number.isFinite(raw) ? raw : 0;
 
     // pointer follows physically (slow lerp)
     (mat.uniforms.uMouse.value as THREE.Vector2).lerp(mouseTarget.current, 0.045);
@@ -267,6 +320,7 @@ type NovCanvasProps = {
 export default function NovCanvas({ onReady }: NovCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [payload, setPayload] = useState<TextPayload | null>(null);
+  const [photoTexture, setPhotoTexture] = useState<THREE.Texture | null>(null);
   const [inView, setInView] = useState(true);
   const startTimeRef = useRef(0);
 
@@ -282,6 +336,13 @@ export default function NovCanvas({ onReady }: NovCanvasProps) {
       startTimeRef.current = performance.now() + 400; // texture first, word at +400ms
       setPayload(makeTextTexture(family));
       onReady?.();
+    });
+
+    new THREE.TextureLoader().load(HERO_PHOTO, (tex) => {
+      if (cancelled) return;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.minFilter = THREE.LinearFilter;
+      setPhotoTexture(tex);
     });
 
     return () => {
@@ -303,16 +364,16 @@ export default function NovCanvas({ onReady }: NovCanvasProps) {
       ref={containerRef}
       aria-hidden="true"
       className="absolute inset-0 font-serif"
-      style={{ opacity: 'calc(1 - var(--hero-scroll, 0) * 0.92)' }}
+      style={{ opacity: 'calc(1 - var(--hero-disperse, 0) * 0.98)' }}
     >
-      {payload && (
+      {payload && photoTexture && (
         <Canvas
           dpr={[1, 1.5]}
           frameloop={inView ? 'always' : 'never'}
           gl={{ antialias: false, alpha: false, powerPreference: 'low-power' }}
           className="!absolute !inset-0"
         >
-          <Scene payload={payload} startTime={startTimeRef.current} />
+          <Scene payload={payload} photoTexture={photoTexture} startTime={startTimeRef.current} />
         </Canvas>
       )}
     </div>
