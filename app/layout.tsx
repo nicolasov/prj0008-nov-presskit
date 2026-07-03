@@ -58,22 +58,24 @@ export const metadata: Metadata = {
  * fallback serif before snapping into its centered, sized, positioned
  * final state — precisely the "loading NOV jumps into hero NOV" bug.
  * This guarantees the word is already in its final position, size and
- * font family (a plain serif stack here — the real Newsreader swaps in
- * seamlessly once the stylesheet loads, a sub-pixel shift at most,
- * because next/font's fallback metric matching is doing its job).
+ * font family. It uses the SAME font stack as the hero's real style
+ * (var(--font-newsreader) → 'Times New Roman', not Georgia) so the loading
+ * word reads as Newsreader-light from the first paint — the same object
+ * that continues into the hero and the canvas handoff, never a heavier
+ * placeholder that gets swapped. NOV is absolutely centered here exactly
+ * as it is in the real CSS (.nov-hero-stage), so it cannot drift.
  *
  * Coupled to markup: if Arrival's hero shell classes change
- * (components/sections/Arrival.tsx), update the selectors below to match.
+ * (components/sections/Arrival.tsx — the section, .nov-hero-stage layer,
+ * or the h1), update the selectors below to match.
  */
 const criticalHeroCss = `
-  html,body{background:#050505;margin:0}
+  html,body{background:#050505;margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
   #arrival,#arrival *{box-sizing:border-box}
   #arrival{position:relative;height:260vh}
-  #arrival>section{position:sticky;top:0;display:flex;height:100svh;flex-direction:column;justify-content:space-between;overflow:hidden}
-  #arrival .container{width:100%;max-width:1320px;margin-inline:auto;padding-inline:clamp(24px,5vw,72px)}
-  #arrival .container.relative{display:flex;flex:1 1 0%;flex-direction:column;justify-content:space-between;padding-block:2rem}
-  #arrival .flex.flex-col.items-center{display:flex;flex-direction:column;align-items:center;text-align:center}
-  #arrival h1{margin:0 0 0 0.06em;font-family:Georgia,'Times New Roman',serif;font-weight:300;font-size:clamp(4.5rem,15vw,13rem);line-height:1;letter-spacing:0.06em;color:#EAEAE6;text-align:center}
+  #arrival>section{position:sticky;top:0;height:100svh;overflow:hidden}
+  #arrival .nov-hero-stage{position:absolute;inset:0;display:grid;place-items:center}
+  #arrival h1{margin:0 0 0 0.06em;font-family:var(--font-newsreader),'Times New Roman',serif;font-weight:300;font-size:clamp(4.5rem,15vw,13rem);line-height:1;letter-spacing:0.06em;color:#EAEAE6;text-align:center}
 `;
 
 const jsonLd = {

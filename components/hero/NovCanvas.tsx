@@ -22,10 +22,11 @@ import * as THREE from 'three';
  *
  *   hold (0–0.35)        → nothing changes, the word simply stays.
  *   sweep (0.35–0.62)    → the red signal travels once across the glyphs.
- *   photograph (0.58–0.88) → the hero photo becomes visible behind/through
- *                            the letterforms; the word itself turns toward
- *                            red and thins to a low-opacity afterimage
- *                            floating above the frame — it never disappears.
+ *   photograph (0.46–0.90) → the hero photo emerges progressively behind/
+ *                            through the letterforms; the word itself turns
+ *                            toward red and thins to a low-opacity
+ *                            afterimage floating above the frame — it never
+ *                            disappears.
  *   disperse (0.86–1.0)  → only now does the word break apart and fade.
  *
  * If the pacing is retimed, keep these four thresholds in sync with the
@@ -88,8 +89,10 @@ const FRAGMENT = /* glsl */ `
     vec2 uv = vUv;
 
     // ---- scroll phases: one source of truth (uScroll) ----
+    // Sprint 6.7: photograph begins earlier (0.46) and ramps more
+    // gradually (to 0.90) so it emerges progressively, never abruptly.
     float sweep = smoothstep(0.35, 0.62, uScroll);
-    float photoReveal = smoothstep(0.58, 0.88, uScroll);
+    float photoReveal = smoothstep(0.46, 0.90, uScroll);
     float disperseAmt = smoothstep(0.86, 1.0, uScroll);
 
     // ---- atmosphere: slow ink drift, <=6% luminance variance ----

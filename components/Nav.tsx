@@ -86,19 +86,26 @@ export default function Nav() {
   };
 
   return (
-    <header
-      className={`sticky top-0 z-50 border-b border-line bg-bg-0 transition-[opacity,transform] duration-[1100ms] ease-fade ${
-        revealed ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
-      }`}
-    >
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/* The recording timeline — always mounted, outside the chrome's
+          intro fade, so a single continuous red hairline paints with
+          scroll from the very first movement through the whole set. It is
+          invisible at rest (0 width) so it never breaks the hero silence. */}
       <div
         ref={barRef}
         aria-hidden="true"
-        className={`h-px bg-red transition-[width] duration-300 ease-fade ${progress >= 0.995 ? 'bar-complete' : ''}`}
+        className={`relative z-10 h-px bg-red transition-[width] duration-300 ease-fade ${progress >= 0.995 ? 'bar-complete' : ''}`}
         style={{ width: `${progress * 100}%` }}
       />
 
-      <Container className="flex h-16 items-center justify-between nav:h-[72px]">
+      {/* The chrome — carries the background + border, and settles in on
+          reveal (first scroll or ~3s). Hidden during the hero silence. */}
+      <div
+        className={`border-b border-line bg-bg-0 transition-[opacity,transform] duration-[1100ms] ease-fade ${
+          revealed ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
+        }`}
+      >
+        <Container className="flex h-16 items-center justify-between nav:h-[72px]">
         <div className="flex items-baseline gap-5">
           <a
             href="#arrival"
@@ -170,7 +177,8 @@ export default function Nav() {
             style={menuOpen ? { transform: 'translateY(-5px) rotate(-45deg)' } : undefined}
           />
         </button>
-      </Container>
+        </Container>
+      </div>
 
       <div
         id="mobile-tracklist"

@@ -32,6 +32,20 @@ below: *if a decision improves the design but breaks the atmosphere,
 discard it* — atmosphere always wins; and *if an animation calls attention
 to itself, remove it — if it creates emotion without being noticed, keep it.*
 
+**Sprint 6.7 hero refinements (2026-07-03) — shipped:**
+
+- [x] Same object load→hero (critical CSS font stack matches Newsreader-light, no Georgia-heavy flash).
+- [x] Faster silence (idle reveal 5s → 3s).
+- [x] Earlier, progressive hero-photo reveal.
+- [x] No vertical movement on first scroll (verified the sticky stage locks the viewport; NOV screen-Y held constant across the sequence).
+- [x] Perfect centering — NOV in its own absolutely-centered layer, decoupled from chrome.
+- [x] Restored the continuous red recording-timeline hairline.
+- [x] Hero continuity — one uninterrupted transformation, verified frame-by-frame.
+
+See [04-motion-system.md](./04-motion-system.md) "Sprint 6.7 hero refinements".
+The larger 6.7 phases below (cover transition, CUE upgrade, line reveals) remain
+queued.
+
 **Shipped this pass:**
 
 - [x] Fixed the loading→hero position jump — root-caused to a FOUC (the

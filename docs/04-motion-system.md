@@ -68,20 +68,59 @@ a way that breaks the sequence:
 1. **Hold** (0 → 0.35) — nothing happens. NOV stays fully formed and legible.
    This is the contemplation window the brief asked for: the visitor is never
    rushed into the next moment.
-2. **Sweep** (0.35 → 0.55) — the red signal travels once across the glyphs,
+2. **Sweep** (0.35 → 0.62) — the red signal travels once across the glyphs,
    left to right, before anything else changes. It is the only place red
-   appears in the hero.
-3. **Photograph** (0.50 → 0.82, slightly overlapping the sweep for a smooth
-   handoff) — the hero photograph becomes visible **through the letterforms**
-   (the glyph mask acts as a window onto the photo, not a flat fade behind
-   it), and the full-bleed background photo layer ramps up in parallel.
-4. **Disperse** (0.80 → 1.0) — only now does NOV break apart: the same ink-
+   appears in the hero. (Extended ~35% in Sprint 6.7 — it lingers longer.)
+3. **Photograph** (0.46 → 0.90 — Sprint 6.7 begins it earlier and ramps it
+   more gradually) — the hero photograph emerges progressively behind the
+   word, never abruptly. NOV does not vanish into it; the word turns toward
+   the red signal and thins to a low-opacity afterimage floating above the
+   frame.
+4. **Disperse** (0.86 → 1.0) — only now does NOV break apart: the same ink-
    drift distortion used for the atmosphere grows sharply and the word fades.
    The word is never allowed to dissolve before the photograph has finished
    revealing.
 
 The face is never the first thing the visitor sees: it only becomes visible
 once the Photograph phase is underway, several screens into the scroll.
+
+### Sprint 6.7 hero refinements (2026-07-03)
+
+Seven refinements, all preserving the sequence above:
+
+1. **Same object, load → hero.** The loading word and the hero word must feel
+   like one continuous object, never a logo swap. The critical CSS
+   (`app/layout.tsx`) now uses the **same font stack** as the hero's real
+   style (`var(--font-newsreader), 'Times New Roman', serif`, weight 300),
+   not a heavier Georgia fallback — so the first paint already reads as
+   Newsreader-light, and the DOM→canvas handoff (both Newsreader, same
+   measured box) is invisible.
+2. **Faster silence.** The idle auto-reveal drops from 5s to 3s
+   (`lib/introReveal.tsx`). Silence stays; the wait stops feeling like the
+   page is stalling.
+3. **Earlier, progressive photograph** — the Photograph phase now starts at
+   0.46 (from 0.58) and ramps to 0.90, so the image emerges gradually rather
+   than appearing suddenly. Threshold mirrored in shader + CSS var.
+4. **No vertical movement on the first scroll.** The hero is a `sticky`
+   stage: the viewport is visually locked for the entire sequence — the first
+   scroll drives only color, red ink, opacity, photograph, typography and
+   shader, never an upward translate. The page only begins translating once
+   the sequence completes and the sticky releases. This was already the
+   architecture; 6.7 makes NOV's centering absolute so it cannot drift.
+5. **Perfect centering.** NOV lives in its own absolutely-centered layer
+   (`.nov-hero-stage`, `display:grid; place-items:center`), decoupled from
+   the surrounding chrome (timecodes, subline, thesis, footer labels), which
+   sit in a separate full-height flex layer. NOV cannot shift when the chrome
+   appears or changes — museum-hang stability, and the critical CSS centers
+   it identically so there is no first-paint drift.
+6. **The recording timeline is restored.** A single continuous red hairline
+   at the very top paints with scroll from the first movement onward
+   (`components/Nav.tsx` — the progress bar is now always mounted, outside the
+   chrome's intro fade, so the "REC timeline slowly advancing" reads through
+   the hero and onward as one line).
+7. **One continuous shot.** load → hero → photograph → scroll is a single
+   uninterrupted transformation. No replacements, jumps or resets — every
+   state melts into the next, guaranteed by 1–6 together.
 
 Implementation notes:
 - All four phases are derived from the single `uScroll` uniform inside the
