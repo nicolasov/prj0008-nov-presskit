@@ -89,6 +89,7 @@ export default function SoundCloudPlayer() {
 
   const boot = useCallback(async () => {
     setPhase('loading');
+    window.dispatchEvent(new Event('nov:audio-engaged'));
     try {
       await loadWidgetApi();
       const iframe = iframeRef.current;

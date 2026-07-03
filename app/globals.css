@@ -158,3 +158,25 @@ figure[data-fx]:not(.in) .monochrome-image {
   outline: 1px solid #e0523f;
   outline-offset: 4px;
 }
+
+/* ---------- nav progress: settles into a slow breath once the
+   journey is complete, instead of just sitting static at 100% ---------- */
+@keyframes bar-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.bar-complete {
+  animation: bar-breathe 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-complete {
+    animation: none;
+  }
+}

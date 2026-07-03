@@ -18,11 +18,47 @@ function liveTimecode(progress: number): string {
   return `${mm}:${ss}`;
 }
 
+/** Real time in Buenos Aires — the quiet counterpart to the fictional runtime. */
+function realTimecode(): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'America/Argentina/Buenos_Aires',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date());
+}
+
 export default function Nav() {
   const { progress, activeId } = useTrackProgress();
   const lenis = useLenis();
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const hoverTimer = useRef<number>(undefined);
+  const [showRealTime, setShowRealTime] = useState(false);
+
+  // Rare analog flicker on the progress hairline — a signal catching static,
+  // once every minute or two, gone before it registers as anything.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let id: number;
+    const schedule = () => {
+      const delay = 60000 + Math.random() * 80000;
+      id = window.setTimeout(() => {
+        const el = barRef.current;
+        if (el) {
+          el.style.transition = 'opacity 180ms linear';
+          el.style.opacity = '0.35';
+          window.setTimeout(() => {
+            el.style.opacity = '1';
+          }, 220);
+        }
+        schedule();
+      }, delay);
+    };
+    schedule();
+    return () => window.clearTimeout(id);
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -50,8 +86,9 @@ export default function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-bg-0">
       <div
+        ref={barRef}
         aria-hidden="true"
-        className="h-px bg-red transition-[width] duration-300 ease-fade"
+        className={`h-px bg-red transition-[width] duration-300 ease-fade ${progress >= 0.995 ? 'bar-complete' : ''}`}
         style={{ width: `${progress * 100}%` }}
       />
 
@@ -66,9 +103,17 @@ export default function Nav() {
           </a>
           <span
             aria-hidden="true"
-            className="hidden font-mono text-[10px] tracking-[0.18em] text-ink/55 [font-variant-numeric:tabular-nums] sm:inline"
+            onMouseEnter={() => {
+              hoverTimer.current = window.setTimeout(() => setShowRealTime(true), 1500);
+            }}
+            onMouseLeave={() => {
+              window.clearTimeout(hoverTimer.current);
+              setShowRealTime(false);
+            }}
+            className="hidden cursor-default font-mono text-[10px] tracking-[0.18em] text-ink/55 [font-variant-numeric:tabular-nums] sm:inline"
           >
-            <span className="text-red-bright">●</span> {liveTimecode(progress)} / {RUNTIME_TC}
+            <span className="text-red-bright">●</span>{' '}
+            {showRealTime ? `${realTimecode()} BA` : `${liveTimecode(progress)} / ${RUNTIME_TC}`}
           </span>
         </div>
 

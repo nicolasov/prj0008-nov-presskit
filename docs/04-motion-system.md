@@ -116,12 +116,32 @@ Implementation notes:
 - Every interactive hover shifts toward the red signal or brightens one
   opacity step — never a shadow, lift or scale (see [03-design-system.md](./03-design-system.md)).
 
+### Hidden interactions
+
+A set of elegant, non-gamified hidden details shipped 2026-07-03 across the
+Hero, Nav, Booking and global layout — deliberately **not enumerated here**.
+The brief that requested them was explicit: discovery is the point, and that
+applies to the person who wrote the brief too. Implementation lives in
+`components/hidden/` and `components/hero/HeroWordInteractions.tsx`, each
+with its own inline comment explaining what it does and why, for whoever
+next needs to maintain or extend one. Ground rules that governed all of
+them, for future additions:
+
+- No pop-ups, no achievements, no badges, no jokes, no gamification.
+- Never interrupt — everything is opt-in-by-curiosity (hover, long-press,
+  idle, a typed shortcut), never presented to a visitor who isn't already
+  looking closely.
+- Any sound is synthesized (Web Audio, no asset) and gated behind the
+  visitor having already engaged audio elsewhere on the page — the site
+  never introduces surprise sound.
+- Quality over quantity. Each one should feel handcrafted on its own.
+
 ### TODO
 
-- Soft UI sounds, hidden quotes and other tasteful Easter eggs were requested
-  in the 2026-07-03 sprint brief but no sound asset or hidden-copy has been
-  designed yet. Do not fabricate audio or "discoveries" without a specific
-  brief — add them here once decided.
+- None open — the previous placeholder ("no sound asset or hidden-copy has
+  been designed") was resolved this sprint. Future hidden details should
+  follow the same ground rules above and, like these, stay undocumented
+  here beyond their existence.
 
 ## Reference
 

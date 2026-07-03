@@ -5,6 +5,7 @@ import Section from '@/components/ui/Section';
 import Timecode from '@/components/ui/Timecode';
 import Quote from '@/components/ui/Quote';
 import Button from '@/components/ui/Button';
+import SessionEcho from '@/components/hidden/SessionEcho';
 import { useLang } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
 
@@ -63,6 +64,7 @@ export default function Booking() {
           <Quote className="mt-6 max-w-[16ch] text-ink">
             Every journey begins with a conversation.
           </Quote>
+          <SessionEcho />
           <div className="mt-9 flex flex-col gap-3 border-t border-line pt-7">
             <a href="mailto:booking@nov.dj" className="text-[15px] text-ink/70 no-underline transition-colors duration-hover ease-fade hover:text-red-bright">
               booking@nov.dj

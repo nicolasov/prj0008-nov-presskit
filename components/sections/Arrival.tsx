@@ -6,6 +6,7 @@ import Background from '@/components/ui/Background';
 import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
 import HeroStage, { Staged } from '@/components/hero/HeroStage';
+import HeroWordInteractions from '@/components/hero/HeroWordInteractions';
 import { getCue, RUNTIME_TC } from '@/lib/cues';
 
 const cue = getCue('arrival');
@@ -92,14 +93,16 @@ export default function Arrival() {
                     readers, and as the no-WebGL / reduced-motion fallback.
                     It only fades once the disperse phase begins — it must
                     never dissolve before the photograph has been revealed. */}
-                <h1
-                  className={`m-0 ml-[0.06em] font-serif text-[clamp(4.5rem,15vw,13rem)] font-light leading-none tracking-[0.06em] text-ink transition-opacity duration-[1200ms] ease-fade ${
-                    canvasReady ? 'opacity-0' : 'opacity-100'
-                  }`}
-                  style={canvasReady ? undefined : { opacity: 'calc(1 - var(--hero-disperse, 0))' }}
-                >
-                  NOV
-                </h1>
+                <HeroWordInteractions>
+                  <h1
+                    className={`m-0 ml-[0.06em] font-serif text-[clamp(4.5rem,15vw,13rem)] font-light leading-none tracking-[0.06em] text-ink transition-opacity duration-[1200ms] ease-fade ${
+                      canvasReady ? 'opacity-0' : 'opacity-100'
+                    }`}
+                    style={canvasReady ? undefined : { opacity: 'calc(1 - var(--hero-disperse, 0))' }}
+                  >
+                    NOV
+                  </h1>
+                </HeroWordInteractions>
 
                 <Staged show={staged} delay={400}>
                   <p className="mt-[clamp(40px,6vw,84px)] font-serif text-[clamp(1rem,2vw,1.35rem)] font-light italic text-ink/70">
