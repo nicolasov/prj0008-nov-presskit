@@ -33,7 +33,9 @@
 
 ## Copy in the current site
 
-- The Booking section uses: “Every journey begins with a conversation.”
+- The Booking section uses: “Every night begins with a conversation.” (the
+  night is the DJ's own unit; “journeys” is left to the Philosophy manifesto
+  so the key line isn't diluted by repetition elsewhere.)
 - Section labels are cue points: Arrival, Philosophy, About, Live, Gallery, Videos / Sets, Press Kit, Booking.
 - The site uses English editorial labels as design material.
 - Prose and the booking form are localized; editorial elements remain in English.

@@ -11,12 +11,19 @@ import { usePlaying } from '@/lib/playback';
  * only. When the music is playing it drifts a little more alive; silent, it
  * is nearly still. Part of the editorial playback language, in type — never
  * a DJ UI. Reduced motion holds it.
+ *
+ * It lives only inside the set: it stays hidden over the hero (where the
+ * hero's own "Buenos Aires" label owns the bottom-left corner, and the pulse
+ * hasn't started yet — you haven't pressed play) and retires as the footer
+ * arrives (where it would otherwise overprint the copyright). One quiet
+ * corner, never shared.
  */
 export default function BpmTicker() {
   const revealed = useIntroReveal();
   const playing = usePlaying();
   const [bpm, setBpm] = useState(122);
   const [pitch, setPitch] = useState(0);
+  const [inSet, setInSet] = useState(false);
   const pitchRef = useRef(0);
   const lastY = useRef(0);
 
@@ -32,6 +39,27 @@ export default function BpmTicker() {
     const id = window.setInterval(tick, playing ? 3600 : 5600);
     return () => window.clearInterval(id);
   }, [playing]);
+
+  // Visibility: only inside the set — past the hero's first screen and not
+  // yet at the footer. Runs in both motion modes so the corner is never
+  // shared (the collision must be avoided even when motion is reduced).
+  useEffect(() => {
+    const compute = () => {
+      const y = window.scrollY;
+      const vh = window.innerHeight;
+      const docH = document.documentElement.scrollHeight;
+      const nearFooter = docH - (y + vh) < 200;
+      const show = y > vh * 0.85 && !nearFooter;
+      setInSet((prev) => (prev === show ? prev : show));
+    };
+    compute();
+    window.addEventListener('scroll', compute, { passive: true });
+    window.addEventListener('resize', compute);
+    return () => {
+      window.removeEventListener('scroll', compute);
+      window.removeEventListener('resize', compute);
+    };
+  }, []);
 
   // Pitch nudges with scroll velocity, then eases back to 0.0
   useEffect(() => {
@@ -62,7 +90,7 @@ export default function BpmTicker() {
     <span
       aria-hidden="true"
       className={`pointer-events-none fixed bottom-8 left-8 z-30 hidden font-mono text-[10px] tracking-[0.18em] text-ink/25 [font-variant-numeric:tabular-nums] transition-opacity duration-[1400ms] ease-fade lg:block ${
-        revealed ? 'opacity-100' : 'opacity-0'
+        revealed && inSet ? 'opacity-100' : 'opacity-0'
       }`}
     >
       {bpm.toFixed(1)} BPM

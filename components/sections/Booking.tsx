@@ -75,7 +75,7 @@ export default function Booking() {
         <div>
           <Timecode tc={cue.tc} label={cue.label} />
           <Quote className="mt-6 max-w-[16ch] text-ink">
-            Every journey begins with a conversation.
+            Every night begins with a conversation.
           </Quote>
           <SessionEcho />
           <div className="mt-9 flex flex-col gap-3 border-t border-line pt-7">

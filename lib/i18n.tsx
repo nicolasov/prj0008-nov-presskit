@@ -31,10 +31,10 @@ const dictionaries = {
       influences: 'Influences',
     },
     live: {
-      body: 'NOV has performed across Buenos Aires and the Argentine coast, sharing the booth with artists who shaped the progressive and deep electronic language of the region.',
+      body: 'Buenos Aires and the Argentine coast. The booth, shared with the artists who shaped the region’s sound.',
     },
     radio: {
-      body: 'The presskit is built around the same principle as the set: fewer signals, deeper attention.',
+      body: 'A recorded set says more than any biography. Fewer signals, deeper attention.',
     },
     pressKit: {
       facts: [
@@ -112,10 +112,10 @@ const dictionaries = {
       influences: 'Influencias',
     },
     live: {
-      body: 'NOV se ha presentado en Buenos Aires y la costa argentina, compartiendo cabina con artistas que dieron forma al lenguaje electrónico progresivo y profundo de la región.',
+      body: 'Buenos Aires y la costa argentina. La cabina, compartida con los artistas que dieron forma al sonido de la región.',
     },
     radio: {
-      body: 'El presskit está construido sobre el mismo principio que el set: menos señales, atención más profunda.',
+      body: 'Un set grabado dice más que cualquier biografía. Menos señales, atención más profunda.',
     },
     pressKit: {
       facts: [

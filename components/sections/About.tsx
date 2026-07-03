@@ -37,7 +37,7 @@ export default function About() {
             lineClassName="max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.35rem)] font-light leading-[1.5] text-ink/80"
           />
           <div className="mt-8 border-t border-line pt-6 font-mono text-[10.5px] tracking-[0.16em] text-ink/55">
-            <span className="text-ink/70">{t.about.influences}</span> — Guy J · Hernan Cattaneo ·
+            <span className="text-ink/70">{t.about.influences}</span> — Guy J · Hernán Cattáneo ·
             John Digweed · Simon Vuarambon · Sahar Z
           </div>
         </div>
