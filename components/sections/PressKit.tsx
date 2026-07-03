@@ -4,6 +4,9 @@ import Section from '@/components/ui/Section';
 import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
 import { useLang, type Dictionary } from '@/lib/i18n';
+import { getCue } from '@/lib/cues';
+
+const cue = getCue('press-kit');
 
 type DownloadKey = keyof Dictionary['pressKit']['downloadsMeta'];
 
@@ -17,8 +20,8 @@ export default function PressKit() {
   const { t } = useLang();
 
   return (
-    <Section id="press-kit" fxIndex={0}>
-      <Timecode tc="47:00" label="Press Kit" />
+    <Section id={cue.id} fxIndex={0}>
+      <Timecode tc={cue.tc} label={cue.label} />
       <Heading as="h2" className="mt-6 max-w-[12ch]">
         Everything needed, nothing loud.
       </Heading>
@@ -30,6 +33,35 @@ export default function PressKit() {
             <span className="text-[15px] leading-[1.65] text-ink">{value}</span>
           </div>
         ))}
+      </div>
+
+      <div className="mt-10 grid gap-8 sm:grid-cols-2">
+        <div>
+          <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink/55">
+            {t.pressKit.rider.technicalLabel}
+          </span>
+          <ul className="m-0 mt-4 flex list-none flex-col gap-2 p-0">
+            {t.pressKit.rider.technical.map((item) => (
+              <li key={item} className="flex gap-3 text-[14.5px] leading-[1.6] text-ink/70">
+                <span aria-hidden="true" className="text-red-bright">—</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink/55">
+            {t.pressKit.rider.hospitalityLabel}
+          </span>
+          <ul className="m-0 mt-4 flex list-none flex-col gap-2 p-0">
+            {t.pressKit.rider.hospitality.map((item) => (
+              <li key={item} className="flex gap-3 text-[14.5px] leading-[1.6] text-ink/70">
+                <span aria-hidden="true" className="text-red-bright">—</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="mt-10 grid gap-3 sm:grid-cols-3">

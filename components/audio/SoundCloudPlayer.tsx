@@ -10,6 +10,21 @@ const EMBED_SRC = `https://w.soundcloud.com/player/?url=${encodeURIComponent(
 
 type Sound = { title: string; duration: number };
 
+/**
+ * Editor's Notes — two sentences of mood, never technique. Keyed by exact
+ * SoundCloud title because the set list is fetched live and titles aren't
+ * known ahead of time. A set we haven't written about yet shows no note
+ * rather than a fabricated one — see docs/06-copywriting.md.
+ */
+const EDITOR_NOTES: Record<string, string> = {
+  'Live at Privilege San Bernardo by Moon House [2026.04]':
+    'Recorded live, the room still audible under the low end. A set that takes its time to arrive — and means it when it does.',
+  'Live at Mazovia Zárate [2026.03]':
+    'A coastal night, played slower than the room expected. It rewards staying until the very end.',
+  'Taken 02':
+    'A quieter register, made for headphones rather than a room. The second chapter of an ongoing selection.',
+};
+
 /* Minimal typings for the SoundCloud Widget API. */
 type SCWidget = {
   bind: (event: string, cb: (data?: { currentPosition?: number }) => void) => void;
@@ -210,6 +225,12 @@ export default function SoundCloudPlayer() {
             <p className="m-0 line-clamp-1 font-archivo text-[17px] font-medium text-ink">
               {current?.title ?? '—'}
             </p>
+
+            {current && EDITOR_NOTES[current.title] && (
+              <p className="m-0 max-w-[48ch] font-serif text-[13.5px] font-light italic leading-[1.6] text-ink/70">
+                {EDITOR_NOTES[current.title]}
+              </p>
+            )}
 
             {/* seek */}
             <div className="relative h-4">

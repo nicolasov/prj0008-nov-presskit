@@ -4,6 +4,9 @@ import Section from '@/components/ui/Section';
 import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
 import { useLang } from '@/lib/i18n';
+import { getCue } from '@/lib/cues';
+
+const cue = getCue('live');
 
 const artists = [
   'Jimmy Van M',
@@ -18,8 +21,8 @@ export default function Live() {
   const { t } = useLang();
 
   return (
-    <Section id="live" fxIndex={0}>
-      <Timecode tc="18:00" label="Live" />
+    <Section id={cue.id} fxIndex={0}>
+      <Timecode tc={cue.tc} label={cue.label} />
       <Heading as="h2" className="mt-6 max-w-[9ch]">
         Trusted in serious rooms.
       </Heading>

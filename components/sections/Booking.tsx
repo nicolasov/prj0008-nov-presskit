@@ -6,6 +6,9 @@ import Timecode from '@/components/ui/Timecode';
 import Quote from '@/components/ui/Quote';
 import Button from '@/components/ui/Button';
 import { useLang } from '@/lib/i18n';
+import { getCue } from '@/lib/cues';
+
+const cue = getCue('booking');
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -53,10 +56,10 @@ export default function Booking() {
   };
 
   return (
-    <Section id="booking" fxIndex={0}>
+    <Section id={cue.id} fxIndex={0}>
       <div className="grid gap-[clamp(32px,5vw,72px)] lg:grid-cols-[0.85fr_1.15fr]">
         <div>
-          <Timecode tc="55:00" label="Booking" />
+          <Timecode tc={cue.tc} label={cue.label} />
           <Quote className="mt-6 max-w-[16ch] text-ink">
             Every journey begins with a conversation.
           </Quote>

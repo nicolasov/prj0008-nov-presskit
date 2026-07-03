@@ -5,12 +5,15 @@ import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
 import Still from '@/components/ui/Still';
 import { useLang } from '@/lib/i18n';
+import { getCue } from '@/lib/cues';
+
+const cue = getCue('about');
 
 export default function About() {
   const { t } = useLang();
 
   return (
-    <Section id="about" fxIndex={1}>
+    <Section id={cue.id} fxIndex={1}>
       <div className="grid gap-[clamp(32px,5vw,72px)] lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <Still
           src="/images/nov-portrait-wall.jpg"
@@ -21,7 +24,7 @@ export default function About() {
         />
 
         <div>
-          <Timecode tc="09:00" label="About" />
+          <Timecode tc={cue.tc} label={cue.label} />
           <Heading as="h2" className="mt-6">
             A slow build into depth.
           </Heading>

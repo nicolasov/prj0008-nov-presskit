@@ -7,8 +7,11 @@ import Section from '@/components/ui/Section';
 import Timecode from '@/components/ui/Timecode';
 import Quote from '@/components/ui/Quote';
 import { useLang } from '@/lib/i18n';
+import { getCue } from '@/lib/cues';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const cue = getCue('philosophy');
 
 /**
  * The manifesto reads like a film's opening captions: each line
@@ -49,9 +52,9 @@ export default function Philosophy() {
   }, []);
 
   return (
-    <Section id="philosophy" fx={false}>
+    <Section id={cue.id} fx={false}>
       <div ref={rootRef}>
-        <Timecode tc="04:30" label="Philosophy" />
+        <Timecode tc={cue.tc} label={cue.label} />
         <div className="mt-10 flex flex-col gap-4">
           <div data-line>
             <Quote className="text-[clamp(1.8rem,4vw,3rem)] text-ink">Not playing tracks.</Quote>

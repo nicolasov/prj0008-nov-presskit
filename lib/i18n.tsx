@@ -23,7 +23,7 @@ const dictionaries = {
     live: {
       body: 'NOV has performed across Buenos Aires and the Argentine coast, sharing the booth with artists who shaped the progressive and deep electronic language of the region.',
     },
-    videos: {
+    radio: {
       body: 'The presskit is built around the same principle as the set: fewer signals, deeper attention.',
     },
     pressKit: {
@@ -32,8 +32,6 @@ const dictionaries = {
         ['Sound', 'Progressive House, Deep House, Organic House, Hypnotic Groove'],
         ['Set Philosophy', 'Fresh music selected before every performance'],
         ['Booking', 'Clubs, listening rooms, private and coastal dates'],
-        ['Technical Rider', 'Minimum 3× Pioneer CDJ-2000NXS2 · DJM-900NXS2 · booth monitors + sub-low'],
-        ['Logistics', 'Travel expenses and accommodation covered by the promoter'],
       ] as [string, string][],
       downloadsMeta: {
         portraits: 'High-resolution studio press photos',
@@ -41,6 +39,17 @@ const dictionaries = {
         artistMark: 'NOV stage image and identity reference',
       },
       download: 'Download',
+      rider: {
+        technicalLabel: 'Technical Requirements — Minimum Setup',
+        technical: [
+          '3 × Pioneer CDJ-2000NXS2 (or newer)',
+          'Pioneer DJM-900NXS2 (or equivalent)',
+          'Professional booth monitors',
+          'Professional venue sound system',
+        ],
+        hospitalityLabel: 'Hospitality',
+        hospitality: ['Water', 'Beer', 'Accommodation and travel expenses when applicable'],
+      },
     },
     booking: {
       name: 'Name',
@@ -71,7 +80,7 @@ const dictionaries = {
     live: {
       body: 'NOV se ha presentado en Buenos Aires y la costa argentina, compartiendo cabina con artistas que dieron forma al lenguaje electrónico progresivo y profundo de la región.',
     },
-    videos: {
+    radio: {
       body: 'El presskit está construido sobre el mismo principio que el set: menos señales, atención más profunda.',
     },
     pressKit: {
@@ -80,8 +89,6 @@ const dictionaries = {
         ['Sonido', 'Progressive House, Deep House, Organic House, Hypnotic Groove'],
         ['Filosofía de set', 'Música nueva seleccionada antes de cada presentación'],
         ['Booking', 'Clubes, listening rooms, fechas privadas y de costa'],
-        ['Rider técnico', 'Mínimo 3× Pioneer CDJ-2000NXS2 · DJM-900NXS2 · monitores de cabina + sub-low'],
-        ['Logística', 'Viáticos y alojamiento a cargo del organizador'],
       ] as [string, string][],
       downloadsMeta: {
         portraits: 'Fotos de prensa de estudio en alta resolución',
@@ -89,6 +96,17 @@ const dictionaries = {
         artistMark: 'Imagen de escenario NOV y referencia de identidad',
       },
       download: 'Descargar',
+      rider: {
+        technicalLabel: 'Requerimientos Técnicos — Set Mínimo',
+        technical: [
+          '3 × Pioneer CDJ-2000NXS2 (o más nuevo)',
+          'Pioneer DJM-900NXS2 (o equivalente)',
+          'Monitores de cabina profesionales',
+          'Sistema de sonido profesional del venue',
+        ],
+        hospitalityLabel: 'Hospitalidad',
+        hospitality: ['Agua', 'Cerveza', 'Alojamiento y viáticos cuando corresponda'],
+      },
     },
     booking: {
       name: 'Nombre',

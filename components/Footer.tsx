@@ -28,13 +28,13 @@ export default function Footer() {
             <InstagramLink />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-ink/45">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-ink/55">
           <span>© {new Date().getFullYear()} NOV — All rights reserved</span>
           <a
             href="https://wa.me/5491132102111"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-ink/45 no-underline transition-colors duration-hover ease-fade hover:text-red-bright [font-variant-numeric:tabular-nums]"
+            className="text-ink/55 no-underline transition-colors duration-hover ease-fade hover:text-red-bright [font-variant-numeric:tabular-nums]"
           >
             +54 9 11 3210-2111
           </a>

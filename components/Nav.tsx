@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { CUES } from '@/lib/cues';
+import { CUES, RUNTIME_SECONDS, RUNTIME_TC } from '@/lib/cues';
 import { useTrackProgress } from '@/lib/useTrackProgress';
 import { useLenis } from '@/components/SmoothScroll';
 import Container from '@/components/ui/Container';
@@ -10,10 +10,9 @@ import Button from '@/components/ui/Button';
 import InstagramLink from '@/components/ui/InstagramLink';
 import LangToggle from '@/components/ui/LangToggle';
 
-/** The journey's fictional runtime (55:00), driven by scroll progress. */
+/** The journey's fictional runtime, driven by scroll progress. */
 function liveTimecode(progress: number): string {
-  const total = 55 * 60;
-  const s = Math.round(progress * total);
+  const s = Math.round(progress * RUNTIME_SECONDS);
   const mm = String(Math.floor(s / 60)).padStart(2, '0');
   const ss = String(s % 60).padStart(2, '0');
   return `${mm}:${ss}`;
@@ -69,7 +68,7 @@ export default function Nav() {
             aria-hidden="true"
             className="hidden font-mono text-[10px] tracking-[0.18em] text-ink/55 [font-variant-numeric:tabular-nums] sm:inline"
           >
-            <span className="text-red-bright">●</span> {liveTimecode(progress)} / 55:00
+            <span className="text-red-bright">●</span> {liveTimecode(progress)} / {RUNTIME_TC}
           </span>
         </div>
 

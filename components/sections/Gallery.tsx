@@ -1,12 +1,15 @@
 import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
 import Still from '@/components/ui/Still';
+import { getCue } from '@/lib/cues';
+
+const cue = getCue('gallery');
 
 export default function Gallery() {
   return (
-    <section id="gallery" data-fx className="py-[var(--space-section)]">
+    <section id={cue.id} data-fx className="py-[var(--space-section)]">
       <Container>
-        <Timecode tc="27:00" label="Gallery" />
+        <Timecode tc={cue.tc} label={cue.label} />
       </Container>
 
       <Container className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-12">
@@ -15,7 +18,7 @@ export default function Gallery() {
           alt="NOV in the booth, hands on the mixer, light trails"
           aspect="letterbox"
           caption="Hands on the filter — closing hour"
-          tc="27:14"
+          tc="29:14"
           className="md:col-span-8"
           sizes="(max-width: 880px) 100vw, 66vw"
           fxIndex={0}
@@ -25,7 +28,7 @@ export default function Gallery() {
           alt="NOV in the booth, half light"
           aspect="portrait"
           caption="The booth, half light"
-          tc="27:41"
+          tc="29:41"
           className="md:col-span-4"
           sizes="(max-width: 880px) 100vw, 33vw"
           fxIndex={1}
@@ -35,7 +38,7 @@ export default function Gallery() {
           alt="NOV cueing with headphones"
           aspect="letterbox"
           caption="Cueing the next room"
-          tc="28:22"
+          tc="30:22"
           className="md:col-span-12"
           sizes="100vw"
           fxIndex={2}

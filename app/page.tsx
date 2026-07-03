@@ -5,7 +5,7 @@ import Philosophy from '@/components/sections/Philosophy';
 import About from '@/components/sections/About';
 import Live from '@/components/sections/Live';
 import Gallery from '@/components/sections/Gallery';
-import Videos from '@/components/sections/Videos';
+import Radio from '@/components/sections/Radio';
 import PressKit from '@/components/sections/PressKit';
 import Booking from '@/components/sections/Booking';
 
@@ -19,7 +19,7 @@ export default function Home() {
         <About />
         <Live />
         <Gallery />
-        <Videos />
+        <Radio />
         <PressKit />
         <Booking />
       </main>
