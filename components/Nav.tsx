@@ -110,7 +110,8 @@ export default function Nav() {
           <a
             href="#arrival"
             onClick={(e) => seek(e, 'arrival')}
-            className="font-archivo text-[15px] font-medium tracking-[0.3em] text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
+            aria-label="NOV — return to Arrival"
+            className="nov-logo font-serif text-[22px] font-light leading-none tracking-[0.14em] text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4"
           >
             NOV
           </a>

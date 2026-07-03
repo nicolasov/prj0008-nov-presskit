@@ -5,12 +5,12 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const IntroRevealContext = createContext(false);
 
 /**
- * For the first ~3 seconds (or until the visitor's first scroll,
+ * For the first ~1.8 seconds (or until the visitor's first scroll,
  * whichever comes first), only the hero word exists — no header, no
- * subline, no chrome. Silence, then an inevitable, staged arrival.
- * Shared between Nav and the hero so both settle in at the same moment.
- * (3s, tightened from 5s in Sprint 6.7 — keeps the silence, stops the
- * wait from feeling like the page has stalled.)
+ * subline, no chrome. Like opening the cover of a book, not a loading
+ * screen. Shared between Nav and the hero so both settle in together.
+ * (1.8s — tightened across sprints from 5s→3s→1.8s; the silence stays,
+ * the wait never feels like the page has stalled.)
  */
 export function IntroRevealProvider({ children }: { children: React.ReactNode }) {
   const [revealed, setRevealed] = useState(false);
@@ -28,7 +28,7 @@ export function IntroRevealProvider({ children }: { children: React.ReactNode })
     };
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    const id = window.setTimeout(reveal, 3000);
+    const id = window.setTimeout(reveal, 1800);
 
     return () => {
       window.removeEventListener('scroll', onScroll);

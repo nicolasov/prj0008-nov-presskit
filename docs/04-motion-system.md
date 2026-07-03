@@ -134,10 +134,27 @@ Implementation notes:
 
 ## NOV typography animation
 
-- The hero word behaves like light projected on a wall.
-- The hero text reveals through opacity and texture, not transform.
-- The WebGL word is a canvas texture of actual Newsreader glyphs.
-- The transition is crossfade-only, maintaining the typographic composition.
+### Sprint 6.8 — ONE NOV (supersedes the WebGL word)
+
+The hero word is now a **single DOM `<h1>`**, present from the first frame to
+the end of the hero — never replaced, never crossfaded into a second element,
+never resized or re-weighted. The WebGL canvas word (and `three` / R3F on the
+hero) was removed: it inherently replaced the DOM word with a canvas
+rendering, which the brief explicitly forbids ("do NOT crossfade between two
+DOM elements"). Removing it is also lighter and more editorial — less effect,
+more atmosphere.
+
+The one element only animates **colour** (bone `#EAEAE6` → the NOV signal
+`#E0523F`, via `color-mix` driven by `--hero-photo`) and lets the photograph
+develop behind it. It never disperses or disappears — it becomes part of the
+image, and is later covered by the Philosophy chapter (cover transition:
+still queued). The same typography (Newsreader light, tracking 0.06em) is used
+for the hero word, the nav wordmark, and any NOV on the site — one identity,
+one logo, per docs/09 LOGO SYSTEM.
+
+Historical note: earlier sprints rendered NOV as a WebGL shader (fbm ink
+drift, a red sweep across the glyphs, the photo showing through the
+letterforms). That approach is retired.
 
 ## Red reveal
 
