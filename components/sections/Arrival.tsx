@@ -173,18 +173,20 @@ export default function Arrival() {
           this empty space; after it, the document rises over them. */}
       <div id={cue.id} aria-hidden="true" className="h-[100svh]" />
 
-      {/* the water ripple filter — a static fine turbulence displacing the
-          letterforms, its amount breathing slowly like the surface of still
-          water. Applied to the NOV h1 above. Rendered only when enabled. */}
+      {/* the water ripple filter — very low-frequency (large, smooth
+          undulation, not fine jitter) turbulence displacing the letterforms
+          by a tiny amount that breathes slowly, so the serif edges shimmer
+          like a calm surface without ever looking rough or pixelated.
+          Applied to the NOV h1 above. Rendered only when enabled. */}
       {ripple && (
         <svg aria-hidden="true" width="0" height="0" className="absolute">
-          <filter id="nov-ripple" x="-8%" y="-8%" width="116%" height="116%" colorInterpolationFilters="sRGB">
-            <feTurbulence type="fractalNoise" baseFrequency="0.018 0.022" numOctaves={2} seed={7} result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="3">
+          <filter id="nov-ripple" x="-6%" y="-6%" width="112%" height="112%" colorInterpolationFilters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves={1} seed={7} result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="1.4">
               <animate
                 attributeName="scale"
-                values="2.2;4.2;2.2"
-                dur="9s"
+                values="0.8;2;0.8"
+                dur="11s"
                 repeatCount="indefinite"
                 calcMode="spline"
                 keyTimes="0;0.5;1"
