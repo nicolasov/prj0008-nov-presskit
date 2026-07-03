@@ -19,6 +19,73 @@ Tasks:
 - [ ] Full legacy filename pass (`nov-portrait.png`, `nov-hero.jpg`, etc. still carry pre-pipeline names) — backlog, see [05-photography.md](./05-photography.md) TODO.
 - [ ] Soft UI sounds, hidden quotes, tasteful Easter eggs — no sound asset or copy has been designed yet; tracked as backlog, not fabricated. See TODO below.
 - [ ] Canonical biography — a "latest official biography" was referenced this sprint but never actually received in the conversation. The site keeps the previously-approved bio text. See [06-copywriting.md](./06-copywriting.md) TODO.
+- [x] Nine hidden interactions, elegant and non-gamified. Not enumerated — see [04-motion-system.md](./04-motion-system.md).
+
+## Sprint 6.6 — Art direction pass (opened 2026-07-03)
+
+The brief for this sprint explicitly reframes the working posture: not "add
+features," but polish rhythm, typography, motion, photography and sound
+until nothing reads as "a website" — the reference is a premium editorial
+publication (Apple / Leica / A24 / Kinfolk), reviewed as if presenting to
+their creative directors. Two guiding rules carried through every task
+below: *if a decision improves the design but breaks the atmosphere,
+discard it* — atmosphere always wins; and *if an animation calls attention
+to itself, remove it — if it creates emotion without being noticed, keep it.*
+
+**Shipped this pass:**
+
+- [x] Fixed the loading→hero position jump — root-caused to a FOUC (the
+  browser paints the hero word with user-agent defaults before the
+  stylesheet loads, on any throttled connection), fixed with inlined
+  critical CSS. See the `fix(hero)` commit for the full trace.
+- [x] Silence-first hero: only NOV exists for the first ~5s (or until first
+  scroll) — header, DJ • Producer, and Curated Journeys hold back until
+  then, and their arrival is staged rather than a plain fade.
+- [x] Header settle: Buenos Aires / Scroll rise from below instead of
+  fading in place; the header itself eases into its sticky state.
+- [x] Red sweep extended ~35%; NOV shifts toward the red signal (not gray)
+  as the photograph reveals, floating above it at low opacity rather than
+  disappearing; DJ • Producer / Curated Journeys persist longer as faint
+  afterimage layers instead of cutting to zero.
+- [x] About section photo replaced with the definitive image.
+- [x] Title color hierarchy: exactly one accent word per heading, used as
+  a reading guide, never decoration.
+- [x] "Back to top" replaced with **CUE** — a return to 00:00, not a
+  generic UI affordance.
+
+**Deliberately queued, not attempted shallow** — each of these is a real
+feature on its own and doing it at the quality this project has held to
+so far needs its own dedicated pass rather than a rushed pass alongside
+everything else in this list:
+
+- [ ] Hero → Philosophy "cover/layer" transition (the document physically
+  covering the hero like a magazine's opening spread, with depth/parallax
+  on the hero image). This is a genuine evolution of the motion system's
+  "everything is a crossfade" rule, scoped specifically to this one
+  boundary — needs its own docs update in [04-motion-system.md](./04-motion-system.md)
+  before implementation, not a quick bolt-on.
+- [ ] Gallery rebuilt as a full photographic exhibition (~20 images,
+  enter/breathe/crossfade/leave, mixed full-bleed and partial framing).
+  Blocked in part on having enough real, distinct, graded photographs —
+  currently ~8 processed. Repeating images to hit 20 (explicitly permitted
+  in the brief) still needs real art direction per placement, not a loop.
+- [ ] First video inside the Gallery (`_mat/NOV/Videos/...aguante...mp4`),
+  autoplay/muted/loop, with the audio-exclusivity rule (video ↔
+  SoundCloud never both play).
+- [ ] Shared Booth as one continuous bullet-separated sentence with slow
+  GSAP marquee motion (reference: CodePen `MYyBrZw`, reinterpreted).
+- [ ] Line-by-line paragraph reveals (About, Philosophy body copy) —
+  reference: tympanus ScrollTextMotion, reinterpreted, not copied.
+- [ ] Full photography pass: test every image in both monochrome and
+  NOV LOOK™ color grading (Leica / Kodak Vision3 / Apple Editorial
+  references), choose per-image rather than a blanket rule.
+- [ ] Full image production pipeline: AVIF/WebP export, responsive
+  srcset/sizes, explicit dimensions, complete alt/title/caption pass,
+  and the remaining legacy-filename rename (already tracked in
+  [05-photography.md](./05-photography.md)).
+- [ ] Hero "living blacks" atmosphere texture (the background should never
+  read as flat dead black) and the subtle independent-depth movement on
+  the hero photograph.
 
 ## Current status
 

@@ -15,13 +15,18 @@ import * as THREE from 'three';
  *
  * The 2026-07-03 sprint added a scrollytelling sequence, all derived from
  * one `uScroll` value (0→1, driven by Arrival's own pinned scroll range —
- * see components/sections/Arrival.tsx and docs/04-motion-system.md):
+ * see components/sections/Arrival.tsx and docs/04-motion-system.md).
+ * Retimed later the same day (Sprint 6.6: the red sweep runs ~35% longer,
+ * and the word no longer disappears into the photograph — it floats above
+ * it, tinted toward the signal red, at low opacity, until it disperses):
  *
- *   hold (0–0.35)      → nothing changes, the word simply stays.
- *   sweep (0.35–0.55)  → the red signal travels once across the glyphs.
- *   photograph (0.50–0.82) → the hero photo becomes visible THROUGH the
- *                            letterforms (the glyph mask is the window).
- *   disperse (0.80–1.0)   → only now does the word break apart and fade.
+ *   hold (0–0.35)        → nothing changes, the word simply stays.
+ *   sweep (0.35–0.62)    → the red signal travels once across the glyphs.
+ *   photograph (0.58–0.88) → the hero photo becomes visible behind/through
+ *                            the letterforms; the word itself turns toward
+ *                            red and thins to a low-opacity afterimage
+ *                            floating above the frame — it never disappears.
+ *   disperse (0.86–1.0)  → only now does the word break apart and fade.
  *
  * If the pacing is retimed, keep these four thresholds in sync with the
  * ones documented in docs/04-motion-system.md.
@@ -83,9 +88,9 @@ const FRAGMENT = /* glsl */ `
     vec2 uv = vUv;
 
     // ---- scroll phases: one source of truth (uScroll) ----
-    float sweep = smoothstep(0.35, 0.55, uScroll);
-    float photoReveal = smoothstep(0.50, 0.82, uScroll);
-    float disperseAmt = smoothstep(0.80, 1.0, uScroll);
+    float sweep = smoothstep(0.35, 0.62, uScroll);
+    float photoReveal = smoothstep(0.58, 0.88, uScroll);
+    float disperseAmt = smoothstep(0.86, 1.0, uScroll);
 
     // ---- atmosphere: slow ink drift, <=6% luminance variance ----
     vec2 sp = vec2(uv.x * uPlaneAspect, uv.y);
@@ -132,29 +137,33 @@ const FRAGMENT = /* glsl */ `
     vec3 ink = vec3(0.918, 0.918, 0.902); // #EAEAE6
     vec3 red = vec3(0.757, 0.216, 0.169); // #C1372B
 
-    // ---- the photograph emerges THROUGH the letterforms: the glyph
-    // mask is reused as the photo's own uv, so the letters read as a
-    // window onto a close, textured detail of the frame ----
+    // ---- the photograph shows faintly through the letterforms — a
+    // ghost of texture, never the dominant read ----
     vec3 letterColor = ink;
     if (inBounds && photoReveal > 0.0) {
       vec3 photoSample = texture2D(uPhoto, suv).rgb;
       float lum = dot(photoSample, vec3(0.299, 0.587, 0.114));
       vec3 graded = vec3(lum) * 0.82 + 0.02;
-      letterColor = mix(ink, graded, photoReveal);
+      letterColor = mix(ink, graded, photoReveal * 0.35);
     }
 
-    // ---- the red signal travels once across the glyphs, before the
-    // photograph, never after ----
+    // ---- the red signal travels once across the glyphs, then the word
+    // itself settles into red — it never disappears into the photograph,
+    // it floats above it, thinned to an afterimage ----
     if (inBounds) {
       float sweepPos = sweep * 1.5 - 0.25;
       float sweepBand = exp(-pow((tuv.x - sweepPos) * 3.0, 2.0));
-      letterColor = mix(letterColor, red, sweepBand * 0.85 * (1.0 - photoReveal));
+      letterColor = mix(letterColor, red, sweepBand * 0.85 * (1.0 - photoReveal * 0.5));
+      letterColor = mix(letterColor, red, photoReveal * 0.6);
     }
 
     float smokeIn = min(1.0, uTime * 0.6);
     vec3 col = bg + ink * smoke * smokeIn;
 
-    float alpha = glyph * reveal * breath * max(0.0, 1.0 - disperseAmt * 1.15);
+    // low, floating opacity once the photograph is present — a mark
+    // above the frame, not a solid word
+    float floatAlpha = mix(1.0, 0.4, photoReveal);
+    float alpha = glyph * reveal * breath * floatAlpha * max(0.0, 1.0 - disperseAmt * 1.15);
     col = mix(col, letterColor, alpha * 0.92);
 
     gl_FragColor = vec4(col, 1.0);

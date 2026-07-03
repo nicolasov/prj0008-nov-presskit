@@ -96,6 +96,24 @@
 - Space is used to separate ideas and let typography breathe.
 - Negative space is a structural asset, not an absence.
 
+## Title color hierarchy (2026-07-03)
+
+- Exactly one word per heading may carry the accent color (`Accent`,
+  `components/ui/Accent.tsx` — red-bright). Never zero, never more than one.
+- It's a reading guide, not decoration: the accented word is the one the
+  heading actually pivots on ("A slow build into **depth**.", "Trusted in
+  serious **rooms**.", "**Listen** before reading.").
+- Narrator-voice elements (`Quote`) are exempt — Philosophy's "Curating
+  journeys." is already entirely red-bright as a different, older pattern
+  (the manifesto's second line responding to its first), not a
+  single-word accent.
+
+## CUE (2026-07-03)
+
+- The site's only "return to top" control. Not a conventional button —
+  the word **CUE**, mono, minimal, fixed bottom-right, appears after the
+  hero and returns to 00:00 / Arrival. `components/ui/CueButton.tsx`.
+
 ## Buttons
 
 - Primary buttons: red border, red text, subtle hover fill.

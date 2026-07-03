@@ -3,14 +3,17 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { cn } from '@/lib/utils';
+import { useIntroReveal } from '@/lib/introReveal';
 
 const NovCanvas = dynamic(() => import('@/components/hero/NovCanvas'), { ssr: false });
 
 /**
- * Staged hero entrance: smoke → NOV (canvas) → subtitle → frame labels.
- * The DOM word stays in the document for SEO/screen readers; when the
- * canvas takes over it fades to invisible. With reduced motion or no
- * WebGL, the DOM word simply remains — same composition, no motion.
+ * Staged hero entrance: for the first ~5s (or until first scroll — see
+ * lib/introReveal.tsx), only the word exists. Then the frame — timecodes,
+ * subline, thesis — arrives, staggered. The DOM word stays in the document
+ * for SEO/screen readers; when the canvas takes over it fades to invisible.
+ * With reduced motion or no WebGL, the DOM word simply remains — same
+ * composition, no motion.
  */
 export default function HeroStage({
   children,
@@ -19,17 +22,14 @@ export default function HeroStage({
 }) {
   const [mountCanvas, setMountCanvas] = useState(false);
   const [canvasReady, setCanvasReady] = useState(false);
-  const [staged, setStaged] = useState(false);
+  const staged = useIntroReveal();
 
   // The canvas is atmosphere, not content: it boots on the visitor's
   // first gesture (pointer, scroll, touch, key) — a response to
   // presence, and it keeps three.js out of the loading window
   // entirely. The DOM word is always the base experience.
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setStaged(true);
-      return;
-    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const events: (keyof WindowEventMap)[] = ['pointermove', 'scroll', 'touchstart', 'keydown'];
     const boot = () => {
       events.forEach((e) => window.removeEventListener(e, boot));
@@ -37,19 +37,6 @@ export default function HeroStage({
     };
     events.forEach((e) => window.addEventListener(e, boot, { passive: true, once: false }));
     return () => events.forEach((e) => window.removeEventListener(e, boot));
-  }, []);
-
-  useEffect(() => {
-    if (!canvasReady) return;
-    // subtitle and frame labels enter once the word has begun developing
-    const id = setTimeout(() => setStaged(true), 1800);
-    return () => clearTimeout(id);
-  }, [canvasReady]);
-
-  useEffect(() => {
-    // failsafe: never leave the hero half-staged (slow font, blocked GL)
-    const id = setTimeout(() => setStaged(true), 4500);
-    return () => clearTimeout(id);
   }, []);
 
   return (
@@ -60,21 +47,33 @@ export default function HeroStage({
   );
 }
 
-/** Opacity-only stage transition — the crossfade contract, in DOM. */
+/**
+ * Opacity-only crossfade is the site's default motion contract (see
+ * docs/04-motion-system.md) — this component is the one deliberate,
+ * scoped exception: the hero's frame elements rise a few pixels as they
+ * arrive, so the first "inevitable" appearance reads as settling into
+ * place rather than a flat fade. Nowhere else in the site translates.
+ */
 export function Staged({
   show,
   delay = 0,
+  rise = false,
   className,
   children,
 }: {
   show: boolean;
   delay?: number;
+  rise?: boolean;
   className?: string;
   children: React.ReactNode;
 }) {
   return (
     <div
-      className={cn('transition-opacity duration-[1400ms] ease-fade', show ? 'opacity-100' : 'opacity-0', className)}
+      className={cn(
+        'transition-[opacity,transform] duration-[1400ms] ease-fade',
+        show ? 'translate-y-0 opacity-100' : rise ? 'translate-y-3 opacity-0' : 'opacity-0',
+        className,
+      )}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}

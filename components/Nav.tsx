@@ -9,6 +9,7 @@ import Timecode from '@/components/ui/Timecode';
 import Button from '@/components/ui/Button';
 import InstagramLink from '@/components/ui/InstagramLink';
 import LangToggle from '@/components/ui/LangToggle';
+import { useIntroReveal } from '@/lib/introReveal';
 
 /** The journey's fictional runtime, driven by scroll progress. */
 function liveTimecode(progress: number): string {
@@ -31,6 +32,7 @@ function realTimecode(): string {
 export default function Nav() {
   const { progress, activeId } = useTrackProgress();
   const lenis = useLenis();
+  const revealed = useIntroReveal();
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
@@ -84,7 +86,11 @@ export default function Nav() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-bg-0">
+    <header
+      className={`sticky top-0 z-50 border-b border-line bg-bg-0 transition-[opacity,transform] duration-[1100ms] ease-fade ${
+        revealed ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
+      }`}
+    >
       <div
         ref={barRef}
         aria-hidden="true"

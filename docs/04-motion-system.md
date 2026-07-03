@@ -16,6 +16,25 @@
 - Motion is reserved for revealing hierarchy and supporting the journey.
 - The experience should feel calm, not kinetic.
 
+### Scoped exceptions
+
+Two deliberate, narrow exceptions to "everything is a crossfade" exist.
+Both are scoped to a single moment, documented here so they read as
+intentional decisions rather than drift:
+
+1. **Hero intro rise** (`Staged` component, `rise` prop, `components/hero/HeroStage.tsx`,
+   and `Nav`'s own entrance in `components/Nav.tsx`). The hero's frame —
+   timecodes, subline, thesis, footer labels — settles in with a small
+   (12px) upward translate alongside its fade, and the sticky nav settles
+   down into place the same way, both triggered by the shared
+   `lib/introReveal.tsx` (first scroll, or ~5s of silence). Nowhere else in
+   the site translates on entrance.
+2. **Hero → Philosophy layer transition** (queued, not yet built — see
+   [08-roadmap.md](./08-roadmap.md)). The brief asks for the hero to be
+   physically covered by the next chapter like a magazine's opening spread,
+   not crossfaded away. When this is built it needs its own entry here
+   before implementation, per the project's own rule.
+
 ## Scroll pacing
 
 - The tracklist is driven by scroll progress.

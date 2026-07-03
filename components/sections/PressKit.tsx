@@ -3,6 +3,7 @@
 import Section from '@/components/ui/Section';
 import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
+import Accent from '@/components/ui/Accent';
 import { useLang, type Dictionary } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
 
@@ -23,7 +24,7 @@ export default function PressKit() {
     <Section id={cue.id} fxIndex={0}>
       <Timecode tc={cue.tc} label={cue.label} />
       <Heading as="h2" className="mt-6 max-w-[12ch]">
-        Everything needed, nothing loud.
+        Everything needed, nothing <Accent>loud</Accent>.
       </Heading>
 
       <div className="mt-10 flex flex-col border-t border-line">

@@ -37,8 +37,8 @@ export default function Arrival() {
         const range = wrapper.offsetHeight - window.innerHeight;
         const p = range > 0 ? Math.min(1, Math.max(0, -wrapper.getBoundingClientRect().top / range)) : 0;
         wrapper.style.setProperty('--hero-scroll', p.toFixed(4));
-        wrapper.style.setProperty('--hero-photo', smoothstep(0.5, 0.82, p).toFixed(4));
-        wrapper.style.setProperty('--hero-disperse', smoothstep(0.8, 1.0, p).toFixed(4));
+        wrapper.style.setProperty('--hero-photo', smoothstep(0.58, 0.88, p).toFixed(4));
+        wrapper.style.setProperty('--hero-disperse', smoothstep(0.86, 1.0, p).toFixed(4));
       });
     };
     onScroll();
@@ -77,14 +77,17 @@ export default function Arrival() {
         <HeroStage>
           {({ canvasReady, staged }) => (
             <Container className="relative flex flex-1 flex-col justify-between py-8">
-              <Staged show={staged} className="flex items-baseline justify-between">
+              <Staged show={staged} rise className="flex items-baseline justify-between">
                 <Timecode tc={cue.tc} label={cue.label} />
                 <Timecode tc={`/ ${RUNTIME_TC}`} />
               </Staged>
 
               <div className="flex flex-col items-center text-center">
-                <Staged show={staged} delay={200}>
-                  <p className="mb-[clamp(40px,6vw,84px)] font-mono text-[12px] tracking-[0.44em] text-ink/70">
+                <Staged show={staged} rise delay={200}>
+                  <p
+                    className="mb-[clamp(40px,6vw,84px)] font-mono text-[12px] tracking-[0.44em] text-ink/70 transition-opacity duration-[1400ms] ease-fade"
+                    style={{ opacity: 'max(0.35, calc(1 - var(--hero-disperse, 0) * 0.7))' }}
+                  >
                     DJ<span className="mx-3 text-ink/45">•</span>Producer
                   </p>
                 </Staged>
@@ -92,26 +95,43 @@ export default function Arrival() {
                 {/* The word lives in the canvas; this stays for SEO, screen
                     readers, and as the no-WebGL / reduced-motion fallback.
                     It only fades once the disperse phase begins — it must
-                    never dissolve before the photograph has been revealed. */}
+                    never dissolve before the photograph has been revealed.
+                    A red duplicate crossfades over it as the photograph
+                    reveals, mirroring the shader's "word turns red and
+                    floats above the frame" behavior for this fallback path. */}
                 <HeroWordInteractions>
-                  <h1
-                    className={`m-0 ml-[0.06em] font-serif text-[clamp(4.5rem,15vw,13rem)] font-light leading-none tracking-[0.06em] text-ink transition-opacity duration-[1200ms] ease-fade ${
-                      canvasReady ? 'opacity-0' : 'opacity-100'
-                    }`}
-                    style={canvasReady ? undefined : { opacity: 'calc(1 - var(--hero-disperse, 0))' }}
-                  >
-                    NOV
-                  </h1>
+                  <div className="relative">
+                    <h1
+                      className={`m-0 ml-[0.06em] font-serif text-[clamp(4.5rem,15vw,13rem)] font-light leading-none tracking-[0.06em] text-ink transition-opacity duration-[1200ms] ease-fade ${
+                        canvasReady ? 'opacity-0' : 'opacity-100'
+                      }`}
+                      style={canvasReady ? undefined : { opacity: 'calc(1 - var(--hero-disperse, 0))' }}
+                    >
+                      NOV
+                    </h1>
+                    {!canvasReady && (
+                      <h1
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 m-0 ml-[0.06em] font-serif text-[clamp(4.5rem,15vw,13rem)] font-light leading-none tracking-[0.06em] text-red-bright"
+                        style={{ opacity: 'calc(var(--hero-photo, 0) * 0.6 * (1 - var(--hero-disperse, 0)))' }}
+                      >
+                        NOV
+                      </h1>
+                    )}
+                  </div>
                 </HeroWordInteractions>
 
-                <Staged show={staged} delay={400}>
-                  <p className="mt-[clamp(40px,6vw,84px)] font-serif text-[clamp(1rem,2vw,1.35rem)] font-light italic text-ink/70">
+                <Staged show={staged} rise delay={400}>
+                  <p
+                    className="mt-[clamp(40px,6vw,84px)] font-serif text-[clamp(1rem,2vw,1.35rem)] font-light italic text-ink/70 transition-opacity duration-[1400ms] ease-fade"
+                    style={{ opacity: 'max(0.35, calc(1 - var(--hero-disperse, 0) * 0.7))' }}
+                  >
                     Curated Journeys
                   </p>
                 </Staged>
               </div>
 
-              <Staged show={staged} delay={600} className="flex items-end justify-between">
+              <Staged show={staged} rise delay={600} className="flex items-end justify-between">
                 <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Buenos Aires</span>
                 <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Scroll</span>
               </Staged>
