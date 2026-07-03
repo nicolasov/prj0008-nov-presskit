@@ -15,17 +15,24 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <main className="relative z-10">
+      {/* Arrival mounts the fixed hero layers (photo + NOV) and a one-screen
+          spacer. The document below scrolls up over those fixed layers with a
+          transparent background — so Philosophy emerges within the still-
+          present photograph, never after a cut. There is no divider between
+          the hero and the first movement; the photograph is the seam. */}
+      <main className="relative">
         <Arrival />
-        <Philosophy />
-        <About />
-        <Live />
-        <Gallery />
-        <Radio />
-        <PressKit />
-        <Booking />
+        <div className="relative z-20">
+          <Philosophy />
+          <About />
+          <Live />
+          <Gallery />
+          <Radio />
+          <PressKit />
+          <Booking />
+          <Footer />
+        </div>
       </main>
-      <Footer />
       <CueButton />
       <BpmTicker />
     </>

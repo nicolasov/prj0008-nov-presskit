@@ -53,30 +53,24 @@ export const metadata: Metadata = {
 
 /**
  * Critical CSS for the hero shell, inlined so it's parsed synchronously
- * with the HTML — no wait on the external stylesheet. On a throttled
- * connection (measured: ~500ms+ on a slow 3G profile, no CPU throttle
- * needed) the hero word would otherwise flash unstyled top-left in a
- * fallback serif before snapping into its centered, sized, positioned
- * final state — precisely the "loading NOV jumps into hero NOV" bug.
- * This guarantees the word is already in its final position, size and
- * font family. It uses the SAME font stack as the hero's real style
- * (var(--font-newsreader) → 'Times New Roman', not Georgia) so the loading
- * word reads as Newsreader-light from the first paint — the same object
- * that continues into the hero and the canvas handoff, never a heavier
- * placeholder that gets swapped. NOV is absolutely centered here exactly
- * as it is in the real CSS (.nov-hero-stage), so it cannot drift.
+ * with the HTML — no wait on the external stylesheet. Without it the hero
+ * word flashes unstyled (Times, top-left) on a throttled connection before
+ * the stylesheet lands, then snaps into place. This fixes NOV's position,
+ * size and font (the same Newsreader-light stack as the real style) from
+ * the first paint. The hero word layer is viewport-fixed and centres NOV
+ * via .nov-hero-stage, so it cannot drift or jump.
  *
- * Coupled to markup: if Arrival's hero shell classes change
- * (components/sections/Arrival.tsx — the section, .nov-hero-stage layer,
- * or the h1), update the selectors below to match.
+ * Coupled to markup: if Arrival's hero classes change
+ * (components/sections/Arrival.tsx — .nov-hero-word / .nov-hero-stage / the
+ * h1), update the selectors below to match.
  */
 const criticalHeroCss = `
   html,body{background:#050505;margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  #arrival,#arrival *{box-sizing:border-box}
-  #arrival{position:relative;height:260vh}
-  #arrival>section{position:sticky;top:0;height:100svh;overflow:hidden}
-  #arrival .nov-hero-stage{position:absolute;inset:0;display:grid;place-items:center}
-  #arrival h1{margin:0 0 0 0.06em;font-family:var(--font-newsreader),'Times New Roman',serif;font-weight:300;font-size:clamp(4.5rem,15vw,13rem);line-height:1;letter-spacing:0.06em;color:#EAEAE6;text-align:center}
+  .nov-hero-word,.nov-hero-word *{box-sizing:border-box}
+  #arrival{height:100svh}
+  .nov-hero-word{position:fixed;inset:0;z-index:10}
+  .nov-hero-stage{position:absolute;inset:0;display:grid;place-items:center}
+  .nov-hero-stage h1{margin:0 0 0 0.06em;font-family:var(--font-newsreader),'Times New Roman',serif;font-weight:300;font-size:clamp(4.5rem,15vw,13rem);line-height:1;letter-spacing:0.06em;color:#EAEAE6;text-align:center}
 `;
 
 const jsonLd = {

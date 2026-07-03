@@ -29,11 +29,26 @@ intentional decisions rather than drift:
    down into place the same way, both triggered by the shared
    `lib/introReveal.tsx` (first scroll, or ~5s of silence). Nowhere else in
    the site translates on entrance.
-2. **Hero → Philosophy layer transition** (queued, not yet built — see
-   [08-roadmap.md](./08-roadmap.md)). The brief asks for the hero to be
-   physically covered by the next chapter like a magazine's opening spread,
-   not crossfaded away. When this is built it needs its own entry here
-   before implementation, per the project's own rule.
+2. **The hero continuum** (Sprint 7.0 — replaces the old "cover transition"
+   idea). The brief reframed the problem: not a transition, but a hero that
+   never ends. There is no cover, no divider, no cut. The hero photograph is
+   a viewport-**fixed** backdrop (z-0) the whole document scrolls over; a
+   single scroll driver in `components/sections/Arrival.tsx` writes one set
+   of CSS variables (`--h-photo`, `--h-nov`, `--h-mix`, `--h-phil`,
+   `--h-photo-scale/y`) that crossfade three layers against each other over
+   that one still image:
+   - **NOV** (fixed, centred, the single element — never moves) colours to
+     the signal, then fades late (`--h-nov`, ~vp 0.95→1.65).
+   - **The photograph** develops (~vp 0.05→0.7), lingers past the first
+     screen, then recedes to black (~vp 1.3→2.2), with a hair of scale/Y
+     parallax for depth (off under reduced motion).
+   - **Philosophy** emerges *within* the same frame (`--h-phil`, ~vp
+     0.72→1.55) — the document layer (z-20) is transparent, so the first
+     words appear over the still-present portrait, never after a seam.
+   Because everything shares one backdrop and crossfades on scroll position
+   (not time), the whole thing is perfectly reversible and there is no moment
+   where the hero "ends". This is the one place several layers move at once;
+   it is deliberate and load-bearing to the whole experience.
 
 ## Scroll pacing
 
