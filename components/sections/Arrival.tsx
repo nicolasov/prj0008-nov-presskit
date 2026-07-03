@@ -60,13 +60,15 @@ export default function Arrival() {
       raf = 0;
       const vp = window.scrollY / Math.max(1, window.innerHeight);
 
-      const develop = smooth(0.05, 0.7, vp); // photo resolves, NOV colours
+      const develop = smooth(0.05, 0.7, vp); // photo resolves
       const recede = 1 - smooth(1.4, 2.3, vp); // photo lingers (the glue), then goes
       const photo = develop * recede;
-      // NOV steps back sooner so Philosophy can own the viewport without
-      // competing — but the photograph stays as the connective tissue.
-      const novOp = 1 - smooth(0.85, 1.4, vp);
-      const mix = develop; // bone → signal
+      // The hero TEXT (NOV, DJ · Producer, Curated Journeys) clears within
+      // the first screen so it never overlaps the Philosophy words — it is
+      // fully orange before it goes. The PHOTOGRAPH stays as the connective
+      // tissue well past it, so the hero still never "ends".
+      const mix = smooth(0.08, 0.5, vp); // bone → signal, reached before it fades
+      const novOp = 1 - smooth(0.5, 0.95, vp);
       const depth = smooth(0, 2, vp);
 
       root.style.setProperty('--h-photo', (photo * 0.92).toFixed(4));
