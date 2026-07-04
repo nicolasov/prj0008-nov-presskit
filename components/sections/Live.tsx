@@ -181,8 +181,11 @@ export default function Live() {
                   src={photo.src}
                   alt={photo.alt}
                   fill
+                  unoptimized={!!photo.temp}
                   sizes="(max-width: 1024px) 0px, 45vw"
-                  className="monochrome-image object-cover transition-opacity duration-[1400ms] ease-fade"
+                  className={`object-cover transition-opacity duration-[1400ms] ease-fade ${
+                    photo.temp ? '' : 'monochrome-image'
+                  }`}
                   style={{ opacity: on ? 1 : 0 }}
                 />
               ) : null,
