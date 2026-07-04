@@ -165,11 +165,18 @@ export default function Live() {
           </div>
 
           {/* the editorial photographic system — desktop only (this is the
-              "empty space on the right"). Monochrome, borderless, slow. Empty
-              and dark until a real NOV-with-artist photograph exists. */}
+              "empty space on the right"). A memory surfacing from the dark:
+              small, monochrome, low-contrast, and radially masked so its edges
+              dissolve completely into the page black — no rectangle, no border,
+              no frame. One image at a time, a slow dissolve. Empty and dark
+              until a real NOV-with-artist photograph exists. */}
           <div
             aria-hidden={!active}
-            className="relative hidden aspect-[5/4] w-full overflow-hidden lg:block"
+            className="relative mx-auto hidden aspect-[4/5] w-[74%] max-w-[380px] lg:block"
+            style={{
+              WebkitMaskImage: 'radial-gradient(63% 60% at 50% 46%, #000 40%, transparent 82%)',
+              maskImage: 'radial-gradient(63% 60% at 50% 46%, #000 40%, transparent 82%)',
+            }}
           >
             {[
               { key: 'a', photo: layers.a, on: layers.showA },
@@ -182,11 +189,14 @@ export default function Live() {
                   alt={photo.alt}
                   fill
                   unoptimized={!!photo.temp}
-                  sizes="(max-width: 1024px) 0px, 45vw"
-                  className={`object-cover transition-opacity duration-[1400ms] ease-fade ${
-                    photo.temp ? '' : 'monochrome-image'
-                  }`}
-                  style={{ opacity: on ? 1 : 0 }}
+                  sizes="(max-width: 1024px) 0px, 34vw"
+                  className="object-cover transition-opacity duration-[1700ms] ease-fade"
+                  style={{
+                    opacity: on ? 1 : 0,
+                    // real photos get a low-contrast monochrome grade; the temp
+                    // placeholders already carry it, baked into the SVG.
+                    filter: photo.temp ? undefined : 'grayscale(1) contrast(0.9) brightness(0.72)',
+                  }}
                 />
               ) : null,
             )}
