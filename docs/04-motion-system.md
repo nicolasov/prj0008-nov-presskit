@@ -68,6 +68,30 @@ intentional decisions rather than drift:
      motion, never moves the type. Cheap (static turbulence, scale-only
      animation) — Lighthouse stays 100.
 
+## Gallery — reader intention (2026-07-04)
+
+The Gallery interlude adapts to *how* the visitor scrolls, never announced.
+One rAF loop (alive only while the section is near the viewport, via an
+IntersectionObserver) is the single source of truth — geometry-driven, so
+nothing depends on scroll-event timing (fast programmatic or momentum scroll
+starves IntersectionObserver, which would leave plates black or the hint
+late). Each frame it measures a smoothed scroll **pace** (0 = still, 1 = fast,
+from `|Δscroll|/Δt`) and:
+
+- **develops** any plate that has entered, its duration read from that pace —
+  `3.2s` when lingering, down to `~0.7s` when rushing (`--dev`, consumed by
+  `.plate-media` in `app/globals.css`);
+- drives **parallax / slow zoom / breathing** (transform only; parallax range
+  eases down as pace rises, so fast scrolling feels calmer, not busier);
+- reveals the **`SKIP GALLERY →`** control only once past ~the sixth
+  photograph *and* while clearly moving (pace > 0.55), hiding it again when the
+  visitor slows (< 0.28) or leaves — with hysteresis so it never flickers, and
+  a hover-hold so it can't fade out from under the pointer. Clicking it
+  continues smoothly to the next section (`#radio`), never a hard jump.
+
+Everything is off under `prefers-reduced-motion` (plates simply settle from
+black quickly, no parallax); the SKIP affordance still works. No layout shift.
+
 ## Scroll pacing
 
 - The tracklist is driven by scroll progress.

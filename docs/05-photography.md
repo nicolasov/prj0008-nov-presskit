@@ -80,9 +80,40 @@ through the same steps before it's referenced in code:
    genuinely incidental to the frame (e.g. a random sponsor sticker); never
    retouch the subject, never stage what wasn't there.
 
+## The Gallery — an exhibition, not a portfolio (2026-07-04)
+
+The Gallery (`components/sections/Gallery.tsx`) is the site's second emotional
+peak, equal to the hero, and it is built as an **interlude**: the site goes
+almost silent — no heading, no timecode, almost no interface — and lets the
+photographs speak. Rules that govern it, so future edits keep the intent:
+
+- **Composition never repeats twice in a row.** The sequence alternates full
+  viewport → small portrait held in negative space → wide landscape → a void
+  → close detail → panorama → full → a receding wide. Two photographs return
+  at radically different crops *and* grades (colour vs monochrome) — treated
+  as different moments, never a repeat.
+- **Colour is curated, not mechanical.** The exhibition is monochrome; muted
+  cinematic colour arrives only twice, well apart — the warm light-trails, and
+  the red booth silhouette at the peak. This is the one deliberate exception
+  to "all stills are monochrome" (Philosophy, above): the two grades live in
+  `app/globals.css` as `.grade-mono` / `.grade-color`, both built from the same
+  four filter primitives so the develop-from-black interpolates cleanly.
+- **Captions are optional, tiny, quiet** — place and year only ("Buenos Aires
+  — 2025", "UFO Point — 2025"), on just two plates. The test the Gallery must
+  pass: *if every caption were removed, would it still read as intentionally
+  curated?* It must be yes — the composition rhythm carries it.
+- **Motion is cinema, never "website animation"** — each photograph develops
+  from near-black like a print; a little parallax, and the large frames zoom
+  and breathe imperceptibly slowly. All transform/filter only → no CLS.
+- **It reads the visitor** (scroll pace): linger and each plate develops
+  slowly with room; move quickly and the development shortens, the parallax
+  calms, and a near-invisible `SKIP GALLERY →` fades in (only past ~the sixth
+  photograph, only while clearly moving) that continues to the next section.
+  Slow down and the contemplative rhythm returns. None of it is announced.
+  See the reader-intention notes in [04-motion-system.md](./04-motion-system.md).
+
 ## Current implementation
 
-- Gallery stills are letterboxed and monochrome, captioned as subtitles.
 - The definitive hero photograph (2026-07-03) is
   `public/images/nov-dj-organic-house-buenos-aires-hero.jpg` — a shadowed,
   partially-obscured portrait (cap, glasses, headphones, hands on the mixer)

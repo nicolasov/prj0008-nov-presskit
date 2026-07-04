@@ -130,6 +130,43 @@ figure[data-fx]:not(.in) .monochrome-image {
   }
 }
 
+/* ---------- Gallery exhibition — the interlude ----------
+   Each photograph develops from near-black like a print in a tray. The grade
+   is curated per plate: most stay monochrome; a few carry muted cinematic
+   colour. Both grades use the same four filter primitives so the develop
+   interpolates cleanly. The development DURATION is written per plate at the
+   moment it enters (--dev), read from the visitor's scroll pace: unhurried
+   when they linger, quick when they're clearly moving on. Parallax, zoom and
+   breathing are transform-only (composited, no layout), applied by the
+   Gallery's single rAF loop. Nothing here shifts layout — no CLS. */
+.plate-media {
+  filter: var(--grade-in);
+  transition: filter var(--dev, 3.2s) cubic-bezier(0.22, 1, 0.36, 1);
+}
+.plate:not(.in) .plate-media {
+  filter: var(--grade-out);
+}
+.grade-mono {
+  --grade-in: grayscale(1) saturate(1) contrast(1.08) brightness(0.78);
+  --grade-out: grayscale(1) saturate(1) contrast(1.32) brightness(0.12);
+}
+.grade-color {
+  --grade-in: grayscale(0.12) saturate(0.82) contrast(1.05) brightness(0.85);
+  --grade-out: grayscale(0.5) saturate(0.4) contrast(1.22) brightness(0.12);
+}
+.plate-move {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plate-media {
+    transition-duration: 0.3s;
+  }
+  .plate-move {
+    transform: none !important;
+  }
+}
+
 /* ---------- Wake Up Mode: the site is subtly more alive while playing ---- */
 html.is-playing .grain {
   opacity: 0.052;
