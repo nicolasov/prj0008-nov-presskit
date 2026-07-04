@@ -10,6 +10,7 @@ import InstagramLink from '@/components/ui/InstagramLink';
 import LangToggle from '@/components/ui/LangToggle';
 import Drawer from '@/components/ui/Drawer';
 import { useIntroReveal } from '@/lib/introReveal';
+import { EXPERIMENTS, IS_PREVIEW, CURRENT_REF } from '@/lib/experiments';
 
 /** The journey's fictional runtime, driven by scroll progress. */
 function liveTimecode(progress: number): string {
@@ -153,6 +154,33 @@ export default function Nav() {
           </div>
           <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Buenos Aires</span>
         </div>
+
+        {/* TEMPORARY — preview-only. Compare the gallery explorations from
+            inside the real menu; never rendered in production (see
+            lib/experiments.ts). Remove before launch. */}
+        {IS_PREVIEW && (
+          <div className="mt-8 border-t border-line/60 pt-5">
+            <span className="font-mono text-[9px] uppercase tracking-[0.24em] text-ink/30">
+              Experiments · preview only
+            </span>
+            <div className="mt-3 flex flex-col gap-1.5">
+              {EXPERIMENTS.map((e) => {
+                const active = e.ref === CURRENT_REF;
+                return (
+                  <a
+                    key={e.ref}
+                    href={e.url}
+                    className={`font-mono text-[11px] tracking-[0.1em] no-underline transition-colors duration-hover ease-fade ${
+                      active ? 'text-red-bright' : 'text-ink/45 hover:text-ink/75'
+                    }`}
+                  >
+                    <span className="text-ink/25">{active ? '●' : '○'}</span> {e.label}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </Drawer>
     </header>
   );
