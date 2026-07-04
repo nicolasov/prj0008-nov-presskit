@@ -17,13 +17,44 @@ export default function CueButton() {
   const [visible, setVisible] = useState(false);
   const [hint, setHint] = useState(false);
   const hintFired = useRef(false);
+  const audioEngaged = useRef(false);
+  const audioCtx = useRef<AudioContext | null>(null);
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > window.innerHeight * 1.2);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    // The CUE plays a soft "needle to the cue point" tone on return — but only
+    // if the visitor has already engaged audio (SoundCloud), so it can never be
+    // a surprise sound. Synthesized, no asset.
+    const onEngaged = () => (audioEngaged.current = true);
+    window.addEventListener('nov:audio-engaged', onEngaged);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('nov:audio-engaged', onEngaged);
+    };
   }, []);
+
+  const playNeedle = () => {
+    if (!audioEngaged.current) return;
+    try {
+      const ctx = (audioCtx.current ??= new AudioContext());
+      const t = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(320, t);
+      osc.frequency.exponentialRampToValueAtTime(180, t + 0.14);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.02, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.18);
+    } catch {
+      // no audio context — silence is the correct fallback
+    }
+  };
 
   // teach the interaction once: a brief arrow the first time CUE appears
   useEffect(() => {
@@ -38,6 +69,7 @@ export default function CueButton() {
 
   const seek = () => {
     setHint(false);
+    playNeedle();
     if (lenis) lenis.scrollTo('#arrival', { offset: 0, duration: 1.6 });
     else window.scrollTo({ top: 0, behavior: 'smooth' });
   };
