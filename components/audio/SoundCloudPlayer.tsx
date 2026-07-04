@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { getSetMeta } from '@/lib/sets';
 
 const SC_PROFILE = 'https://soundcloud.com/novnovnovnovnovnovnov';
 const WIDGET_API = 'https://w.soundcloud.com/player/api.js';
@@ -9,21 +10,6 @@ const EMBED_SRC = `https://w.soundcloud.com/player/?url=${encodeURIComponent(
 )}&auto_play=false&visual=false&show_artwork=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&hide_related=true`;
 
 type Sound = { title: string; duration: number };
-
-/**
- * Editor's Notes — two sentences of mood, never technique. Keyed by exact
- * SoundCloud title because the set list is fetched live and titles aren't
- * known ahead of time. A set we haven't written about yet shows no note
- * rather than a fabricated one — see docs/06-copywriting.md.
- */
-const EDITOR_NOTES: Record<string, string> = {
-  'Live at Privilege San Bernardo by Moon House [2026.04]':
-    'Recorded live, the room still audible under the low end. A set that takes its time to arrive — and means it when it does.',
-  'Live at Mazovia Zárate [2026.03]':
-    'A coastal night, played slower than the room expected. It rewards staying until the very end.',
-  'Taken 02':
-    'A quieter register, made for headphones rather than a room. The second chapter of an ongoing selection.',
-};
 
 /* Minimal typings for the SoundCloud Widget API. */
 type SCWidget = {
@@ -80,6 +66,7 @@ export default function SoundCloudPlayer() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const widgetRef = useRef<SCWidget | null>(null);
   const soundsRef = useRef<Sound[]>([]);
+  const playingRef = useRef(false);
 
   const [phase, setPhase] = useState<Phase>('idle');
   const [sounds, setSounds] = useState<Sound[]>([]);
@@ -115,11 +102,13 @@ export default function SoundCloudPlayer() {
 
       widget.bind(PLAY, () => {
         setPlaying(true);
+        playingRef.current = true;
         window.dispatchEvent(new Event('nov:play')); // wake the experience
         widget.getCurrentSoundIndex((i) => setIndex(i));
       });
       widget.bind(PAUSE, () => {
         setPlaying(false);
+        playingRef.current = false;
         window.dispatchEvent(new Event('nov:pause'));
       });
       widget.bind(PLAY_PROGRESS, (data) => setPosition(data?.currentPosition ?? 0));
@@ -141,6 +130,27 @@ export default function SoundCloudPlayer() {
 
   const current = sounds[index];
   const duration = current?.duration ?? 0;
+
+  // Broadcast the current set so the Companion can reflect what's playing.
+  useEffect(() => {
+    if (current) {
+      window.dispatchEvent(
+        new CustomEvent('nov:track', { detail: { title: current.title, duration: current.duration } }),
+      );
+    }
+  }, [current]);
+
+  // Let the Companion drive play/pause from its own drawer — one engine.
+  useEffect(() => {
+    const onToggle = () => {
+      const w = widgetRef.current;
+      if (!w) return;
+      if (playingRef.current) w.pause();
+      else w.play();
+    };
+    window.addEventListener('nov:toggle', onToggle);
+    return () => window.removeEventListener('nov:toggle', onToggle);
+  }, []);
 
   const toggle = () => {
     const w = widgetRef.current;
@@ -231,9 +241,9 @@ export default function SoundCloudPlayer() {
               {current?.title ?? '—'}
             </p>
 
-            {current && EDITOR_NOTES[current.title] && (
+            {getSetMeta(current?.title).note && (
               <p className="m-0 max-w-[48ch] font-serif text-[13.5px] font-light italic leading-[1.6] text-ink/70">
-                {EDITOR_NOTES[current.title]}
+                {getSetMeta(current?.title).note}
               </p>
             )}
 
