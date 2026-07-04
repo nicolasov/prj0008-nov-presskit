@@ -138,7 +138,7 @@ export default function Arrival() {
 
         <div className="nov-hero-stage absolute inset-0 grid place-items-center">
           <div className="relative flex items-center justify-center">
-            <div className="absolute inset-x-0 bottom-full mb-[clamp(28px,5vw,72px)] flex justify-center">
+            <div className="absolute inset-x-0 bottom-full mb-[clamp(44px,6vw,72px)] flex justify-center">
               <Staged show={introReady} rise delay={150}>
                 <p className="font-mono text-[12px] tracking-[0.44em] text-ink/70">
                   DJ<span className="mx-3 text-ink/45">•</span>Producer
@@ -158,7 +158,7 @@ export default function Arrival() {
               </h1>
             </HeroWordInteractions>
 
-            <div className="absolute inset-x-0 top-full mt-[clamp(28px,5vw,72px)] flex justify-center">
+            <div className="absolute inset-x-0 top-full mt-[clamp(44px,6vw,72px)] flex justify-center">
               <Staged show={introReady} rise delay={300}>
                 <p className="whitespace-nowrap font-serif text-[clamp(1rem,2vw,1.35rem)] font-light italic text-ink/70">
                   Curated Journeys

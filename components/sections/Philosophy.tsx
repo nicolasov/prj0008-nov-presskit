@@ -62,7 +62,7 @@ export default function Philosophy() {
         };
 
   return (
-    <Section id={cue.id} fx={false} className="pt-[clamp(160px,26vh,320px)]">
+    <Section id={cue.id} fx={false} className="pt-[clamp(190px,27vh,320px)]">
       <div ref={rootRef}>
         <div style={item(0, 700)}>
           <Timecode tc={cue.tc} label={cue.label} />
