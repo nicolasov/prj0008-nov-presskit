@@ -27,7 +27,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Servicio de email no configurado' }, { status: 503 });
   }
 
-  const TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'nicolasolivavelez@gmail.com';
+  // Destination and sender are env-driven so no personal address lives in the
+  // repo. `onboarding@resend.dev` is Resend's shared sender and works with only
+  // an API key; once nov.dj is verified in Resend, set CONTACT_FROM_EMAIL to a
+  // branded address (e.g. "NOV <booking@nov.dj>"). CONTACT_TO_EMAIL is where
+  // enquiries are read (can be a private inbox — it is never exposed to the client).
+  const TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'booking@nov.dj';
   const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'NOV Booking <onboarding@resend.dev>';
   const resend = new Resend(apiKey);
 

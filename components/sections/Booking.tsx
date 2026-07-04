@@ -12,28 +12,56 @@ import { getCue } from '@/lib/cues';
 const cue = getCue('booking');
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
+type Payload = { name: string; email: string; venue: string; date: string; message: string };
+
+const BOOKING_EMAIL = 'booking@nov.dj';
 
 const inputCls =
   'w-full border border-line bg-bg-1 px-4 py-[14px] text-[14.5px] text-ink outline-none transition-colors duration-hover ease-fade focus:border-red';
 
+/**
+ * A booking that must never be silently lost. The form posts to /api/contact
+ * (Resend). On success it confirms honestly; on any failure it does NOT pretend
+ * to have sent — it shows the error and offers a graceful, pre-filled fallback
+ * straight to booking@nov.dj, so the enquiry always has a way through even
+ * before the mail service is configured. No personal address is ever exposed.
+ */
+const mailtoFallback = (d: Payload) => {
+  const subject = `NOV Booking — ${d.name || 'Enquiry'}`;
+  const body = [
+    `Name: ${d.name}`,
+    `Email: ${d.email}`,
+    d.venue && `Venue: ${d.venue}`,
+    d.date && `Date: ${d.date}`,
+    '',
+    d.message,
+  ]
+    .filter(Boolean)
+    .join('\n');
+  return `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
 export default function Booking() {
   const { t } = useLang();
   const [status, setStatus] = useState<Status>('idle');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [payload, setPayload] = useState<Payload | null>(null);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('loading');
-    setErrorMsg('');
-
     const form = e.currentTarget;
-    const data = {
-      name: (form.elements.namedItem('name') as HTMLInputElement).value,
-      email: (form.elements.namedItem('email') as HTMLInputElement).value,
-      venue: (form.elements.namedItem('venue') as HTMLInputElement).value,
-      date: (form.elements.namedItem('date') as HTMLInputElement).value,
-      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+    const data: Payload = {
+      name: (form.elements.namedItem('name') as HTMLInputElement).value.trim(),
+      email: (form.elements.namedItem('email') as HTMLInputElement).value.trim(),
+      venue: (form.elements.namedItem('venue') as HTMLInputElement).value.trim(),
+      date: (form.elements.namedItem('date') as HTMLInputElement).value.trim(),
+      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value.trim(),
     };
+    // The inputs are `required` + type=email, so the browser blocks empty or
+    // malformed submits first; this is a final guard against a programmatic one.
+    if (!data.name || !data.email || !data.message) return;
+
+    setPayload(data);
+    setStatus('loading');
 
     try {
       const res = await fetch('/api/contact', {
@@ -41,32 +69,21 @@ export default function Booking() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error('api');
-      setStatus('success');
-      form.reset();
-      setTimeout(() => setStatus('idle'), 5000);
+      if (res.ok) {
+        setStatus('success');
+        form.reset();
+        window.setTimeout(() => setStatus('idle'), 7000);
+        return;
+      }
+      setStatus('error'); // honest — never a faked success
     } catch {
-      // The API needs a RESEND_API_KEY to actually send. Until that's set,
-      // never lose the visitor's message: hand off to their mail client,
-      // pre-addressed to NOV, so the booking still reaches him.
-      const subject = `NOV Booking — ${data.name || 'Enquiry'}`;
-      const body = [
-        `Name: ${data.name}`,
-        `Email: ${data.email}`,
-        data.venue && `Venue: ${data.venue}`,
-        data.date && `Date: ${data.date}`,
-        '',
-        data.message,
-      ]
-        .filter(Boolean)
-        .join('\n');
-      window.location.href = `mailto:nicolasolivavelez@gmail.com?subject=${encodeURIComponent(
-        subject,
-      )}&body=${encodeURIComponent(body)}`;
-      setStatus('success');
-      form.reset();
-      setTimeout(() => setStatus('idle'), 5000);
+      setStatus('error');
     }
+  };
+
+  // starting to edit again clears a previous result
+  const onFormInput = () => {
+    if (status === 'error' || status === 'success') setStatus('idle');
   };
 
   return (
@@ -93,7 +110,7 @@ export default function Booking() {
           </div>
         </div>
 
-        <form onSubmit={onSubmit} className="grid gap-4 border border-line bg-bg-1 p-[clamp(18px,3vw,34px)] sm:grid-cols-2">
+        <form onSubmit={onSubmit} onInput={onFormInput} noValidate={false} className="grid gap-4 border border-line bg-bg-1 p-[clamp(18px,3vw,34px)] sm:grid-cols-2">
           <label className="grid gap-2">
             <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/55">{t.booking.name} *</span>
             <input name="name" type="text" required placeholder={t.booking.namePlaceholder} className={inputCls} />
@@ -126,9 +143,24 @@ export default function Booking() {
             />
           </label>
 
-          {status === 'error' && (
-            <p className="m-0 text-[13px] text-red-bright sm:col-span-2">{errorMsg}</p>
-          )}
+          <div aria-live="polite" className="sm:col-span-2 empty:hidden">
+            {status === 'success' && (
+              <p className="m-0 text-[13px] text-ink/70">
+                <span className="text-red-bright">●</span> {t.booking.sent}.
+              </p>
+            )}
+            {status === 'error' && payload && (
+              <p className="m-0 text-[13px] text-ink/70">
+                {t.booking.errorFallback}{' '}
+                <a
+                  href={mailtoFallback(payload)}
+                  className="text-red-bright underline decoration-red-bright/40 underline-offset-4 transition-colors duration-hover ease-fade hover:decoration-red-bright"
+                >
+                  {t.booking.writeDirect}
+                </a>
+              </p>
+            )}
+          </div>
 
           <Button
             as="button"

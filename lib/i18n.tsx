@@ -88,8 +88,9 @@ const dictionaries = {
       messagePlaceholder: 'Tell us about the room, the audience and the moment of the night.',
       submit: 'Send booking request',
       sending: 'Sending',
-      sent: 'Message sent',
-      errorFallback: 'Could not send. Please try again.',
+      sent: 'Message sent — NOV will be in touch',
+      errorFallback: 'Couldn’t send automatically —',
+      writeDirect: 'write to booking@nov.dj',
     },
   },
   es: {
@@ -169,8 +170,9 @@ const dictionaries = {
       messagePlaceholder: 'Contanos sobre la sala, el público y el momento de la noche.',
       submit: 'Enviar solicitud de booking',
       sending: 'Enviando',
-      sent: 'Mensaje enviado',
-      errorFallback: 'No se pudo enviar. Probá de nuevo.',
+      sent: 'Mensaje enviado — NOV se va a contactar',
+      errorFallback: 'No se pudo enviar automáticamente —',
+      writeDirect: 'escribí a booking@nov.dj',
     },
   },
 };
