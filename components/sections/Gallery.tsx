@@ -1,7 +1,9 @@
-import type { ReactNode } from 'react';
-import Image from 'next/image';
+'use client';
+
+import { useRef, type ReactNode } from 'react';
 import Container from '@/components/ui/Container';
 import { getCue } from '@/lib/cues';
+import { CineFrame, useCinematic, SkipToRadio } from '@/components/gallery/Cinematic';
 
 const cue = getCue('gallery');
 
@@ -9,9 +11,12 @@ const cue = getCue('gallery');
  * GALLERY D — Magazine Editorial Sequence.
  *
  * The exhibition as a printed feature: asymmetric spreads, pull-quotes set in
- * the narrator serif, captions and metadata in mono, generous margins. Images
- * develop from black (global reveal engine); text blocks fade in the same way.
- * You read it like a magazine, not a grid.
+ * the narrator serif, captions and metadata in mono, generous margins. Every
+ * photograph now speaks the same cinematic language as the other explorations —
+ * pace-adaptive reveal-from-darkness, subtle parallax, breathing on the full
+ * spreads, and the shared SKIP → Radio — via components/gallery/Cinematic, while
+ * keeping the magazine layout. Text blocks still develop from black with the
+ * global reveal engine. You read it like a magazine, not a grid.
  *
  * Experimental — preview only, not for production merge.
  */
@@ -24,16 +29,26 @@ const Frame = ({
   pos = 'object-center',
   ratio,
   className = '',
+  range = 20,
+  breathe = false,
 }: {
   src: string;
   alt: string;
   pos?: string;
   ratio: string;
   className?: string;
+  range?: number;
+  breathe?: boolean;
 }) => (
-  <figure data-fx className={`relative m-0 overflow-hidden bg-bg-1 ${ratio} ${className}`}>
-    <Image src={src} alt={alt} fill sizes="(max-width: 768px) 100vw, 60vw" className={`monochrome-image object-cover ${pos}`} />
-  </figure>
+  <CineFrame
+    src={src}
+    alt={alt}
+    pos={pos}
+    range={range}
+    breathe={breathe}
+    sizes="(max-width: 768px) 100vw, 60vw"
+    frameClassName={`${ratio} ${className}`}
+  />
 );
 
 const Meta = ({ children }: { children: ReactNode }) => (
@@ -41,19 +56,29 @@ const Meta = ({ children }: { children: ReactNode }) => (
 );
 
 export default function Gallery() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { skipShown, skip, skipHoverRef } = useCinematic(sectionRef);
+
   return (
-    <section id={cue.id} className="py-[var(--space-section)]">
+    <section id={cue.id} ref={sectionRef} className="py-[var(--space-section)]">
       {/* opening spread — full bleed with a serif title laid over the low gradient */}
-      <figure data-fx className="relative m-0 h-[80svh] w-full overflow-hidden bg-bg-1">
-        <Image src="/images/nov-dj-live-buenos-aires-club.jpg" alt="The room, Buenos Aires" fill sizes="100vw" priority={false} className="monochrome-image object-cover object-[center_36%]" />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 55%, rgba(5,5,5,0.7))' }} />
-        <figcaption className="absolute bottom-[clamp(28px,5vw,64px)] left-0 right-0">
+      <CineFrame
+        src="/images/nov-dj-live-buenos-aires-club.jpg"
+        alt="The room, Buenos Aires"
+        pos="object-[center_36%]"
+        sizes="100vw"
+        range={30}
+        breathe
+        frameClassName="h-[80svh] w-full"
+      >
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10" style={{ background: 'linear-gradient(180deg, transparent 55%, rgba(5,5,5,0.7))' }} />
+        <figcaption className="absolute bottom-[clamp(28px,5vw,64px)] left-0 right-0 z-10">
           <Container>
             <p className="m-0 font-serif text-[clamp(2rem,6vw,4.2rem)] font-light leading-[0.98] text-ink">The room, before the room knows.</p>
             <span className="mt-4 block font-mono text-[10px] uppercase tracking-[0.28em] text-ink/50">Buenos Aires — 2025</span>
           </Container>
         </figcaption>
-      </figure>
+      </CineFrame>
 
       <Container className="mt-[clamp(72px,12vh,160px)] flex flex-col gap-[clamp(72px,13vh,180px)]">
         {/* spread — tall portrait + offset caption column */}
@@ -99,7 +124,7 @@ export default function Gallery() {
 
         {/* wide landscape + caption line */}
         <div>
-          <Frame {...img('/images/nov-booth-motion.jpg', 'Light trails across the booth', 'object-center')} ratio="aspect-[16/9]" />
+          <Frame {...img('/images/nov-booth-motion.jpg', 'Light trails across the booth', 'object-center')} ratio="aspect-[16/9]" range={26} />
           <div data-fx className="mt-5 flex items-baseline justify-between">
             <Meta>Plate 04 — closing hour</Meta>
             <span className="max-w-[38ch] text-right text-[13.5px] italic leading-[1.6] text-ink/55">Hands on the filter, the last hour drawn out until it means something.</span>
@@ -108,15 +133,26 @@ export default function Gallery() {
       </Container>
 
       {/* closing spread — full bleed */}
-      <figure data-fx className="relative mt-[clamp(72px,12vh,160px)] m-0 h-[82svh] w-full overflow-hidden bg-bg-1">
-        <Image src="/images/nov-dj-red-light-booth-silhouette.jpg" alt="Red light silhouette" fill sizes="100vw" className="monochrome-image object-cover object-center" />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 60%, rgba(5,5,5,0.65))' }} />
-        <figcaption className="absolute bottom-[clamp(24px,4vw,48px)] left-0 right-0">
-          <Container>
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink/50">UFO Point — 2025</span>
-          </Container>
-        </figcaption>
-      </figure>
+      <div className="mt-[clamp(72px,12vh,160px)]">
+        <CineFrame
+          src="/images/nov-dj-red-light-booth-silhouette.jpg"
+          alt="Red light silhouette"
+          pos="object-center"
+          sizes="100vw"
+          range={30}
+          breathe
+          frameClassName="h-[82svh] w-full"
+        >
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10" style={{ background: 'linear-gradient(180deg, transparent 60%, rgba(5,5,5,0.65))' }} />
+          <figcaption className="absolute bottom-[clamp(24px,4vw,48px)] left-0 right-0 z-10">
+            <Container>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink/50">UFO Point — 2025</span>
+            </Container>
+          </figcaption>
+        </CineFrame>
+      </div>
+
+      <SkipToRadio shown={skipShown} onSkip={skip} hoverRef={skipHoverRef} />
     </section>
   );
 }
