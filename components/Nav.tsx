@@ -127,6 +127,34 @@ export default function Nav() {
       </div>
 
       <Drawer open={menuOpen} onClose={() => setMenuOpen(false)} title="Tracklist">
+        {/* TEMPORARY — preview-only. Pinned to the TOP of the drawer so the
+            gallery explorations are the first thing visible when comparing;
+            never rendered in production (see lib/experiments.ts). Remove
+            before launch. */}
+        {IS_PREVIEW && (
+          <div className="mb-8 border-b border-line pb-6">
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-red-bright/80">
+              Gallery variations · preview
+            </span>
+            <div className="mt-3 flex flex-col gap-2">
+              {EXPERIMENTS.map((e) => {
+                const active = e.ref === CURRENT_REF;
+                return (
+                  <a
+                    key={e.ref}
+                    href={e.url}
+                    className={`font-mono text-[12px] tracking-[0.08em] no-underline transition-colors duration-hover ease-fade ${
+                      active ? 'text-red-bright' : 'text-ink/70 hover:text-ink'
+                    }`}
+                  >
+                    <span className={active ? 'text-red-bright' : 'text-ink/40'}>{active ? '●' : '○'}</span> {e.label}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <nav aria-label="Tracklist" className="flex flex-col">
           {CUES.map((cue) => {
             const isActive = cue.id === activeId;
@@ -154,33 +182,6 @@ export default function Nav() {
           </div>
           <span className="font-mono text-[10px] tracking-[0.18em] text-ink/55">Buenos Aires</span>
         </div>
-
-        {/* TEMPORARY — preview-only. Compare the gallery explorations from
-            inside the real menu; never rendered in production (see
-            lib/experiments.ts). Remove before launch. */}
-        {IS_PREVIEW && (
-          <div className="mt-8 border-t border-line/60 pt-5">
-            <span className="font-mono text-[9px] uppercase tracking-[0.24em] text-ink/30">
-              Experiments · preview only
-            </span>
-            <div className="mt-3 flex flex-col gap-1.5">
-              {EXPERIMENTS.map((e) => {
-                const active = e.ref === CURRENT_REF;
-                return (
-                  <a
-                    key={e.ref}
-                    href={e.url}
-                    className={`font-mono text-[11px] tracking-[0.1em] no-underline transition-colors duration-hover ease-fade ${
-                      active ? 'text-red-bright' : 'text-ink/45 hover:text-ink/75'
-                    }`}
-                  >
-                    <span className="text-ink/25">{active ? '●' : '○'}</span> {e.label}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        )}
       </Drawer>
     </header>
   );
