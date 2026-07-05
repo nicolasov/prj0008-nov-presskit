@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type RefObject } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 import Image from 'next/image';
 import { useLenis } from '@/components/SmoothScroll';
 
@@ -36,6 +36,7 @@ export function CineFrame({
   breathe = false,
   frameClassName = '',
   imgClassName = '',
+  children,
 }: {
   src: string;
   alt: string;
@@ -49,9 +50,11 @@ export function CineFrame({
   breathe?: boolean;
   frameClassName?: string;
   imgClassName?: string;
+  /** overlays (index, caption, select ring) — rendered above the moving image */
+  children?: ReactNode;
 }) {
   return (
-    <figure data-cine className={`plate relative m-0 overflow-hidden bg-bg-1 ${frameClassName}`}>
+    <figure data-cine className={`plate group relative m-0 overflow-hidden bg-bg-1 ${frameClassName}`}>
       <div
         data-cine-move
         data-range={range}
@@ -70,6 +73,7 @@ export function CineFrame({
           className={`plate-media grade-${grade} object-cover ${pos ?? ''} ${imgClassName}`}
         />
       </div>
+      {children}
     </figure>
   );
 }
