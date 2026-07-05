@@ -1,7 +1,10 @@
-import Image from 'next/image';
+'use client';
+
+import { useRef } from 'react';
 import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
 import { getCue } from '@/lib/cues';
+import { CineFrame, useCinematic, SkipToRadio } from '@/components/gallery/Cinematic';
 
 const cue = getCue('gallery');
 
@@ -10,8 +13,10 @@ const cue = getCue('gallery');
  *
  * The exhibition as a salon hang: a dense monochrome mosaic packed tight,
  * frames of every proportion butted together, the eye left to wander. Same
- * identity (near-black, monochrome grade); each tile develops from black via
- * the global reveal engine. Masonry is CSS columns — no layout JS.
+ * cinematic language as every other exploration — pace-adaptive
+ * reveal-from-darkness, a subtle parallax kept small so the dense wall stays
+ * calm, and the shared SKIP → Radio — via components/gallery/Cinematic, keeping
+ * the CSS-columns masonry (no layout JS).
  *
  * Experimental — preview only, not for production merge.
  */
@@ -58,8 +63,11 @@ const wall: Tile[] = [
 ];
 
 export default function Gallery() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { skipShown, skip, skipHoverRef } = useCinematic(sectionRef);
+
   return (
-    <section id={cue.id} className="py-[var(--space-section)]">
+    <section id={cue.id} ref={sectionRef} className="py-[var(--space-section)]">
       <Container>
         <div className="flex items-baseline justify-between">
           <Timecode tc={cue.tc} label={cue.label} />
@@ -70,23 +78,20 @@ export default function Gallery() {
 
         <div className="mt-[clamp(28px,4vw,56px)] columns-2 gap-2 sm:columns-3 lg:columns-4 xl:columns-5">
           {wall.map((t, i) => (
-            <figure
+            <CineFrame
               key={i}
-              data-fx
-              data-fx-index={i % 5}
-              className={`relative mb-2 break-inside-avoid overflow-hidden bg-bg-1 ${t.ratio}`}
-            >
-              <Image
-                src={t.src}
-                alt={t.alt}
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                className={`monochrome-image object-cover ${t.pos ?? ''}`}
-              />
-            </figure>
+              src={t.src}
+              alt={t.alt}
+              pos={t.pos}
+              range={14}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+              frameClassName={`mb-2 break-inside-avoid ${t.ratio}`}
+            />
           ))}
         </div>
       </Container>
+
+      <SkipToRadio shown={skipShown} onSkip={skip} hoverRef={skipHoverRef} />
     </section>
   );
 }
