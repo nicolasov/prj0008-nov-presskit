@@ -7,6 +7,7 @@ import Section from '@/components/ui/Section';
 import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
 import Accent from '@/components/ui/Accent';
+import LineReveal from '@/components/ui/LineReveal';
 import { useLang } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
 import { ARTIST_PHOTOS, artistPhoto, type ArtistPhoto } from '@/lib/live-photos';
@@ -161,7 +162,11 @@ export default function Live() {
             <Heading as="h2" className="mt-6 max-w-[9ch]">
               Trusted in serious <Accent>rooms</Accent>.
             </Heading>
-            <p className="mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">{t.live.body}</p>
+            <LineReveal
+              lines={t.live.lines}
+              className="mt-6 flex max-w-[52ch] flex-col gap-1.5"
+              lineClassName="text-[15.5px] leading-[1.6] text-ink/70"
+            />
           </div>
 
           {/* the editorial photographic system — desktop only (this is the
@@ -174,8 +179,10 @@ export default function Live() {
             aria-hidden={!active}
             className="relative mx-auto hidden aspect-[4/5] w-[74%] max-w-[380px] lg:block"
             style={{
-              WebkitMaskImage: 'radial-gradient(63% 60% at 50% 46%, #000 40%, transparent 82%)',
-              maskImage: 'radial-gradient(63% 60% at 50% 46%, #000 40%, transparent 82%)',
+              // heavy vignette — the edges disappear completely into the page
+              // black, so it never reads as a rectangle
+              WebkitMaskImage: 'radial-gradient(58% 54% at 50% 45%, #000 22%, transparent 74%)',
+              maskImage: 'radial-gradient(58% 54% at 50% 45%, #000 22%, transparent 74%)',
             }}
           >
             {[

@@ -31,10 +31,13 @@ const dictionaries = {
       influences: 'Influences',
     },
     live: {
-      body: 'Buenos Aires and the Argentine coast. The booth, shared with the artists who shaped the region’s sound.',
+      lines: [
+        'Buenos Aires and the Argentine coast.',
+        'The booth, shared with the artists who shaped the region’s sound.',
+      ],
     },
     radio: {
-      body: 'A recorded set says more than any biography. Fewer signals, deeper attention.',
+      lines: ['A recorded set says more than any biography.', 'Fewer signals, deeper attention.'],
     },
     pressKit: {
       facts: [
@@ -113,10 +116,13 @@ const dictionaries = {
       influences: 'Influencias',
     },
     live: {
-      body: 'Buenos Aires y la costa argentina. La cabina, compartida con los artistas que dieron forma al sonido de la región.',
+      lines: [
+        'Buenos Aires y la costa argentina.',
+        'La cabina, compartida con los artistas que dieron forma al sonido de la región.',
+      ],
     },
     radio: {
-      body: 'Un set grabado dice más que cualquier biografía. Menos señales, atención más profunda.',
+      lines: ['Un set grabado dice más que cualquier biografía.', 'Menos señales, atención más profunda.'],
     },
     pressKit: {
       facts: [
