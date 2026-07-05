@@ -1,7 +1,10 @@
-import Image from 'next/image';
+'use client';
+
+import { useRef } from 'react';
 import Container from '@/components/ui/Container';
 import Timecode from '@/components/ui/Timecode';
 import { getCue } from '@/lib/cues';
+import { CineFrame, useCinematic, SkipToRadio } from '@/components/gallery/Cinematic';
 
 const cue = getCue('gallery');
 
@@ -10,9 +13,9 @@ const cue = getCue('gallery');
  *
  * The exhibition as a photographer's contact sheet: a hairline grid of small
  * monochrome frames from the same roll, each indexed, a couple ringed in
- * grease-pencil red as the selects. Same identity as the site (near-black,
- * monochrome grade, mono metadata); the develop-from-black is inherited from
- * the global reveal engine via `figure[data-fx] .monochrome-image`.
+ * grease-pencil red as the selects. Same cinematic language as every other
+ * exploration (reveal-from-darkness, pace-adaptive develop, subtle parallax,
+ * SKIP → Radio) via the shared module — interpreted as a grid.
  *
  * Experimental — preview only, not for production merge.
  */
@@ -36,11 +39,14 @@ const roll = [
   { src: '/images/nov-about-editorial-buenos-aires.jpg', alt: 'Selection', pos: 'object-[center_30%]' },
 ];
 
-const selects = new Set([5, 6]); // grease-pencil keepers
+const selects = new Set([5, 6]);
 
 export default function Gallery() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { skipShown, skip, skipHoverRef } = useCinematic(sectionRef);
+
   return (
-    <section id={cue.id} className="py-[var(--space-section)]">
+    <section id={cue.id} ref={sectionRef} className="py-[var(--space-section)]">
       <Container>
         <div className="flex items-baseline justify-between">
           <Timecode tc={cue.tc} label={cue.label} />
@@ -51,40 +57,34 @@ export default function Gallery() {
 
         <div className="mt-[clamp(28px,4vw,56px)] grid grid-cols-2 gap-px bg-line-strong sm:grid-cols-3 lg:grid-cols-4">
           {roll.map((frame, i) => (
-            <figure
+            <CineFrame
               key={i}
-              data-fx
-              data-fx-index={i % 4}
-              className="group relative m-0 aspect-[3/2] overflow-hidden bg-bg-1"
+              src={frame.src}
+              alt={frame.alt}
+              pos={frame.pos}
+              range={16}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              frameClassName="aspect-[3/2]"
             >
-              <Image
-                src={frame.src}
-                alt={frame.alt}
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                className={`monochrome-image object-cover ${frame.pos}`}
-              />
-
-              <span className="absolute left-2 top-2 font-mono text-[9px] tracking-[0.16em] text-ink/45 [font-variant-numeric:tabular-nums]">
+              <span className="pointer-events-none absolute left-2 top-2 z-10 font-mono text-[9px] tracking-[0.16em] text-ink/45 [font-variant-numeric:tabular-nums]">
                 {String(i + 1).padStart(2, '0')}
               </span>
-
-              {/* grease-pencil select ring */}
               {selects.has(i) && (
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-2 rounded-[2px] border-2 border-red-bright/70"
+                  className="pointer-events-none absolute inset-2 z-10 rounded-[2px] border-2 border-red-bright/70"
                   style={{ boxShadow: 'inset 0 0 0 9999px rgba(224,82,63,0.04)' }}
                 />
               )}
-
-              <figcaption className="pointer-events-none absolute bottom-2 left-2 font-mono text-[9px] uppercase tracking-[0.18em] text-ink/0 transition-colors duration-hover ease-fade group-hover:text-ink/55">
+              <figcaption className="pointer-events-none absolute bottom-2 left-2 z-10 font-mono text-[9px] uppercase tracking-[0.18em] text-ink/0 transition-colors duration-hover ease-fade group-hover:text-ink/55">
                 {frame.alt}
               </figcaption>
-            </figure>
+            </CineFrame>
           ))}
         </div>
       </Container>
+
+      <SkipToRadio shown={skipShown} onSkip={skip} hoverRef={skipHoverRef} />
     </section>
   );
 }
