@@ -1,29 +1,25 @@
 export type ArtistPhoto = { src: string; alt: string; temp?: boolean };
 
 /**
- * Real photographs of NOV *with* each artist, keyed by the exact name used in
- * the Live marquee. One unique image per artist — never a duplicate.
- *
- * PRODUCTION RULE — never a placeholder. In production, only add an entry when
- * a genuine photo of NOV *together with* that artist exists; if there is none,
- * leave the artist out and the Live section shows nothing for that name.
+ * One unique photograph per artist for the Live section — never a duplicate.
  *
  * ── Temporary (pre-launch) ─────────────────────────────────────────────
- * Until the real photographs arrive, each artist points at a NEUTRAL,
- * clearly-labelled placeholder (`/images/live-temp/*.svg`, `temp: true`) so the
- * composition and behaviour (focus tint, slow dissolve, one image at a time)
- * can be judged. These are NOT reused gallery images and each is unique.
+ * These are NOT the real "NOV with the artist" photographs. Until those
+ * arrive, each artist points at a DIFFERENT real photograph already on the
+ * site, so the composition (monochrome, small, heavily vignetted, dissolving
+ * from darkness) can be judged as close to the final experience as possible —
+ * not with placeholder graphics.
  *
- * TO SWAP IN A REAL PHOTO: drop the file in `public/images/` and change that
- * artist's `src` to it, then remove `temp: true`. Nothing else changes.
+ * TO SWAP IN A REAL PHOTO: change that artist's `src`. Nothing else changes.
+ * PRODUCTION RULE: an artist with no entry shows nothing — never a placeholder.
  */
 export const ARTIST_PHOTOS: Record<string, ArtistPhoto> = {
-  'Jimmy Van M': { src: '/images/live-temp/jimmy-van-m.svg', alt: 'NOV with Jimmy Van M — temporary placeholder', temp: true },
-  'Popof': { src: '/images/live-temp/popof.svg', alt: 'NOV with Popof — temporary placeholder', temp: true },
-  'Martín García': { src: '/images/live-temp/martin-garcia.svg', alt: 'NOV with Martín García — temporary placeholder', temp: true },
-  'Nicolás Rada': { src: '/images/live-temp/nicolas-rada.svg', alt: 'NOV with Nicolás Rada — temporary placeholder', temp: true },
-  'Fernando Ferreyra': { src: '/images/live-temp/fernando-ferreyra.svg', alt: 'NOV with Fernando Ferreyra — temporary placeholder', temp: true },
-  'Carlos Alfonsin': { src: '/images/live-temp/carlos-alfonsin.svg', alt: 'NOV with Carlos Alfonsin — temporary placeholder', temp: true },
+  'Jimmy Van M': { src: '/images/nov-dj-organic-house-buenos-aires-hero.jpg', alt: 'NOV, Buenos Aires — temporary stand-in' },
+  'Popof': { src: '/images/nov-booth-shadow.jpg', alt: 'NOV in half light — temporary stand-in' },
+  'Martín García': { src: '/images/nov-portrait-wall.jpg', alt: 'NOV, portrait — temporary stand-in' },
+  'Nicolás Rada': { src: '/images/nov-headphones.jpg', alt: 'NOV, cueing — temporary stand-in' },
+  'Fernando Ferreyra': { src: '/images/nov-about-editorial-buenos-aires.jpg', alt: 'NOV at the decks — temporary stand-in' },
+  'Carlos Alfonsin': { src: '/images/nov-dj-red-light-booth-silhouette.jpg', alt: 'NOV, red light — temporary stand-in' },
 };
 
 export const artistPhoto = (name?: string | null): ArtistPhoto | null =>
