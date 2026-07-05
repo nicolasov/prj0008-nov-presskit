@@ -5,6 +5,7 @@ import Heading from '@/components/ui/Heading';
 import Timecode from '@/components/ui/Timecode';
 import SoundCloudPlayer from '@/components/audio/SoundCloudPlayer';
 import Accent from '@/components/ui/Accent';
+import LineReveal from '@/components/ui/LineReveal';
 import { useLang } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
 
@@ -24,7 +25,11 @@ export default function Radio() {
       <Heading as="h2" className="mt-6 max-w-[10ch]">
         <Accent>Listen</Accent> before reading.
       </Heading>
-      <p className="mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/70">{t.radio.body}</p>
+      <LineReveal
+        lines={t.radio.lines}
+        className="mt-6 flex max-w-[52ch] flex-col gap-1.5"
+        lineClassName="text-[15.5px] leading-[1.6] text-ink/70"
+      />
 
       <div className="mt-12">
         <SoundCloudPlayer />

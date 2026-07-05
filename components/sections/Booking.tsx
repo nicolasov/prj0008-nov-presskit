@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Section from '@/components/ui/Section';
 import Timecode from '@/components/ui/Timecode';
 import Quote from '@/components/ui/Quote';
-import Button from '@/components/ui/Button';
 import SessionEcho from '@/components/hidden/SessionEcho';
 import { useLang } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
@@ -16,8 +15,10 @@ type Payload = { name: string; email: string; venue: string; date: string; messa
 
 const BOOKING_EMAIL = 'booking@nov.dj';
 
+// Editorial, not a web form: no boxes — each field is a quiet underline that
+// warms to the signal on focus. Placeholders whisper. Usability kept intact.
 const inputCls =
-  'w-full border border-line bg-bg-1 px-4 py-[14px] text-[14.5px] text-ink outline-none transition-colors duration-hover ease-fade focus:border-red';
+  'w-full border-0 border-b border-line bg-transparent px-0 py-[10px] text-[15px] text-ink outline-none transition-colors duration-hover ease-fade placeholder:text-ink/25 focus:border-red';
 
 /**
  * A booking that must never be silently lost. The form posts to /api/contact
@@ -110,7 +111,7 @@ export default function Booking() {
           </div>
         </div>
 
-        <form onSubmit={onSubmit} onInput={onFormInput} noValidate={false} className="grid gap-4 border border-line bg-bg-1 p-[clamp(18px,3vw,34px)] sm:grid-cols-2">
+        <form onSubmit={onSubmit} onInput={onFormInput} noValidate={false} className="grid gap-x-[clamp(24px,4vw,56px)] gap-y-8 sm:grid-cols-2">
           <label className="grid gap-2">
             <span className="font-mono text-[10.5px] tracking-[0.16em] text-ink/55">{t.booking.name} *</span>
             <input name="name" type="text" required placeholder={t.booking.namePlaceholder} className={inputCls} />
@@ -162,15 +163,19 @@ export default function Booking() {
             )}
           </div>
 
-          <Button
-            as="button"
+          <button
             type="submit"
-            variant="primary"
             disabled={status === 'loading'}
-            className="justify-center py-[14px] sm:col-span-2"
+            className="group/send mt-1 flex w-fit items-center gap-3 border-0 bg-transparent p-0 text-left font-mono text-[11px] uppercase tracking-[0.24em] text-ink/70 transition-colors duration-hover ease-fade hover:cursor-pointer hover:text-ink focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-bright focus-visible:outline-offset-4 disabled:cursor-wait disabled:opacity-50 sm:col-span-2"
           >
             {status === 'loading' ? t.booking.sending : status === 'success' ? t.booking.sent : t.booking.submit}
-          </Button>
+            <span
+              aria-hidden="true"
+              className="text-red-bright transition-transform duration-hover ease-fade group-hover/send:translate-x-1"
+            >
+              →
+            </span>
+          </button>
         </form>
       </div>
     </Section>
