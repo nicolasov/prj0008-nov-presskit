@@ -12,9 +12,9 @@ import { getCue } from '@/lib/cues';
 const cue = getCue('press-kit');
 
 const photoDownloads = [
-  { title: 'Portrait', href: '/images/nov-portrait-wall.jpg', format: 'JPG · 0.3 MB' },
-  { title: 'Booth', href: '/images/nov-booth-motion.jpg', format: 'JPG · 0.3 MB' },
-  { title: 'Editorial', href: '/images/nov-about-editorial-buenos-aires.jpg', format: 'JPG · 0.3 MB' },
+  { title: 'Buenos Aires Portrait', href: '/images/nov-presskit-portrait.jpg', format: 'JPG · Web optimized' },
+  { title: 'Booth Light Trails', href: '/images/nov-presskit-booth.jpg', format: 'JPG · Web optimized' },
+  { title: 'Editorial Set', href: '/images/nov-presskit-editorial.jpg', format: 'JPG · Web optimized' },
 ];
 
 type OpenDrawer = 'biography' | 'rider' | 'photos' | null;

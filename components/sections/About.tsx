@@ -18,8 +18,8 @@ export default function About() {
     <Section id={cue.id} fxIndex={1}>
       <div className="grid gap-[clamp(32px,5vw,72px)] lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <Still
-          src="/images/nov-about-editorial-buenos-aires.jpg"
-          alt="NOV at the decks, editorial portrait, Buenos Aires"
+          src="/images/nov-editorial-buenos-aires.jpg"
+          alt="NOV DJ and producer in an editorial portrait at a Buenos Aires venue"
           aspect="portrait"
           caption="Buenos Aires"
           sizes="(max-width: 1024px) 100vw, 45vw"

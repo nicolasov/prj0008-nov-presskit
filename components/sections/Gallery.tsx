@@ -56,14 +56,14 @@ type Plate = {
    plates 3 and 7, well apart. Two photographs return at radically different
    crops and grades — treated as different moments, never a repeat. */
 const plates: Plate[] = [
-  { comp: 'full', src: '/images/nov-dj-live-buenos-aires-club.jpg', alt: 'The room, full — Buenos Aires', grade: 'mono', pos: 'object-[center_42%]', caption: 'Buenos Aires — 2025', range: 34, zoom: true, breathe: true },
-  { comp: 'tall', src: '/images/nov-booth-shadow.jpg', alt: 'NOV in half light', grade: 'mono', align: 'left', pos: 'object-[center_28%]', range: 22 },
-  { comp: 'wide', src: '/images/nov-booth-motion.jpg', alt: 'Light trails across the booth', grade: 'color', align: 'right', pos: 'object-center', range: 26, zoom: true },
-  { comp: 'void', src: '/images/nov-headphones.jpg', alt: 'A held note', grade: 'mono', align: 'right', pos: 'object-[38%_30%]', range: 16 },
-  { comp: 'detail', src: '/images/nov-portrait-wall.jpg', alt: 'Between sets', grade: 'mono', align: 'left', pos: 'object-[center_18%]', range: 18 },
-  { comp: 'pano', src: '/images/nov-booth-motion.jpg', alt: 'The last hour', grade: 'mono', pos: 'object-[72%_center]', range: 24, zoom: true },
-  { comp: 'full', src: '/images/nov-dj-red-light-booth-silhouette.jpg', alt: 'Red light — the long build', grade: 'color', pos: 'object-center', caption: 'UFO Point — 2025', range: 34, zoom: true, breathe: true },
-  { comp: 'tall', src: '/images/nov-booth-shadow.jpg', alt: 'The booth, receding', grade: 'mono', align: 'right', pos: 'object-[70%_60%]', range: 22 },
+  { comp: 'full', src: '/images/nov-club-room-buenos-aires.jpg', alt: 'NOV performing in a full-frame Buenos Aires club scene', grade: 'mono', pos: 'object-[center_42%]', caption: 'Buenos Aires — 2025', range: 34, zoom: true, breathe: true },
+  { comp: 'tall', src: '/images/nov-booth-half-light.jpg', alt: 'NOV in the booth under atmospheric half-light', grade: 'mono', align: 'left', pos: 'object-[center_28%]', range: 22 },
+  { comp: 'wide', src: '/images/nov-booth-motion-trails.jpg', alt: 'NOV in the booth with motion-blurred light trails', grade: 'color', align: 'right', pos: 'object-center', range: 26, zoom: true },
+  { comp: 'void', src: '/images/nov-headphones-cueing.jpg', alt: 'NOV cueing a set with headphones in a minimalist scene', grade: 'mono', align: 'right', pos: 'object-[38%_30%]', range: 16 },
+  { comp: 'detail', src: '/images/nov-portrait-wall-buenos-aires.jpg', alt: 'NOV in a portrait against a textured wall in Buenos Aires', grade: 'mono', align: 'left', pos: 'object-[center_18%]', range: 18 },
+  { comp: 'pano', src: '/images/nov-gallery-wide-buenos-aires.jpg', alt: 'NOV on stage during a wide live performance in Buenos Aires', grade: 'mono', pos: 'object-[72%_center]', range: 24, zoom: true },
+  { comp: 'full', src: '/images/nov-red-light-silhouette.jpg', alt: 'NOV in silhouette under red light during a live set', grade: 'color', pos: 'object-center', caption: 'UFO Point — 2025', range: 34, zoom: true, breathe: true },
+  { comp: 'tall', src: '/images/nov-gallery-detail-buenos-aires.jpg', alt: 'NOV in a close detail frame with intimate stage lighting', grade: 'mono', align: 'right', pos: 'object-[70%_60%]', range: 22 },
 ];
 
 const frame: Record<Comp, string> = {

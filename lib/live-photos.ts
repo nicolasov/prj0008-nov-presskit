@@ -14,12 +14,12 @@ export type ArtistPhoto = { src: string; alt: string; temp?: boolean };
  * PRODUCTION RULE: an artist with no entry shows nothing — never a placeholder.
  */
 export const ARTIST_PHOTOS: Record<string, ArtistPhoto> = {
-  'Jimmy Van M': { src: '/images/nov-dj-organic-house-buenos-aires-hero.jpg', alt: 'NOV, Buenos Aires — temporary stand-in' },
-  'Popof': { src: '/images/nov-booth-shadow.jpg', alt: 'NOV in half light — temporary stand-in' },
-  'Martín García': { src: '/images/nov-portrait-wall.jpg', alt: 'NOV, portrait — temporary stand-in' },
-  'Nicolás Rada': { src: '/images/nov-headphones.jpg', alt: 'NOV, cueing — temporary stand-in' },
-  'Fernando Ferreyra': { src: '/images/nov-about-editorial-buenos-aires.jpg', alt: 'NOV at the decks — temporary stand-in' },
-  'Carlos Alfonsin': { src: '/images/nov-dj-red-light-booth-silhouette.jpg', alt: 'NOV, red light — temporary stand-in' },
+  'Jimmy Van M': { src: '/images/nov-artist-jimmy-van-m.jpg', alt: 'NOV DJ and producer in a live Buenos Aires performance context' },
+  'Popof': { src: '/images/nov-artist-popof.jpg', alt: 'NOV in a focused club portrait with cinematic lighting' },
+  'Martín García': { src: '/images/nov-artist-martin-garcia.jpg', alt: 'NOV in a candid portrait during a live set' },
+  'Nicolás Rada': { src: '/images/nov-artist-nicolas-rada.jpg', alt: 'NOV cueing music with headphones in a minimal venue scene' },
+  'Fernando Ferreyra': { src: '/images/nov-artist-fernando-ferreyra.jpg', alt: 'NOV in an editorial frame with a confident stage presence' },
+  'Carlos Alfonsin': { src: '/images/nov-artist-carlos-alfonsin.jpg', alt: 'NOV captured in silhouette under red light at a live venue' },
 };
 
 export const artistPhoto = (name?: string | null): ArtistPhoto | null =>

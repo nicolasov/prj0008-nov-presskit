@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: '%s | NOV',
   },
   description:
-    'Official presskit for NOV, a Buenos Aires DJ and producer creating deep, hypnotic and emotionally evolving progressive house sets.',
+    'Official presskit for NOV, a Buenos Aires-based DJ and producer crafting hypnotic progressive house, deep house and organic house sets.',
   keywords: [
     'NOV',
     'DJ',
@@ -31,6 +31,8 @@ export const metadata: Metadata = {
     'Official Presskit',
     'Hypnotic Groove',
     'Argentina',
+    'Buenos Aires DJ',
+    'Argentina DJ',
   ],
   authors: [{ name: 'NOV' }],
   openGraph: {
@@ -40,13 +42,13 @@ export const metadata: Metadata = {
     siteName: 'NOV',
     locale: 'es_AR',
     type: 'website',
-    images: [{ url: '/images/nov-booth-motion.jpg', width: 1537, height: 1023, alt: 'NOV in the booth' }],
+    images: [{ url: '/images/nov-dj-organic-house-buenos-aires-hero.jpg', width: 1600, height: 1067, alt: 'NOV DJ and producer in a cinematic Buenos Aires live set' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'NOV — Official Presskit',
     description: 'Deep, hypnotic and emotionally evolving sets.',
-    images: ['/images/nov-booth-motion.jpg'],
+    images: ['/images/nov-dj-organic-house-buenos-aires-hero.jpg'],
   },
   robots: { index: true, follow: true },
 };
