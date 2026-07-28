@@ -54,7 +54,9 @@ export async function GET(
     trackRedirect({
       slug,
       destination,
-      requestUrl: request.url,
+      // Only the query string is taken from the request; the host for
+      // page_location comes from config. See buildPageLocation.
+      search: new URL(request.url).search,
       userAgent: request.headers.get('user-agent'),
       cookieHeader: request.headers.get('cookie'),
     }),

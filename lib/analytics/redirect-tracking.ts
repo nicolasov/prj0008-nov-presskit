@@ -1,4 +1,5 @@
-import { ANALYTICS } from '@/lib/config/analytics';
+import { ANALYTICS, DEFAULT_REDIRECT_UTM } from '@/lib/config/analytics';
+import { createSiteUrl } from '@/lib/config/site';
 
 /**
  * Server-side measurement for the redirect layer.
@@ -46,10 +47,39 @@ export function readClientId(cookieHeader: string | null): string {
   return `${Math.floor(Math.random() * 1e9)}.${Math.floor(Date.now() / 1000)}`;
 }
 
+/**
+ * Builds the page_location reported to GA4.
+ *
+ * The host comes from SITE, never from the incoming request: the request host
+ * varies with the deployment (preview URLs, the project's auto-assigned host,
+ * localhost) and would scatter one campaign across several hostnames in the
+ * reports. One configured domain keeps it in one place, and migrating to a
+ * custom domain stays a single-value change.
+ *
+ * A request that already carries utm_* is left exactly as it came. Only a
+ * request with none gets the default campaign, so an incoming campaign is
+ * never silently rewritten into ours.
+ */
+export function buildPageLocation(slug: string, search: string): string {
+  const url = new URL(createSiteUrl(`/${slug}`));
+  const incoming = new URLSearchParams(search);
+
+  for (const [key, value] of incoming) url.searchParams.set(key, value);
+
+  const carriesCampaign = [...incoming.keys()].some((key) => key.startsWith('utm_'));
+  if (!carriesCampaign) {
+    for (const [key, value] of Object.entries(DEFAULT_REDIRECT_UTM)) {
+      url.searchParams.set(key, value);
+    }
+  }
+
+  return url.toString();
+}
+
 type TrackArgs = {
   slug: string;
   destination: string;
-  requestUrl: string;
+  search: string;
   userAgent: string | null;
   cookieHeader: string | null;
 };
@@ -65,7 +95,7 @@ type TrackArgs = {
 export async function trackRedirect({
   slug,
   destination,
-  requestUrl,
+  search,
   userAgent,
   cookieHeader,
 }: TrackArgs): Promise<void> {
@@ -88,7 +118,7 @@ export async function trackRedirect({
           {
             name: 'page_view',
             params: {
-              page_location: requestUrl,
+              page_location: buildPageLocation(slug, search),
               page_title: `redirect: /${slug}`,
               redirect_slug: slug,
               redirect_destination: destination,

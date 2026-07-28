@@ -17,7 +17,7 @@
 export const SITE = {
   name: 'NOV',
   shortName: 'NOV',
-  domain: 'novdj.vercel.app',
+  domain: 'djnov.vercel.app',
   description: '',
 } as const;
 

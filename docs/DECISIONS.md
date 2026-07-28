@@ -81,6 +81,37 @@ Contarlos inflaría en silencio todas las campañas.
 
 ---
 
+## 4b. La campaña se adjunta en el servidor, no se imprime
+
+El QR lleva únicamente `<dominio>/ig`. Sin parámetros.
+
+Si la request no trae ningún `utm_*`, el servidor le aplica
+`DEFAULT_REDIRECT_UTM` (`lib/config/analytics.ts`) al construir el
+`page_location` que va a GA4. Si la request **sí** trae `utm_*`, se respeta tal
+cual y no se toca.
+
+**Por qué:** nada de la campaña queda grabado en el objeto físico, así que se
+puede cambiar la taxonomía sin reimprimir. Es el mismo principio que la capa de
+redirects. Y de paso el QR es más corto, lo que importa de verdad para escanear
+en un club oscuro.
+
+**Por qué no se mezcla una campaña parcial:** si llega `utm_source=flyer` solo,
+no se completan los otros dos con los valores por defecto. Combinarlos
+inventaría una campaña que nunca existió.
+
+⚠️ **Contrapartida asumida a conciencia:** `/ig` también se linkea desde la bio
+y se comparte a mano, y esas visitas tampoco traen `utm_*`, así que caen bajo la
+misma campaña. **Los números describen "llegadas sin etiquetar a `/ig`", no
+estrictamente "escaneos del QR".** Mientras el QR sea el canal principal alcanza.
+Para separarlos de verdad hay que darle al código impreso su propio slug — **no**
+hacer más inteligente el default.
+
+El `page_location` se arma con el host de `SITE`, nunca con el de la request:
+las URLs de preview, el host autoasignado del proyecto y localhost dispersarían
+una misma campaña entre varios hostnames en los informes.
+
+---
+
 ## 5. Slugs de destino, no de superficie
 
 Se evaluó `/booth` (nombrar la superficie física) contra `/ig` (nombrar el
@@ -143,7 +174,7 @@ reescribe. Un redirect permanente cacheado le sobreviviría.
 
 ## 9b. La identidad pública vive en un alias, no en el host del proyecto
 
-`SITE.domain` apunta a **`novdj.vercel.app`**, un alias adjuntado al proyecto —
+`SITE.domain` apunta a **`djnov.vercel.app`**, un alias adjuntado al proyecto —
 no al host autoasignado `<proyecto>.vercel.app`.
 
 **Por qué:** renombrar el proyecto en Vercel cambia el host autoasignado y
