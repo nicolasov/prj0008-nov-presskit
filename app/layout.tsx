@@ -37,6 +37,9 @@ export const metadata: Metadata = {
     'Argentina DJ',
   ],
   authors: [{ name: 'NOV' }],
+  // /press redirects here, so there is only ever one indexable URL for this
+  // document. Declared anyway: it is what survives the move to a custom domain.
+  alternates: { canonical: '/' },
   openGraph: {
     title: `${SITE.name} — Official Presskit`,
     description: 'Deep, hypnotic and emotionally evolving sets. Progressive house from Buenos Aires.',
