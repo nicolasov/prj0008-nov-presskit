@@ -141,6 +141,31 @@ reescribe. Un redirect permanente cacheado le sobreviviría.
 
 ---
 
+## 9b. La identidad pública vive en un alias, no en el host del proyecto
+
+`SITE.domain` apunta a **`novdj.vercel.app`**, un alias adjuntado al proyecto —
+no al host autoasignado `<proyecto>.vercel.app`.
+
+**Por qué:** renombrar el proyecto en Vercel cambia el host autoasignado y
+Vercel no deja redirect del viejo. Cualquier URL publicada (y cualquier QR
+impreso) moriría. Un alias es independiente del nombre del proyecto: una vez
+adjuntado, **el nombre interno deja de ser crítico.**
+
+Es el patrón que ya usaban `prj0001-ml-sync` (sirve `ml-sync.vercel.app`) y
+`prj0005` (sirve `creative-technology-studio.vercel.app`).
+
+**`nov.vercel.app` no se pudo usar:** la API de Vercel lo rechaza con
+`alias_conflict`, está asignado a otra cuenta.
+
+⚠️ **Un 404 sobre un host `*.vercel.app` NO significa que esté libre** — toda la
+zona tiene DNS wildcard, así que cualquier subdominio resuelve. La única prueba
+fiable es intentar adjuntarlo por API.
+
+El alias es intercambiable **hasta que se imprima el primer QR**. Después es
+permanente.
+
+---
+
 ## 9. `SITE.domain` tiene que nombrar el host real
 
 Alimenta `metadataBase`, y por lo tanto Open Graph, Twitter cards y JSON-LD.
