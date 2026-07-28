@@ -1,6 +1,5 @@
+import { LINKS } from '@/lib/config/links';
 import { cn } from '@/lib/utils';
-
-const INSTAGRAM_URL = 'https://instagram.com/novnovnovnovnovnovnov';
 
 type InstagramLinkProps = {
   className?: string;
@@ -10,7 +9,7 @@ type InstagramLinkProps = {
 export default function InstagramLink({ className }: InstagramLinkProps) {
   return (
     <a
-      href={INSTAGRAM_URL}
+      href={LINKS.instagram}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Instagram"

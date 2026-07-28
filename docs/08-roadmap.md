@@ -107,6 +107,30 @@ everything else in this list:
 - The site currently includes Arrival, Philosophy, About, Live, Gallery, Videos / Sets, Press Kit, and Booking.
 - The motion system is implemented with Lenis and GSAP.
 - The hero uses WebGL atmosphere with a DOM fallback.
+- Phase 1 website foundation is in place: `/` redirects through centralized config while the repository remains prepared to evolve into the official NOV website. See [14-website-foundation.md](./14-website-foundation.md).
+
+## Website evolution roadmap
+
+These phases are intentionally documented, not implemented in this sprint:
+
+- Landing Page
+- Press Kit
+- Link Hub
+- Booking
+- Music
+- Media
+- Contact
+- Open Graph
+- SEO
+- Sitemap
+- Custom Domain
+- QR Tracking
+- Vercel Analytics
+- Google Analytics
+- Microsoft Clarity
+- Meta Pixel
+- A/B Testing
+- Smart Redirects
 
 ## Short term
 

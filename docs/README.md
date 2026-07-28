@@ -51,3 +51,5 @@ The repository is the implementation layer of a long-term creative project.
 - `10-ai-rules.md`
 - `11-lessons-learned.md`
 - `12-creative-checklist.md`
+- `13-playback-system-roadmap.md`
+- `14-website-foundation.md`

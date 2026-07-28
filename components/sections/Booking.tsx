@@ -5,6 +5,7 @@ import Section from '@/components/ui/Section';
 import Timecode from '@/components/ui/Timecode';
 import Quote from '@/components/ui/Quote';
 import SessionEcho from '@/components/hidden/SessionEcho';
+import { LINKS } from '@/lib/config/links';
 import { useLang } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
 
@@ -12,8 +13,6 @@ const cue = getCue('booking');
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 type Payload = { name: string; email: string; venue: string; date: string; message: string };
-
-const BOOKING_EMAIL = 'booking@nov.dj';
 
 // Editorial, not a web form: no boxes — each field is a quiet underline that
 // warms to the signal on focus. Placeholders whisper. Usability kept intact.
@@ -24,7 +23,7 @@ const inputCls =
  * A booking that must never be silently lost. The form posts to /api/contact
  * (Resend). On success it confirms honestly; on any failure it does NOT pretend
  * to have sent — it shows the error and offers a graceful, pre-filled fallback
- * straight to booking@nov.dj, so the enquiry always has a way through even
+ * straight to the configured booking inbox, so the enquiry always has a way through even
  * before the mail service is configured. No personal address is ever exposed.
  */
 const mailtoFallback = (d: Payload) => {
@@ -39,7 +38,7 @@ const mailtoFallback = (d: Payload) => {
   ]
     .filter(Boolean)
     .join('\n');
-  return `mailto:${BOOKING_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${LINKS.bookingEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 };
 
 export default function Booking() {
@@ -97,11 +96,11 @@ export default function Booking() {
           </Quote>
           <SessionEcho />
           <div className="mt-9 flex flex-col gap-3 border-t border-line pt-7">
-            <a href="mailto:booking@nov.dj" className="text-[15px] text-ink/70 no-underline transition-colors duration-hover ease-fade hover:text-red-bright">
-              booking@nov.dj
+            <a href={`mailto:${LINKS.bookingEmail}`} className="text-[15px] text-ink/70 no-underline transition-colors duration-hover ease-fade hover:text-red-bright">
+              {LINKS.bookingEmail}
             </a>
             <a
-              href="https://soundcloud.com/novnovnovnovnovnovnov"
+              href={LINKS.soundcloud}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[15px] text-ink/70 no-underline transition-colors duration-hover ease-fade hover:text-red-bright"

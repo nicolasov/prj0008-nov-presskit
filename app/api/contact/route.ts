@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { LINKS } from '@/lib/config/links';
+import { SITE } from '@/lib/config/site';
 
 export async function POST(req: NextRequest) {
   let body: { name?: string; email?: string; venue?: string; date?: string; message?: string };
@@ -30,9 +32,9 @@ export async function POST(req: NextRequest) {
   // Destination and sender are env-driven so no personal address lives in the
   // repo. `onboarding@resend.dev` is Resend's shared sender and works with only
   // an API key; once nov.dj is verified in Resend, set CONTACT_FROM_EMAIL to a
-  // branded address (e.g. "NOV <booking@nov.dj>"). CONTACT_TO_EMAIL is where
+  // branded address using the configured booking inbox). CONTACT_TO_EMAIL is where
   // enquiries are read (can be a private inbox — it is never exposed to the client).
-  const TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'booking@nov.dj';
+  const TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? LINKS.bookingEmail;
   const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'NOV Booking <onboarding@resend.dev>';
   const resend = new Resend(apiKey);
 
@@ -61,7 +63,7 @@ export async function POST(req: NextRequest) {
             <p style="margin:0;line-height:1.7;white-space:pre-line">${escapeHtml(message)}</p>
           </div>
           <p style="margin-top:24px;color:rgba(245,241,235,.38);font-size:12px">
-            Enviado desde nov.dj
+            Enviado desde ${escapeHtml(SITE.domain)}
           </p>
         </div>
       `,

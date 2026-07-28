@@ -1,12 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { LINKS } from '@/lib/config/links';
 import { getSetMeta } from '@/lib/sets';
 
-const SC_PROFILE = 'https://soundcloud.com/novnovnovnovnovnovnov';
 const WIDGET_API = 'https://w.soundcloud.com/player/api.js';
 const EMBED_SRC = `https://w.soundcloud.com/player/?url=${encodeURIComponent(
-  SC_PROFILE,
+  LINKS.soundcloud,
 )}&auto_play=false&visual=false&show_artwork=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&hide_related=true`;
 
 type Sound = { title: string; duration: number };
@@ -216,7 +216,7 @@ export default function SoundCloudPlayer() {
             Player unavailable
           </p>
           <a
-            href={SC_PROFILE}
+            href={LINKS.soundcloud}
             target="_blank"
             rel="noopener noreferrer"
             className="font-mono text-[10px] uppercase tracking-[0.22em] text-red-bright no-underline"

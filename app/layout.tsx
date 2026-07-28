@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import { archivo, newsreader, geistMono } from '@/lib/fonts';
 import RevealEngine from '@/components/RevealEngine';
@@ -9,14 +10,15 @@ import IdleGrainBreath from '@/components/hidden/IdleGrainBreath';
 import { LanguageProvider } from '@/lib/i18n';
 import { IntroRevealProvider } from '@/lib/introReveal';
 import { PlaybackProvider } from '@/lib/playback';
-
-const siteUrl = 'https://nov.dj';
+import { ANALYTICS } from '@/lib/config/analytics';
+import { LINKS } from '@/lib/config/links';
+import { SITE, SITE_URL } from '@/lib/config/site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'NOV — Official Presskit',
-    template: '%s | NOV',
+    default: `${SITE.name} — Official Presskit`,
+    template: `%s | ${SITE.name}`,
   },
   description:
     'Official presskit for NOV, a Buenos Aires-based DJ and producer crafting hypnotic progressive house, deep house and organic house sets.',
@@ -36,17 +38,17 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'NOV' }],
   openGraph: {
-    title: 'NOV — Official Presskit',
+    title: `${SITE.name} — Official Presskit`,
     description: 'Deep, hypnotic and emotionally evolving sets. Progressive house from Buenos Aires.',
-    url: siteUrl,
-    siteName: 'NOV',
+    url: SITE_URL,
+    siteName: SITE.name,
     locale: 'es_AR',
     type: 'website',
     images: [{ url: '/images/nov-dj-organic-house-buenos-aires-hero.jpg', width: 1600, height: 1067, alt: 'NOV DJ and producer in a cinematic Buenos Aires live set' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NOV — Official Presskit',
+    title: `${SITE.name} — Official Presskit`,
     description: 'Deep, hypnotic and emotionally evolving sets.',
     images: ['/images/nov-dj-organic-house-buenos-aires-hero.jpg'],
   },
@@ -80,10 +82,10 @@ const jsonLd = {
   '@type': 'MusicGroup',
   name: 'NOV',
   genre: ['Progressive House', 'Deep House', 'Organic House', 'Hypnotic Groove'],
-  url: siteUrl,
+  url: SITE_URL,
   sameAs: [
-    'https://soundcloud.com/novnovnovnovnovnovnov',
-    'https://youtube.com/@novnovnovnovnovnovnov',
+    LINKS.soundcloud,
+    LINKS.youtube,
   ],
   location: {
     '@type': 'Place',
@@ -120,6 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </IntroRevealProvider>
         </LanguageProvider>
       </body>
+      {ANALYTICS.ga4.enabled ? <GoogleAnalytics gaId={ANALYTICS.ga4.measurementId} /> : null}
     </html>
   );
 }

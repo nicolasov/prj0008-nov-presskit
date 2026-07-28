@@ -1,10 +1,11 @@
 import Container from '@/components/ui/Container';
 import InstagramLink from '@/components/ui/InstagramLink';
+import { LINKS } from '@/lib/config/links';
 
 const socialLinks = [
-  { label: 'SoundCloud', href: 'https://soundcloud.com/novnovnovnovnovnovnov' },
-  { label: 'YouTube', href: 'https://youtube.com/@novnovnovnovnovnovnov' },
-  { label: 'WhatsApp', href: 'https://wa.me/5491132102111' },
+  { label: 'SoundCloud', href: LINKS.soundcloud },
+  { label: 'YouTube', href: LINKS.youtube },
+  { label: 'WhatsApp', href: LINKS.whatsapp },
 ];
 
 export default function Footer() {
@@ -31,7 +32,7 @@ export default function Footer() {
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-ink/55">
           <span>© {new Date().getFullYear()} NOV — All rights reserved</span>
           <a
-            href="https://wa.me/5491132102111"
+            href={LINKS.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="text-ink/55 no-underline transition-colors duration-hover ease-fade hover:text-red-bright [font-variant-numeric:tabular-nums]"
