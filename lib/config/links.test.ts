@@ -1,6 +1,12 @@
-import { describe, expect, it } from 'vitest';
-import { GET } from '@/app/[slug]/route';
+import { describe, expect, it, vi } from 'vitest';
 import { LINKS, REDIRECTS, RESERVED_PATHS, resolveRedirect } from '@/lib/config/links';
+import { isBot, readClientId } from '@/lib/analytics/redirect-tracking';
+
+// after() only exists inside a Next request scope. These tests assert redirect
+// semantics, not Next's post-response plumbing, so it is stubbed to run inline.
+vi.mock('next/server', () => ({ after: (p: unknown) => p }));
+
+const { GET } = await import('@/app/[slug]/route');
 
 /**
  * These tests guard the only mistakes in this repository that a deploy cannot
@@ -76,5 +82,33 @@ describe('redirect behaviour', () => {
     // Silently landing a visitor on / would hide a broken printed QR.
     expect((await call('spotify')).status).toBe(404);
     expect((await call('noexiste')).status).toBe(404);
+  });
+});
+
+describe('measurement', () => {
+  it('excludes link-preview crawlers, which would inflate every campaign', () => {
+    // Sharing a redirect on WhatsApp makes its crawler fetch the link. Real
+    // request, no human.
+    expect(isBot('WhatsApp/2.23.20')).toBe(true);
+    expect(isBot('facebookexternalhit/1.1')).toBe(true);
+    expect(isBot('Twitterbot/1.0')).toBe(true);
+    expect(isBot('Mozilla/5.0 (compatible; Googlebot/2.1)')).toBe(true);
+    expect(isBot(null)).toBe(true);
+  });
+
+  it('counts a real phone', () => {
+    expect(
+      isBot(
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
+      ),
+    ).toBe(false);
+  });
+
+  it('reuses the GA client_id so a scan stitches to the same visitor', () => {
+    expect(readClientId('_ga=GA1.1.1234567890.1700000000; other=x')).toBe('1234567890.1700000000');
+  });
+
+  it('mints a client_id in GA shape on first contact', () => {
+    expect(readClientId(null)).toMatch(/^\d+\.\d+$/);
   });
 });

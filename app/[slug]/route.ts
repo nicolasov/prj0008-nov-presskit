@@ -1,4 +1,6 @@
+import { after } from 'next/server';
 import { RESERVED_PATHS, resolveRedirect } from '@/lib/config/links';
+import { trackRedirect } from '@/lib/analytics/redirect-tracking';
 
 /**
  * The public redirect layer.
@@ -27,7 +29,7 @@ const NOT_FOUND_HEADERS = {
 } as const;
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
@@ -45,6 +47,18 @@ export async function GET(
   if (destination === null) {
     return new Response(null, { status: 404, headers: NOT_FOUND_HEADERS });
   }
+
+  // after() runs once the response is on its way, so measurement cannot add a
+  // single millisecond to the redirect. The visitor is already gone.
+  after(
+    trackRedirect({
+      slug,
+      destination,
+      requestUrl: request.url,
+      userAgent: request.headers.get('user-agent'),
+      cookieHeader: request.headers.get('cookie'),
+    }),
+  );
 
   return new Response(null, {
     status: 307,
