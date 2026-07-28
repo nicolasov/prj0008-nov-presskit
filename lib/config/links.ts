@@ -32,6 +32,19 @@ export const LINKS = {
 export type LinkKey = keyof typeof LINKS;
 
 /**
+ * Booking form endpoint (Formspree).
+ *
+ * Public by design — it is a form action, not a credential, and Formspree
+ * handles abuse on their side. That is the point: the alternative was our own
+ * API route, which was an unauthenticated, unthrottled endpoint that anyone
+ * could POST to in a loop.
+ *
+ * Reused from the account already in use across the ecosystem rather than
+ * adding a second email service for one form.
+ */
+export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mzdlejre';
+
+/**
  * Public redirect slugs → the LINKS key they resolve to.
  *
  * These are the URLs that end up in QR codes, bios and captions. Adding a

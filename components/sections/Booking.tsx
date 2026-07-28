@@ -5,7 +5,7 @@ import Section from '@/components/ui/Section';
 import Timecode from '@/components/ui/Timecode';
 import Quote from '@/components/ui/Quote';
 import SessionEcho from '@/components/hidden/SessionEcho';
-import { LINKS } from '@/lib/config/links';
+import { FORMSPREE_ENDPOINT, LINKS } from '@/lib/config/links';
 import { useLang } from '@/lib/i18n';
 import { getCue } from '@/lib/cues';
 
@@ -20,11 +20,14 @@ const inputCls =
   'w-full border-0 border-b border-line bg-transparent px-0 py-[10px] text-[15px] text-ink outline-none transition-colors duration-hover ease-fade placeholder:text-ink/25 focus:border-red';
 
 /**
- * A booking that must never be silently lost. The form posts to /api/contact
- * (Resend). On success it confirms honestly; on any failure it does NOT pretend
- * to have sent — it shows the error and offers a graceful, pre-filled fallback
- * straight to the configured booking inbox, so the enquiry always has a way through even
- * before the mail service is configured. No personal address is ever exposed.
+ * A booking that must never be silently lost. The form posts straight to
+ * Formspree — no API route of our own, so there is no unauthenticated endpoint
+ * to abuse and no mail service to keep configured.
+ *
+ * On success it confirms honestly; on any failure it does NOT pretend to have
+ * sent. It shows the error and offers a pre-filled fallback to the booking
+ * inbox, so the enquiry always has a way through. No personal address is ever
+ * exposed.
  */
 const mailtoFallback = (d: Payload) => {
   const subject = `NOV Booking — ${d.name || 'Enquiry'}`;
@@ -64,10 +67,15 @@ export default function Booking() {
     setStatus('loading');
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          ...data,
+          // Formspree reads `email` for reply-to and `_subject` for the subject
+          // line, so a booking arrives ready to answer.
+          _subject: `NOV Booking — ${data.name}`,
+        }),
       });
       if (res.ok) {
         setStatus('success');

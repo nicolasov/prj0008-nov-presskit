@@ -168,7 +168,38 @@ sin retorno.
 
 ---
 
-## 11. Consecuencia conocida: el 404 de la capa de redirects
+## 11. El formulario de booking usa Formspree, no Resend
+
+El form postea directo a Formspree. No hay API route propia, ni servicio de
+email, ni secreto detrás.
+
+**Por qué se revirtió Resend:** su única ventaja real es enviar desde una
+dirección propia con HTML controlado, y eso **requiere un dominio verificado**
+que el proyecto no tiene. Sin dominio, Resend caía en `onboarding@resend.dev`
+—el remitente compartido— y no aportaba nada sobre Formspree, mientras sumaba
+un servicio, una variable de entorno, una API route y un 503 en producción.
+
+**Y resolvía peor un problema:** `/api/contact` era un endpoint público sin
+rate limiting, sin captcha y sin honeypot. Cualquiera podía hacer POST en loop,
+con costo real en cuota de envío y en la casilla. Formspree trae filtrado de
+spam del lado de ellos.
+
+Formspree ya estaba implementado acá antes (commit `7552e95`) y el rediseño lo
+reemplazó. Se reutiliza la misma cuenta que el resto del ecosistema, en línea
+con el hallazgo de `_reports/2026-07-19-vision-cto-ecosistema.md`: había tres
+soluciones a medias para el mismo problema.
+
+El endpoint es público a propósito: es un form action, no una credencial.
+
+**Cuándo reconsiderar Resend:** si hiciera falta mail transaccional propio
+—confirmación automática al que consulta, plantillas—. No es el caso.
+
+Se conserva el fallback a `mailto`: si el envío falla, el form no finge éxito y
+ofrece la consulta pre-cargada hacia la casilla de booking.
+
+---
+
+## 12. Consecuencia conocida: el 404 de la capa de redirects
 
 `app/[slug]/route.ts` captura todo path raíz no matcheado. Como un Route Handler
 devuelve `Response` y no UI, un typo como `/hme` recibe un 404 plano en vez del
@@ -187,7 +218,6 @@ arquitectura congelada define. Se acepta conscientemente.
   `novdj.com` (~$11/año), `novmusic.com`, `wearenov.com`.
 - **`GA4_API_SECRET`.** Sin él la medición de redirects no cuenta nada. El
   redirect funciona igual.
-- **`RESEND_API_KEY`.** Sin él el formulario de booking devuelve 503.
 - **Renombrar el proyecto en Vercel** a `prj0008-nov`. Postergado a propósito
   hasta definir el dominio: renombrarlo cambia el host `*.vercel.app` y Vercel
   no deja redirect del viejo.
