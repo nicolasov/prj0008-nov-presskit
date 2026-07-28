@@ -1,10 +1,12 @@
 # 14 · Website Foundation
 
 This document records the Phase 1 architectural decision that prepares
-`prj0008-nov-presskit` to eventually become the official NOV website.
+`prj0008-nov` to eventually become the official NOV website.
 
-The repository name stays unchanged for now. Do not rename the project, move
-the existing press kit code, or redesign the experience as part of this phase.
+The project was renamed from `prj0008-nov-presskit` to `prj0008-nov` because it
+now represents the whole NOV website, not only the press kit. "Press Kit"
+remains a feature of the site and the `/press` route — it is no longer the name
+of the project.
 
 ## Current decision
 
@@ -284,7 +286,8 @@ and `docs/08-roadmap.md`.
 
 Preserve these rules:
 
-- Do not rename `prj0008-nov-presskit` until explicitly requested.
+- The project is named `prj0008-nov`. "Press Kit" is a feature and the `/press`
+  route — never the project name.
 - Do not move existing press kit code as part of redirect or config work.
 - Do not hardcode public URLs in pages or components.
 - Start with config and documentation, then implement.
