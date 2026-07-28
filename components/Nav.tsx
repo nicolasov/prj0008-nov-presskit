@@ -10,7 +10,6 @@ import InstagramLink from '@/components/ui/InstagramLink';
 import LangToggle from '@/components/ui/LangToggle';
 import Drawer from '@/components/ui/Drawer';
 import { useIntroReveal } from '@/lib/introReveal';
-import { EXPERIMENTS, IS_PREVIEW, CURRENT_REF } from '@/lib/experiments';
 
 /** The journey's fictional runtime, driven by scroll progress. */
 function liveTimecode(progress: number): string {
@@ -127,34 +126,6 @@ export default function Nav() {
       </div>
 
       <Drawer open={menuOpen} onClose={() => setMenuOpen(false)} title="Tracklist">
-        {/* TEMPORARY — preview-only. Pinned to the TOP of the drawer so the
-            gallery explorations are the first thing visible when comparing;
-            never rendered in production (see lib/experiments.ts). Remove
-            before launch. */}
-        {IS_PREVIEW && (
-          <div className="mb-8 border-b border-line pb-6">
-            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-red-bright/80">
-              Gallery variations · preview
-            </span>
-            <div className="mt-3 flex flex-col gap-2">
-              {EXPERIMENTS.map((e) => {
-                const active = e.ref === CURRENT_REF;
-                return (
-                  <a
-                    key={e.ref}
-                    href={e.url}
-                    className={`font-mono text-[12px] tracking-[0.08em] no-underline transition-colors duration-hover ease-fade ${
-                      active ? 'text-red-bright' : 'text-ink/70 hover:text-ink'
-                    }`}
-                  >
-                    <span className={active ? 'text-red-bright' : 'text-ink/40'}>{active ? '●' : '○'}</span> {e.label}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
         <nav aria-label="Tracklist" className="flex flex-col">
           {CUES.map((cue) => {
             const isActive = cue.id === activeId;

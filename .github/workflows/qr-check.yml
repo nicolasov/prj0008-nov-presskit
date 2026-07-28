@@ -1,0 +1,78 @@
+name: QR check
+
+# The redirects behind the printed QR codes cannot be fixed once the codes are
+# in the world, so a break has to surface in minutes — not from a promoter
+# telling us the sign is dead.
+#
+# Runs after every push to main, and daily to catch breakage that no deploy
+# caused (a domain expiring, a platform changing, a config drifting).
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: Verify live redirects
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check redirects in production
+        env:
+          # Single place to update when the custom domain lands.
+          SITE: https://prj0008-nov-presskit.vercel.app
+        run: |
+          set -euo pipefail
+          fail=0
+
+          # Vercel needs a moment after a push before the new build is live.
+          sleep 45
+
+          check_redirect() {
+            local slug="$1" expected_host="$2"
+            local out status location
+            out=$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' "$SITE/$slug")
+            status="${out%% *}"
+            location="${out#* }"
+
+            if [ "$status" != "307" ]; then
+              echo "::error::/$slug returned $status, expected 307. A 301/308 would be cached by every phone that already scanned the QR."
+              fail=1
+              return
+            fi
+            case "$location" in
+              *"$expected_host"*) echo "OK  /$slug -> $location" ;;
+              *) echo "::error::/$slug points at $location, expected $expected_host"; fail=1 ;;
+            esac
+          }
+
+          check_status() {
+            local path="$1" expected="$2" status
+            status=$(curl -sS -o /dev/null -w '%{http_code}' "$SITE/$path")
+            if [ "$status" != "$expected" ]; then
+              echo "::error::/$path returned $status, expected $expected"
+              fail=1
+            else
+              echo "OK  /$path -> $status"
+            fi
+          }
+
+          # The QR path. This is the one that is printed.
+          check_redirect ig        instagram.com
+          check_redirect instagram instagram.com
+          check_redirect soundcloud soundcloud.com
+          check_redirect youtube   youtube.com
+
+          # Reserved paths must stay free for future pages.
+          check_status music   404
+          check_status booking 404
+          check_status contact 404
+
+          # The Press Kit itself.
+          check_status ""      200
+
+          exit $fail
