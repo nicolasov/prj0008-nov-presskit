@@ -23,8 +23,10 @@ jobs:
 
       - name: Check redirects in production
         env:
+          # The public alias, not the project's auto-assigned host: this is the
+          # URL that goes on printed QR codes, so this is what must be checked.
           # Single place to update when the custom domain lands.
-          SITE: https://prj0008-nov-presskit.vercel.app
+          SITE: https://novdj.vercel.app
         run: |
           set -euo pipefail
           fail=0

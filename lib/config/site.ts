@@ -8,11 +8,16 @@
  * does not answer.
  *
  * Migrating to a custom domain is this line, and only this line.
+ *
+ * Deliberately an alias rather than the project's auto-assigned
+ * <project>.vercel.app host: renaming the Vercel project would change that
+ * host and break every URL already published. Pointing the public identity at
+ * an alias decouples it from the project name entirely.
  */
 export const SITE = {
   name: 'NOV',
   shortName: 'NOV',
-  domain: 'prj0008-nov-presskit.vercel.app',
+  domain: 'novdj.vercel.app',
   description: '',
 } as const;
 
