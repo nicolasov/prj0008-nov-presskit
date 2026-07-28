@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build & Lint
+    name: Test, Lint & Build
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Runs before lint and build: these guard the printed QR codes, which are
+      # the only thing here a deploy cannot fix.
+      - name: Test
+        run: npm test
 
       - name: Lint
         run: npm run lint
