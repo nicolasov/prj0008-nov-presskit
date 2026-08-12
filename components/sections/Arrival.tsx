@@ -147,15 +147,17 @@ export default function Arrival() {
             </div>
 
             <HeroWordInteractions>
-              <h1
-                className="nov-logo pointer-events-auto m-0 ml-[0.06em] font-serif text-[clamp(4.5rem,15vw,13rem)] font-light leading-none tracking-[0.06em]"
-                style={{
-                  color: 'color-mix(in srgb, #EAEAE6, #E0523F var(--h-mix, 0%))',
-                  filter: ripple ? 'url(#nov-ripple)' : undefined,
-                }}
-              >
-                NOV
-              </h1>
+              <Staged show={introReady} rise>
+                <h1
+                  className="nov-logo pointer-events-auto m-0 ml-[0.06em] font-serif text-[clamp(4.5rem,15vw,13rem)] font-light leading-none tracking-[0.06em]"
+                  style={{
+                    color: 'color-mix(in srgb, #EAEAE6, #E0523F var(--h-mix, 0%))',
+                    filter: ripple ? 'url(#nov-ripple)' : undefined,
+                  }}
+                >
+                  NOV
+                </h1>
+              </Staged>
             </HeroWordInteractions>
 
             <div className="absolute inset-x-0 top-full mt-[clamp(44px,6vw,72px)] flex justify-center">
